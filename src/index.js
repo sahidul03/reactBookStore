@@ -2,10 +2,69 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {Router} from './components/router';
+// import {Router} from './components/router';
 import registerServiceWorker from './registerServiceWorker';
+import {
+    BrowserRouter as Router,
+    Route,
+    NavLink
+} from 'react-router-dom';
+import {About} from './components/others/About';
+import {Home} from './components/others/Home';
+import {Topics} from './components/others/Topics';
 
 ReactDOM.render(
-    <Router><App /></Router>,
+    <Router>
+        <div className="container">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#navbar"
+                                aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <NavLink className="navbar-brand" to="/">Project name</NavLink>
+                        {/*<a class="navbar-brand" href="#">Project name</a>*/}
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><NavLink activeClassName="headerMenuActive" exact="true" to="/">Home</NavLink></li>
+                            <li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>
+                            <li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>
+                            <li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>
+                            {/*<li class="dropdown">*/}
+                            {/*<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>*/}
+                            {/*<ul class="dropdown-menu">*/}
+                            {/*<li><a href="#">Action</a></li>*/}
+                            {/*<li><a href="#">Another action</a></li>*/}
+                            {/*<li><a href="#">Something else here</a></li>*/}
+                            {/*<li role="separator" class="divider"></li>*/}
+                            {/*<li class="dropdown-header">Nav header</li>*/}
+                            {/*<li><a href="#">Separated NavLink</a></li>*/}
+                            {/*<li><a href="#">One more separated NavLink</a></li>*/}
+                            {/*</ul>*/}
+                            {/*</li>*/}
+                        </ul>
+                        {/*<ul class="nav navbar-nav navbar-right">*/}
+                        {/*<li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>*/}
+                        {/*<li><a href="../navbar-static-top/">Static top</a></li>*/}
+                        {/*<li><a href="../navbar-fixed-top/">Fixed top</a></li>*/}
+                        {/*</ul>*/}
+                    </div>
+                </div>
+            </nav>
+
+            <div class="jumbotron">
+                <Route exact path="/" component={Home}/>
+                <Route path="/about" component={About}/>
+                <Route path="/todo" component={App}/>
+                <Route path="/topics" component={Topics}/>
+            </div>
+        </div>
+    </Router>,
     document.getElementById('root'));
 registerServiceWorker();
