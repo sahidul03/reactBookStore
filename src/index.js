@@ -16,23 +16,23 @@ import {Topics} from './components/others/Topics';
 ReactDOM.render(
     <Router>
         <div className="container">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+            <nav className="navbar navbar-default">
+                <div className="container-fluid">
+                    <div className="navbar-header">
+                        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
                                 data-target="#navbar"
                                 aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
+                            <span className="sr-only">Toggle navigation</span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
                         </button>
                         <NavLink className="navbar-brand" to="/">Project name</NavLink>
                         {/*<a class="navbar-brand" href="#">Project name</a>*/}
                     </div>
-                    <div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li><NavLink activeClassName="headerMenuActive" exact="true" to="/">Home</NavLink></li>
+                    <div id="navbar" className="navbar-collapse collapse">
+                        <ul className="nav navbar-nav">
+                            <li><NavLink activeClassName="headerMenuActive" exact={true} to="/">Home</NavLink></li>
                             <li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>
                             <li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>
                             <li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>
@@ -58,7 +58,7 @@ ReactDOM.render(
                 </div>
             </nav>
 
-            <div class="jumbotron">
+            <div className="jumbotron">
                 <Route exact path="/" component={Home}/>
                 <Route path="/about" component={About}/>
                 <Route path="/todo" component={App}/>

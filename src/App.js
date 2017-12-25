@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {TodoForm, TodoList, Footer} from './components/todo';
-import {addTodo, generateId} from './lib/todoHelpers';
+import {addTodo} from './lib/todoHelpers';
 import {loadTodos, createTodo} from './lib/todoServices';
-import { NavLink } from 'react-router-dom'
 
 class App extends Component {
     state = {

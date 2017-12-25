@@ -1,7 +1,6 @@
 import React from 'react';
 import {Topic} from './Topic';
 import {
-    BrowserRouter as Router,
     Route,
     Link
 } from 'react-router-dom';
