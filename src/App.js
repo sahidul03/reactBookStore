@@ -13,7 +13,9 @@ class App extends Component {
 
     componentDidMount(){
         loadTodos().then(
-            todos => this.setState({todos})
+            todos => {
+                this.setState({todos});
+            }
         )
     }
 

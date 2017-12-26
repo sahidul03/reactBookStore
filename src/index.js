@@ -12,6 +12,17 @@ import {
 import {About} from './components/others/About';
 import {Home} from './components/others/Home';
 import {Topics} from './components/others/Topics';
+import Login from './components/layouts/Login';
+import SignUp from './components/layouts/Signup';
+import {logout} from './lib/authenticationService';
+
+function logoutSubmit() {
+    logout().then(response => {
+        if(response.flag === 1){
+            window.location.href = 'http://localhost:3000/login';
+        }
+    })
+}
 
 ReactDOM.render(
     <Router>
@@ -36,6 +47,9 @@ ReactDOM.render(
                             <li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>
                             <li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>
                             <li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>
+                            <li><NavLink activeClassName="headerMenuActive" to="/login">Login</NavLink></li>
+                            <li><NavLink activeClassName="headerMenuActive" to="/signup">SignUp</NavLink></li>
+                            <li><a className="logoutButton" onClick={logoutSubmit}>Logout</a></li>
                             {/*<li class="dropdown">*/}
                             {/*<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>*/}
                             {/*<ul class="dropdown-menu">*/}
@@ -63,6 +77,8 @@ ReactDOM.render(
                 <Route path="/about" component={About}/>
                 <Route path="/todo" component={App}/>
                 <Route path="/topics" component={Topics}/>
+                <Route path="/login" component={Login}/>
+                <Route path="/signup" component={SignUp}/>
             </div>
         </div>
     </Router>,
