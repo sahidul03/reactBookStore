@@ -7,11 +7,10 @@ export const login = (formData) => {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
-        credentials: 'include'
+        body: JSON.stringify(formData)
     })
         .then(res => {
-            sessionStorage.setItem('headers', JSON.stringify(res.headers));
+            // sessionStorage.setItem('headers', JSON.stringify(res.headers));
             return res.json()
         })
         .catch(err => console.log(err))
@@ -25,8 +24,7 @@ export const signUp = (formData) => {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
-        credentials: 'include'
+        body: JSON.stringify(formData)
     })
         .then(res => {
             return res.json()

@@ -31,6 +31,8 @@ class Login extends Component {
                             password: ''
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
+                        console.log("response.token", response.token);
+                        sessionStorage.setItem('token', response.token);
                         window.location.href = 'http://localhost:3000/todo';
                     }else {
                         this.setState({message: '', errorMessage: response.message, flag: response.flag});
