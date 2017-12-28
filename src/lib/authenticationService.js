@@ -39,10 +39,10 @@ export const logout = () => {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-        },
-        credentials: 'include'
+        }
     })
         .then(res => {
+            sessionStorage.removeItem('token');
             return res.json()
         })
         .catch(err => console.log(err))
@@ -55,8 +55,7 @@ export const getProfile = () => {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-        },
-        credentials: 'include'
+        }
     })
         .then(res => {
             console.log(res);
@@ -65,3 +64,26 @@ export const getProfile = () => {
         .catch(err => console.log(err))
 
 };
+
+export const loggingStatus = () => {
+    return fetch(baseUrl + '/logging-status', {
+        method: 'GET',
+        headers: headers()
+    })
+        .then(res => {
+            return res.json()
+        })
+        .catch(err => console.log(err))
+
+};
+
+function headers() {
+    let accessToken =  sessionStorage.getItem('token');
+    let headers = {
+        'Access-Control-Allow-Origin':'*',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': accessToken
+    };
+    return headers;
+}

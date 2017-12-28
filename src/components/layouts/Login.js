@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {login, getProfile} from '../../lib/authenticationService';
+import {login} from '../../lib/authenticationService';
+import {getRequest} from '../../lib/common/commonApiGetway';
 
 class Login extends Component {
     state = {
@@ -12,13 +13,13 @@ class Login extends Component {
         errorMessage: ''
     };
 
-    // componentDidMount(){
-    //     getProfile().then(response => {
-    //         if(response){
-    //             window.location.href = 'http://localhost:3000/todo';
-    //         }
-    //     })
-    // }
+    componentWillMount(){
+        getRequest('/profile').then(response => {
+            if(response){
+                window.location.href = 'http://localhost:3000/todo';
+            }
+        })
+    }
 
     handleSubmit = (evt) => {
         evt.preventDefault();
@@ -31,7 +32,6 @@ class Login extends Component {
                             password: ''
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
-                        console.log("response.token", response.token);
                         sessionStorage.setItem('token', response.token);
                         window.location.href = 'http://localhost:3000/todo';
                     }else {

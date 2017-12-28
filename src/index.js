@@ -15,6 +15,18 @@ import {Topics} from './components/others/Topics';
 import Login from './components/layouts/Login';
 import SignUp from './components/layouts/Signup';
 import {logout} from './lib/authenticationService';
+import {loggingStatus} from './lib/authenticationService';
+
+let initializationHeaderMenu = false;
+let isLoggedIn = false;
+setTimeout(() => {
+    loggingStatus().then(response => {
+        initializationHeaderMenu = true;
+        if(response.flag === 1){
+            isLoggedIn = true;
+        }
+    })
+}, 10);
 
 function logoutSubmit() {
     logout().then(response => {
@@ -38,7 +50,7 @@ ReactDOM.render(
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <NavLink className="navbar-brand" to="/">Project name</NavLink>
+                        <NavLink className="navbar-brand" to="/">Task Manager</NavLink>
                         {/*<a class="navbar-brand" href="#">Project name</a>*/}
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">

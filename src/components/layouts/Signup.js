@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {signUp} from '../../lib/authenticationService';
+import {getRequest} from '../../lib/common/commonApiGetway';
 
 class SignUp extends Component {
     state = {
@@ -13,6 +14,14 @@ class SignUp extends Component {
         message: '',
         errorMessage: ''
     };
+
+    componentWillMount(){
+        getRequest('/profile').then(response => {
+            if(response){
+                window.location.href = 'http://localhost:3000/todo';
+            }
+        })
+    }
 
     handleSubmit = (evt) => {
         evt.preventDefault();

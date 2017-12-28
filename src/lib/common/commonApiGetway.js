@@ -22,12 +22,20 @@ export const postRequest = (apiUrl, data) => {
 };
 
 function errorHandle(err) {
-    console.log(err)
-    // window.location.href = 'http://localhost:3000/login';
+    console.log(err);
+    if(window.location.href !== 'http://localhost:3000/login' && window.location.href !== 'http://localhost:3000/signup'){
+        window.location.href = 'http://localhost:3000/login';
+    }
 }
 
 function successHandle(res) {
-    return res.json();
+    if(res.status === 401){
+        if(window.location.href !== 'http://localhost:3000/login' && window.location.href !== 'http://localhost:3000/signup'){
+            window.location.href = 'http://localhost:3000/login';
+        }
+    }else {
+        return res.json();
+    }
 }
 
 function headers() {
@@ -38,6 +46,5 @@ function headers() {
         'Content-Type': 'application/json',
         'x-access-token': accessToken
     };
-    console.log(headers);
     return headers;
 }
