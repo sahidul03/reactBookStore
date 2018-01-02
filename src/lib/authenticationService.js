@@ -18,7 +18,7 @@ export const login = (formData) => {
 };
 
 export const signUp = (formData) => {
-    return fetch(baseUrl + '/users', {
+    return fetch(baseUrl + '/registration', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

@@ -1,0 +1,106 @@
+import React, {Component} from 'react';
+import {createTask, getTask} from '../../lib/tasksServices';
+import {getMinProject} from '../../lib/projectsServices';
+
+
+class NewTask extends Component {
+    state = {
+        project: {},
+        parentTask: {},
+        task: {
+            title: '',
+            description: '',
+            project: ''
+        },
+        flag: null,
+        message: '',
+        errorMessage: ''
+    };
+
+    componentDidMount(){
+        console.log('this.props.match.params', this.props.match.params);
+        getMinProject(this.props.match.params.projectId).then(
+            project => {
+                var tempTask = this.state.task;
+                tempTask.project = project._id;
+                this.setState({project: project, task: tempTask});
+            }
+        );
+        // getTask(this.props.match.params.parentTaskId).then(
+        //     pTask => {
+        //         var tempTask = this.state.task;
+        //         tempTask.parentTask = pTask._id;
+        //         this.setState({parentTask: pTask, task: tempTask});
+        //         console.log(this.state.task)
+        //     }
+        // );
+    }
+
+    handleSubmit = (evt) => {
+        evt.preventDefault();
+        if (this.state.task) {
+            createTask(this.state.task).then(response => {
+                    if(response._id){
+                        let formData = {
+                            title: '',
+                            description: ''
+                        };
+                        this.setState({message: response.message, errorMessage: '', flag: response.flag, task: formData});
+                        window.location.href = 'http://localhost:3000/projects/' + this.state.project._id;
+                    }else {
+                        this.setState({message: '', errorMessage: response.message, flag: response.flag});
+                    }
+                }
+            )
+        }
+    };
+
+    handleInputChange = (evt) => {
+        let formData = this.state.task;
+        formData[evt.target.name] = evt.target.value;
+        this.setState({
+            task: formData
+        });
+    };
+
+    render() {
+        return (
+            <div className="NewProject">
+                <h4><strong>Create a new task</strong></h4>
+                <div className="row">
+                    <div className="col-sm-12 col-md-12 col-lg-12">
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="form-group col-md-12 col-sm-12">
+                                <h5 className="text-danger">{this.state.errorMessage}</h5>
+                            </div>
+                            <div className="form-group col-md-12 col-sm-12">
+                                <label>Project*</label>
+                                <label contentEditable={false} type="text"
+                                       className="form-control input-sm">{this.state.project.title}</label>
+                            </div>
+                            <div className="form-group col-md-12 col-sm-12">
+                                <label>Task Title*</label>
+                                <input name="title" type="text" onChange={this.handleInputChange}
+                                       value={this.state.task.title}
+                                       className="form-control input-sm" id="title"
+                                       placeholder="Title" required/>
+                            </div>
+                            <div className="form-group col-md-12 col-sm-12">
+                                <label>Task Description*</label>
+                                <textarea name="description" onChange={this.handleInputChange}
+                                          value={this.state.task.description}
+                                          className="form-control input-sm" id="description"
+                                          placeholder="Description" required></textarea>
+                            </div>
+                            <div className="col-md-12 col-sm-12">
+                                <input type="submit" className="btn btn-primary pull-right" value="Submit"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default NewTask;

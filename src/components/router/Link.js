@@ -7,6 +7,6 @@ export class Link extends Component{
         history.pushState(null, '', this.props.to)
     };
     render(){
-        return <a href="#" onClick={this.handleClick}>{this.props.children}</a>
+        return <a onClick={this.handleClick}>{this.props.children}</a>
     }
 }

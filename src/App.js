@@ -7,7 +7,10 @@ import {
     NavLink
 } from 'react-router-dom';
 import {About} from './components/others/About';
-import {Home} from './components/others/Home';
+import Home from './components/others/Home';
+import ProjectDetails from './components/Projects/ProjectDetails';
+import NewProject from './components/Projects/NewProject';
+import NewTask from './components/tasks/NewTask';
 import {Topics} from './components/others/Topics';
 import Login from './components/layouts/Login';
 import SignUp from './components/layouts/Signup';
@@ -62,9 +65,9 @@ class App extends Component {
                                     <li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>
                                     <li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>
                                     <li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>
-                                    {(this.state.initializationHeaderMenu && this.state.isLoggedIn == false) ?
+                                    {(this.state.initializationHeaderMenu && this.state.isLoggedIn === false) ?
                                         <li><NavLink activeClassName="headerMenuActive" to="/login">Login</NavLink></li> : ''}
-                                    {(this.state.initializationHeaderMenu && this.state.isLoggedIn  == false) ?
+                                    {(this.state.initializationHeaderMenu && this.state.isLoggedIn  === false) ?
                                         <li><NavLink activeClassName="headerMenuActive" to="/signup">SignUp</NavLink></li> : ''}
                                     {(this.state.initializationHeaderMenu && this.state.isLoggedIn) ?
                                         <li><a className="logoutButton" onClick={this.logoutSubmit}>Logout</a></li> : ''}
@@ -93,13 +96,16 @@ class App extends Component {
                         </div>
                     </nav>
 
-                    <div className="jumbotron">
+                    <div>
                         <Route exact path="/" component={Home}/>
                         <Route path="/about" component={About}/>
                         <Route path="/todo" component={Todo}/>
                         <Route path="/topics" component={Topics}/>
                         <Route path="/login" component={Login}/>
                         <Route path="/signup" component={SignUp}/>
+                        <Route path="/projects/:id" component={ProjectDetails}/>
+                        <Route path="/project/new" component={NewProject}/>
+                        <Route path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
                     </div>
                 </div>
             </Router>
