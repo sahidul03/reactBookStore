@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {createTask, getTask} from '../../lib/tasksServices';
+import {createTask, getMinTask} from '../../lib/tasksServices';
 import {getMinProject} from '../../lib/projectsServices';
-
+import {
+    NavLink
+} from 'react-router-dom';
 
 class NewTask extends Component {
     state = {
         project: {},
-        parentTask: {},
+        parentTask: '',
         task: {
             title: '',
             description: '',
@@ -18,7 +20,6 @@ class NewTask extends Component {
     };
 
     componentDidMount(){
-        console.log('this.props.match.params', this.props.match.params);
         getMinProject(this.props.match.params.projectId).then(
             project => {
                 var tempTask = this.state.task;
@@ -26,14 +27,15 @@ class NewTask extends Component {
                 this.setState({project: project, task: tempTask});
             }
         );
-        // getTask(this.props.match.params.parentTaskId).then(
-        //     pTask => {
-        //         var tempTask = this.state.task;
-        //         tempTask.parentTask = pTask._id;
-        //         this.setState({parentTask: pTask, task: tempTask});
-        //         console.log(this.state.task)
-        //     }
-        // );
+        getMinTask(this.props.match.params.parentTaskId).then(
+            pTask => {
+                if(pTask){
+                    var tempTask = this.state.task;
+                    tempTask.parentTask = pTask._id;
+                    this.setState({parentTask: pTask, task: tempTask});
+                }
+            }
+        );
     }
 
     handleSubmit = (evt) => {
@@ -74,10 +76,14 @@ class NewTask extends Component {
                                 <h5 className="text-danger">{this.state.errorMessage}</h5>
                             </div>
                             <div className="form-group col-md-12 col-sm-12">
-                                <label>Project*</label>
-                                <label contentEditable={false} type="text"
-                                       className="form-control input-sm">{this.state.project.title}</label>
+                                <label>Project: </label>
+                                <NavLink to={"/projects/" + this.state.project._id }> { this.state.project.title}</NavLink>
                             </div>
+                            {this.state.parentTask ? <div className="form-group col-md-12 col-sm-12">
+                                <label>Parent Task: </label>
+                                <NavLink to={"/tasks/" + this.state.parentTask._id }> { this.state.parentTask.title}</NavLink>
+                            </div> : ''}
+
                             <div className="form-group col-md-12 col-sm-12">
                                 <label>Task Title*</label>
                                 <input name="title" type="text" onChange={this.handleInputChange}

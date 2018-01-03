@@ -11,3 +11,7 @@ export  const getMinProject = (id) => {
 export  const createProject = (project) => {
     return postRequest('/projects', project);
 };
+
+export  const addMemberToProject = (data) => {
+    return postRequest('/add-member', data);
+};

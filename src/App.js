@@ -11,6 +11,8 @@ import Home from './components/others/Home';
 import ProjectDetails from './components/Projects/ProjectDetails';
 import NewProject from './components/Projects/NewProject';
 import NewTask from './components/tasks/NewTask';
+import UserProfile from './components/users/UserProfile';
+import TaskDetails from './components/tasks/TaskDetails';
 import {Topics} from './components/others/Topics';
 import Login from './components/layouts/Login';
 import SignUp from './components/layouts/Signup';
@@ -106,6 +108,8 @@ class App extends Component {
                         <Route path="/projects/:id" component={ProjectDetails}/>
                         <Route path="/project/new" component={NewProject}/>
                         <Route path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
+                        <Route path="/users/:id" component={UserProfile}/>
+                        <Route path="/tasks/:id" component={TaskDetails}/>
                     </div>
                 </div>
             </Router>

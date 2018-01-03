@@ -1,0 +1,165 @@
+import React, {Component} from 'react';
+import {getTask, addAssigneeToTask} from '../../lib/tasksServices';
+import {getAllUsers} from '../../lib/usersServices';
+import {
+    NavLink
+} from 'react-router-dom';
+
+
+class TaskDetails extends Component {
+    state = {
+        availableUsers: [],
+        task: '',
+        project: '',
+        assignee: '',
+        creator: '',
+        parentTask: '',
+        subTasks: [],
+        comments: [],
+        showAddAssigneeForm: false,
+        userFetched: false,
+        assignee_id: ''
+    };
+
+    componentWillReceiveProps(newProps) {
+        getTask(newProps.match.params.id).then(
+            task => {
+                this.setState({
+                    task: task,
+                    project: task.project,
+                    subTasks: task.subTasks,
+                    assignee: task.assignee,
+                    creator: task.creator,
+                    parentTask: task.parentTask,
+                    comments: task.comments
+                });
+            }
+        )
+    }
+
+    componentDidMount() {
+        getTask(this.props.match.params.id).then(
+            task => {
+                this.setState({
+                    task: task,
+                    project: task.project,
+                    subTasks: task.subTasks,
+                    assignee: task.assignee,
+                    creator: task.creator,
+                    parentTask: task.parentTask,
+                    comments: task.comments
+                });
+            }
+        )
+    }
+
+    handleAddMembersForm = () => {
+        var tempFlag = this.state.showAddAssigneeForm;
+        if (!this.state.userFetched) {
+            getAllUsers().then(
+                users => {
+                    if (this.state.assignee) {
+                        var u = users.find(user => {
+                            return user._id === this.state.assignee._id
+                        });
+                        var index = users.indexOf(u);
+                        if (index > -1) {
+                            users.splice(index, 1);
+                        }
+                    }
+                    this.setState({availableUsers: users, userFetched: true});
+                }
+            );
+        }
+        this.setState({showAddAssigneeForm: !tempFlag});
+    };
+
+    addAssigneeToThisTask = () => {
+        if (this.state.assignee_id) {
+            if (this.state.assignee && (this.state.assignee_id === this.state.assignee._id)) {
+                console.log('Already assigned this user.');
+            } else {
+                var data = {task_id: this.state.task._id, assignee_id: this.state.assignee_id};
+                addAssigneeToTask(data).then(
+                    user => {
+                        var availableUsers = this.state.availableUsers;
+                        availableUsers.push(this.state.assignee);
+                        var abUser = this.state.availableUsers.find((obj) => {
+                            return obj._id === this.state.assignee_id
+                        });
+                        var index = availableUsers.indexOf(abUser);
+                        if (index > -1) {
+                            availableUsers.splice(index, 1);
+                        }
+                        this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user});
+                    }
+                );
+            }
+        }
+    };
+
+    handleInputChange = (evt) => {
+        this.setState({assignee_id: evt.target.value});
+    };
+
+    render() {
+        return (
+            <div className="TaskDetails">
+                <div className="row">
+                    <div className="col-sm-8 col-md-8 col-lg-8">
+                        {this.state.parentTask ? <h5><strong>Parent task: </strong><NavLink
+                            to={"/tasks/" + this.state.parentTask._id}>{this.state.parentTask.title}</NavLink>
+                        </h5> : ''}
+                        <h4><strong>Title: </strong>{this.state.task.title}</h4>
+                        <p><strong>Description: </strong>{this.state.task.description}</p>
+                        <NavLink className="cursor-pointer"
+                                 to={"/" + this.state.project._id + "/tasks/new/" + this.state.task._id}> + Create a sub
+                            task</NavLink>
+                        <h4>Sub Tasks list</h4>
+                        {this.state.subTasks.map(task => <div key={task._id}><NavLink
+                            to={"/tasks/" + task._id}>{task.title}</NavLink>
+                        </div>)}
+                    </div>
+                    <div className="col-sm-4 col-md-4 col-lg-4">
+                        <h5>
+                            <strong>Creator:</strong> {this.state.task.creator ? <NavLink
+                            to={"/users/" + this.state.task.creator._id}>{this.state.task.creator.username}</NavLink> : ''}
+                        </h5>
+                        <h5>
+                            <strong>Project:</strong> {this.state.project ? <NavLink
+                            to={"/projects/" + this.state.project._id}>{this.state.project.title}</NavLink> : ''}
+                        </h5>
+                        <h5>
+                            <button className="btn btn-default btn-sm" onClick={this.handleAddMembersForm}>+ Add or
+                                Change Assignee
+                            </button>
+                        </h5>
+                        {this.state.showAddAssigneeForm ? <h5 className="AddMemberFrom">
+                            <select className="form-control" onChange={this.handleInputChange} name="member_id"
+                                    value={this.state.assignee_id}>
+                                <option key={0} value=''>Please select one user</option>
+                                {this.state.availableUsers.map(user => <option key={user._id} value={user._id}
+                                                                               className="form-control">{user.username}</option>)}
+                            </select>
+                            <button className="pull-right btn btn-info" onClick={this.addAssigneeToThisTask}>Add
+                                assignee
+                            </button>
+                            <br/><br/>
+                        </h5> : ""}
+                        <div>
+                            <div>
+                                <strong>Assignee: </strong>
+                                {this.state.assignee ?
+                                    <NavLink
+                                        to={"/users/" + this.state.assignee._id}>{this.state.assignee.username}</NavLink>
+                                    : "Not assigned yet"}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default TaskDetails;
