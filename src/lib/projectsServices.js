@@ -15,3 +15,7 @@ export  const createProject = (project) => {
 export  const addMemberToProject = (data) => {
     return postRequest('/add-member', data);
 };
+
+export  const removeMemberFromProject = (data) => {
+    return postRequest('/remove-member', data);
+};

@@ -62,3 +62,34 @@ a.headerMenuActive{
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.remove-icon-project-members{
+  margin: 1px 0px 1px 10px;
+}
+.comments-container .profile-image{
+  width: 35px;
+  border-radius: 50%;
+}
+.comments-container .profile-name{
+  margin-left: 10px;
+  font-size: 16px;
+  color: teal;
+}
+.comments-container .comment-body{
+  font-size: 13px;
+  margin: 5px 0px 5px 0px;
+  background-color: #fbf5eb;
+  padding: 10px;
+  border-radius: 4px;
+}
+.comments-container .comment{
+  border-bottom: 1px solid #dadada;
+  margin-bottom: 12px;
+  background-color: #fbfbfb;
+  padding: 5px;
+  border-radius: 5px;
+}
+.comments-container .created-date{
+  margin-left: 10px;
+  font-size: 10px;
+  color: gray;
+}

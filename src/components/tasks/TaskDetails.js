@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {getTask, addAssigneeToTask} from '../../lib/tasksServices';
 import {getAllUsers} from '../../lib/usersServices';
+import Timestamp from 'react-timestamp';
 import {
     NavLink
 } from 'react-router-dom';
@@ -53,7 +54,7 @@ class TaskDetails extends Component {
         )
     }
 
-    handleAddMembersForm = () => {
+    handleAddAssigneeForm = () => {
         var tempFlag = this.state.showAddAssigneeForm;
         if (!this.state.userFetched) {
             getAllUsers().then(
@@ -83,7 +84,9 @@ class TaskDetails extends Component {
                 addAssigneeToTask(data).then(
                     user => {
                         var availableUsers = this.state.availableUsers;
-                        availableUsers.push(this.state.assignee);
+                        if (this.state.assignee) {
+                            availableUsers.push(this.state.assignee);
+                        }
                         var abUser = this.state.availableUsers.find((obj) => {
                             return obj._id === this.state.assignee_id
                         });
@@ -130,7 +133,7 @@ class TaskDetails extends Component {
                             to={"/projects/" + this.state.project._id}>{this.state.project.title}</NavLink> : ''}
                         </h5>
                         <h5>
-                            <button className="btn btn-default btn-sm" onClick={this.handleAddMembersForm}>+ Add or
+                            <button className="btn btn-default btn-sm" onClick={this.handleAddAssigneeForm}>+ Add or
                                 Change Assignee
                             </button>
                         </h5>
@@ -154,6 +157,20 @@ class TaskDetails extends Component {
                                         to={"/users/" + this.state.assignee._id}>{this.state.assignee.username}</NavLink>
                                     : "Not assigned yet"}
                             </div>
+                        </div>
+                    </div>
+                    <div className="col-xs-12">
+                        <h4>Comments: </h4>
+                        <div className="comments-container">
+                            {this.state.comments.map(comment => <div key={comment._id} className="comment">
+                                <div className="comment-header">
+                                    <img src="/images/profile-avater.png" className="profile-image" alt={comment._id}/>
+                                    <NavLink className="profile-name"
+                                             to={"/users/" + comment.commenter._id}>{comment.commenter.username}</NavLink>
+                                    <span className="created-date"><Timestamp time={comment.updated_at} /></span>
+                                </div>
+                                <div className="comment-body">{comment.description}</div>
+                            </div>)}
                         </div>
                     </div>
                 </div>

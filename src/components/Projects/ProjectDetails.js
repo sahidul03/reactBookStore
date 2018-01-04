@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {getProject, addMemberToProject} from '../../lib/projectsServices';
+import {getProject, addMemberToProject, removeMemberFromProject} from '../../lib/projectsServices';
 import {getAllUsers} from '../../lib/usersServices';
 import {
     NavLink
@@ -68,6 +68,30 @@ class ProjectDetails extends Component {
         }
     };
 
+    removeMemberFromThisProject = (member_id) => {
+        console.log('member_id: ', member_id);
+        if(member_id){
+            var removedMember = this.state.members.find((obj)=> { return obj._id === member_id });
+            if(removedMember){
+                removeMemberFromProject({project_id: this.state.project._id, member_id: member_id}).then(
+                    user => {
+                        var members = this.state.members;
+                        var index = members.indexOf(removedMember);
+                        if (index > -1) {
+                            members.splice(index, 1);
+                            this.setState({members: members});
+                        }
+                        var tempAvailableUser = this.state.availableUsers;
+                        tempAvailableUser.push(removedMember);
+                        this.setState({availableUsers: tempAvailableUser});
+                    }
+                );
+            }else {
+                console.log('He is not member of this project at all.');
+            }
+        }
+    };
+
     handleInputChange = (evt) => {
         this.setState({member_id: evt.target.value});
     };
@@ -100,8 +124,9 @@ class ProjectDetails extends Component {
                         </div> : ""}
                         <div>
                             <strong>Members: </strong>
-                            {this.state.members.map(member => <div key={member._id}><NavLink
-                                to={"/users/" + member._id}>{member.username}</NavLink>
+                            {this.state.members.map(member => <div key={member._id}>
+                                <NavLink to={"/users/" + member._id}>{member.username}</NavLink>
+                                <button onClick={() => this.removeMemberFromThisProject(member._id)} className="btn btn-xs cursor-pointer remove-icon-project-members">X</button>
                             </div>)}
                         </div>
                     </div>
