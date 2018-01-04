@@ -18,6 +18,7 @@ import Login from './components/layouts/Login';
 import SignUp from './components/layouts/Signup';
 import {logout} from './lib/authenticationService';
 import {loggingStatus} from './lib/authenticationService';
+import config from './config';
 
 class App extends Component {
     state = {
@@ -28,7 +29,7 @@ class App extends Component {
     logoutSubmit() {
         logout().then(response => {
             if (response.flag === 1) {
-                window.location.href = 'http://localhost:3000/login';
+                window.location.href = config.frontendBaseUrl + '/login';
             }
         })
     }

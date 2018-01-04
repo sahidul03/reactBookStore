@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {login} from '../../lib/authenticationService';
 import {getRequest} from '../../lib/common/commonApiGetway';
+import config from '../../config';
 
 class Login extends Component {
     state = {
@@ -16,7 +17,7 @@ class Login extends Component {
     componentWillMount(){
         getRequest('/profile').then(response => {
             if(response){
-                window.location.href = 'http://localhost:3000/todo';
+                window.location.href = config.frontendBaseUrl;
             }
         })
     }
@@ -33,7 +34,7 @@ class Login extends Component {
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
                         sessionStorage.setItem('token', response.token);
-                        window.location.href = 'http://localhost:3000/todo';
+                        window.location.href = config.frontendBaseUrl;
                     }else {
                         this.setState({message: '', errorMessage: response.message, flag: response.flag});
                     }

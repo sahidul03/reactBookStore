@@ -1,4 +1,5 @@
-const baseUrl = 'http://localhost:5000';
+import config from '../config';
+const baseUrl = config.backendBaseUrl;
 
 export const login = (formData) => {
     return fetch(baseUrl + '/login', {

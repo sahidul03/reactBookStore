@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {createTask, getMinTask} from '../../lib/tasksServices';
 import {getMinProject} from '../../lib/projectsServices';
+import config from '../../config';
 import {
     NavLink
 } from 'react-router-dom';
@@ -48,7 +49,7 @@ class NewTask extends Component {
                             description: ''
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, task: formData});
-                        window.location.href = 'http://localhost:3000/projects/' + this.state.project._id;
+                        window.location.href = config.frontendBaseUrl + '/projects/' + this.state.project._id;
                     }else {
                         this.setState({message: '', errorMessage: response.message, flag: response.flag});
                     }

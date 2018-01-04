@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {createProject} from '../../lib/projectsServices';
+import config from '../../config';
 
 
 class NewProject extends Component {
@@ -23,7 +24,7 @@ class NewProject extends Component {
                             description: ''
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, project: formData});
-                        window.location.href = 'http://localhost:3000';
+                        window.location.href = config.frontendBaseUrl;
                     }else {
                         this.setState({message: '', errorMessage: response.message, flag: response.flag});
                     }

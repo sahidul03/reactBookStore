@@ -1,4 +1,5 @@
-const baseUrl = 'http://localhost:5000';
+import config from '../../config'
+const baseUrl = config.backendBaseUrl;
 
 export const getRequest = (apiUrl) => {
     return fetch(baseUrl + apiUrl, {
@@ -23,15 +24,15 @@ export const postRequest = (apiUrl, data) => {
 
 function errorHandle(err) {
     console.log(err);
-    if(window.location.href !== 'http://localhost:3000/login' && window.location.href !== 'http://localhost:3000/signup'){
-        window.location.href = 'http://localhost:3000/login';
+    if(window.location.href !== config.frontendBaseUrl + '/login' && window.location.href !== config.frontendBaseUrl + '/signup'){
+        window.location.href = config.frontendBaseUrl + '/login';
     }
 }
 
 function successHandle(res) {
     if(res.status === 401){
-        if(window.location.href !== 'http://localhost:3000/login' && window.location.href !== 'http://localhost:3000/signup'){
-            window.location.href = 'http://localhost:3000/login';
+        if(window.location.href !== config.frontendBaseUrl + '/login' && window.location.href !== config.frontendBaseUrl + '/signup'){
+            window.location.href = config.frontendBaseUrl + '/login';
         }
     }else {
         return res.json();
