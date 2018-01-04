@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {getTask, addAssigneeToTask} from '../../lib/tasksServices';
+import {createComment} from '../../lib/commentsServices';
 import {getAllUsers} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
 import {
@@ -19,7 +20,9 @@ class TaskDetails extends Component {
         comments: [],
         showAddAssigneeForm: false,
         userFetched: false,
-        assignee_id: ''
+        assignee_id: '',
+        showAddCommentForm: false,
+        newCommentDescription: ''
     };
 
     componentWillReceiveProps(newProps) {
@@ -75,6 +78,10 @@ class TaskDetails extends Component {
         this.setState({showAddAssigneeForm: !tempFlag});
     };
 
+    handleAddCommentForm = () => {
+        this.setState({showAddCommentForm: !this.state.showAddCommentForm});
+    };
+
     addAssigneeToThisTask = () => {
         if (this.state.assignee_id) {
             if (this.state.assignee && (this.state.assignee_id === this.state.assignee._id)) {
@@ -103,6 +110,30 @@ class TaskDetails extends Component {
 
     handleInputChange = (evt) => {
         this.setState({assignee_id: evt.target.value});
+    };
+
+    handleCommentInputChange = (evt) => {
+        this.setState({
+            newCommentDescription: evt.target.value
+        });
+    };
+
+    handleAddCommentFormSubmit = (evt) => {
+        evt.preventDefault();
+        if (this.state.newCommentDescription) {
+            var data = {
+              task: this.state.task._id,
+              description: this.state.newCommentDescription
+            };
+            createComment(data).then(comment => {
+                    if(comment){
+                        var tempComments = this.state.comments;
+                        tempComments.push(comment);
+                        this.setState({newCommentDescription: "", showAddCommentForm: false, comments: tempComments});
+                    }
+                }
+            )
+        }
     };
 
     render() {
@@ -160,14 +191,35 @@ class TaskDetails extends Component {
                         </div>
                     </div>
                     <div className="col-xs-12">
-                        <h4>Comments: </h4>
+                        <h4>Comments:
+                            <button onClick={this.handleAddCommentForm} className="btn btn-sm btn-default pull-right">
+                                + Add comment
+                            </button>
+                        </h4>
+                        {this.state.showAddCommentForm ? <div ref="CommentForm" className="addComment">
+                            <form onSubmit={this.handleAddCommentFormSubmit}>
+                                <div className="form-group col-md-12 col-sm-12">
+                                    <h5 className="text-danger">{this.state.errorMessage}</h5>
+                                </div>
+                                <div className="form-group col-md-12 col-sm-12">
+                                    <label>Comments*</label>
+                                    <textarea name="description" onChange={this.handleCommentInputChange}
+                                              value={this.state.newCommentDescription}
+                                              className="form-control input-sm" id="description"
+                                              placeholder="Comments" required></textarea>
+                                </div>
+                                <div className="col-md-12 col-sm-12">
+                                    <input type="submit" className="btn btn-primary pull-right" value="Add"/>
+                                </div>
+                            </form>
+                        </div> : ''}
                         <div className="comments-container">
                             {this.state.comments.map(comment => <div key={comment._id} className="comment">
                                 <div className="comment-header">
                                     <img src="/images/profile-avater.png" className="profile-image" alt={comment._id}/>
                                     <NavLink className="profile-name"
                                              to={"/users/" + comment.commenter._id}>{comment.commenter.username}</NavLink>
-                                    <span className="created-date"><Timestamp time={comment.updated_at} /></span>
+                                    <span className="created-date"><Timestamp time={comment.updated_at}/></span>
                                 </div>
                                 <div className="comment-body">{comment.description}</div>
                             </div>)}
