@@ -3,15 +3,20 @@ import {getCurrentUser} from '../../lib/usersServices';
 import {
     NavLink
 } from 'react-router-dom';
+import { subscribeToTimer } from '../../lib/socket/sampleService';
 
 class Home extends Component {
     state = {
         user: '',
         projects: [],
-        ownProjects: []
+        ownProjects: [],
+        timestamp: null
     };
 
     componentDidMount() {
+        subscribeToTimer((err, timestamp) => this.setState({
+            timestamp
+        }));
         getCurrentUser().then(
             user => {
                 this.setState({user: user, projects: user.projects, ownProjects: user.ownProjects});

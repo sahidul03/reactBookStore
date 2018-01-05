@@ -65,9 +65,9 @@ class App extends Component {
                                 <ul className="nav navbar-nav">
                                     <li><NavLink activeClassName="headerMenuActive" exact={true} to="/">Home</NavLink>
                                     </li>
-                                    <li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>
-                                    <li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>
-                                    <li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>
+                                    {/*<li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>*/}
+                                    {/*<li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>*/}
+                                    {/*<li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>*/}
                                     {(this.state.initializationHeaderMenu && this.state.isLoggedIn === false) ?
                                         <li><NavLink activeClassName="headerMenuActive" to="/login">Login</NavLink></li> : ''}
                                     {(this.state.initializationHeaderMenu && this.state.isLoggedIn  === false) ?

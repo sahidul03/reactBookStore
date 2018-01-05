@@ -6,7 +6,7 @@ import Timestamp from 'react-timestamp';
 import {
     NavLink
 } from 'react-router-dom';
-
+import { appendComment, addComment } from '../../lib/socket/sampleService';
 
 class TaskDetails extends Component {
     state = {
@@ -42,6 +42,13 @@ class TaskDetails extends Component {
     }
 
     componentDidMount() {
+        appendComment((comment) => {
+            console.log(comment);
+            var tempComments = this.state.comments;
+            tempComments.push(comment);
+            this.setState({newCommentDescription: "", showAddCommentForm: false, comments: tempComments});
+            }
+        );
         getTask(this.props.match.params.id).then(
             task => {
                 this.setState({
@@ -127,9 +134,10 @@ class TaskDetails extends Component {
             };
             createComment(data).then(comment => {
                     if(comment){
-                        var tempComments = this.state.comments;
-                        tempComments.push(comment);
-                        this.setState({newCommentDescription: "", showAddCommentForm: false, comments: tempComments});
+                        addComment(comment);
+                        // var tempComments = this.state.comments;
+                        // tempComments.push(comment);
+                        // this.setState({newCommentDescription: "", showAddCommentForm: false, comments: tempComments});
                     }
                 }
             )
@@ -219,7 +227,7 @@ class TaskDetails extends Component {
                                     <img src="/images/profile-avater.png" className="profile-image" alt={comment._id}/>
                                     <NavLink className="profile-name"
                                              to={"/users/" + comment.commenter._id}>{comment.commenter.username}</NavLink>
-                                    <span className="created-date"><Timestamp time={comment.updated_at}/></span>
+                                    <span className="created-date"><Timestamp time={comment.updated_at} format='full' includeDay /></span>
                                 </div>
                                 <div className="comment-body">{comment.description}</div>
                             </div>)}
