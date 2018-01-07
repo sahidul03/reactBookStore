@@ -33,7 +33,7 @@ class Login extends Component {
                             password: ''
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
-                        sessionStorage.setItem('token', response.token);
+                        localStorage.setItem('token', response.token);
                         window.location.href = config.frontendBaseUrl;
                     }else {
                         this.setState({message: '', errorMessage: response.message, flag: response.flag});

@@ -6,7 +6,7 @@ import Timestamp from 'react-timestamp';
 import {
     NavLink
 } from 'react-router-dom';
-import { appendComment, addComment } from '../../lib/socket/sampleService';
+import { appendComment, addComment , joinToTaskRoom} from '../../lib/socket/sampleService';
 
 class TaskDetails extends Component {
     state = {
@@ -26,6 +26,7 @@ class TaskDetails extends Component {
     };
 
     componentWillReceiveProps(newProps) {
+        joinToTaskRoom(newProps.match.params.id);
         getTask(newProps.match.params.id).then(
             task => {
                 this.setState({
@@ -42,11 +43,11 @@ class TaskDetails extends Component {
     }
 
     componentDidMount() {
+        joinToTaskRoom(this.props.match.params.id);
         appendComment((comment) => {
-            console.log(comment);
             var tempComments = this.state.comments;
             tempComments.push(comment);
-            this.setState({newCommentDescription: "", showAddCommentForm: false, comments: tempComments});
+            this.setState({comments: tempComments});
             }
         );
         getTask(this.props.match.params.id).then(
@@ -137,7 +138,7 @@ class TaskDetails extends Component {
                         addComment(comment);
                         // var tempComments = this.state.comments;
                         // tempComments.push(comment);
-                        // this.setState({newCommentDescription: "", showAddCommentForm: false, comments: tempComments});
+                        this.setState({newCommentDescription: "", showAddCommentForm: false});
                     }
                 }
             )

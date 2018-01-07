@@ -79,7 +79,7 @@ export const loggingStatus = () => {
 };
 
 function headers() {
-    let accessToken =  sessionStorage.getItem('token');
+    let accessToken =  localStorage.getItem('token');
     let headers = {
         'Access-Control-Allow-Origin':'*',
         'Accept': 'application/json',
