@@ -1,6 +1,6 @@
 import config from '../../config';
 import openSocket from 'socket.io-client';
-const socket = openSocket(config.socketUrl);
+const socket = openSocket(config.socketUrl, {transports: ['websocket', 'polling', 'flashsocket']});
 
 // var socket = io('/my-namespace');
 // import io from 'socket.io-client';

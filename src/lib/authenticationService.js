@@ -43,7 +43,7 @@ export const logout = () => {
         }
     })
         .then(res => {
-            sessionStorage.removeItem('token');
+            localStorage.removeItem('token');
             return res.json()
         })
         .catch(err => console.log(err))

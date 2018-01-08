@@ -13,6 +13,7 @@ import NewProject from './components/Projects/NewProject';
 import NewTask from './components/tasks/NewTask';
 import UserProfile from './components/users/UserProfile';
 import TaskDetails from './components/tasks/TaskDetails';
+import Conversation from './components/conversations/Conversation';
 import {Topics} from './components/others/Topics';
 import Login from './components/layouts/Login';
 import SignUp from './components/layouts/Signup';
@@ -111,6 +112,7 @@ class App extends Component {
                         <Route path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
                         <Route path="/users/:id" component={UserProfile}/>
                         <Route path="/tasks/:id" component={TaskDetails}/>
+                        <Route path="/conversation" component={Conversation}/>
                     </div>
                 </div>
             </Router>

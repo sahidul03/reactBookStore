@@ -58,6 +58,11 @@ a.headerMenuActive{
 .cursor-pointer{
   cursor: pointer;
 }
+.separator{
+  height: 1px;
+  background-color: #dadada;
+  margin: 8px 0px 8px 0px;
+}
 .AddMemberFrom{
   padding-top: 10px;
   padding-bottom: 10px;
@@ -66,7 +71,7 @@ a.headerMenuActive{
   margin: 1px 0px 1px 10px;
 }
 .comments-container .profile-image{
-  width: 35px;
+  width: 26px;
   border-radius: 50%;
 }
 .comments-container .profile-name{
@@ -92,4 +97,29 @@ a.headerMenuActive{
   margin-left: 10px;
   font-size: 10px;
   color: gray;
+}
+.Conversation .channels-contacts{
+  border-right: 1px solid #dadada;
+  min-height: 400px;
+}
+.Conversation .chat-text-box{
+}
+.Conversation .messages-container{
+  height: 450px;
+}
+.Conversation .channel-contact-info{
+  font-size: 19px;
+  color: green;
+  background-color: aliceblue;
+  padding: 3px 0px 3px 10px;
+}
+.Conversation .channel-or-contact-list{
+  padding: 4px;
+  color: blue;
+  cursor: pointer;
+}
+
+.Conversation .channel-or-contact-list:hover{
+  background-color: mediumblue;
+  color: white;
 }
