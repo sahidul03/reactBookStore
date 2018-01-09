@@ -14,6 +14,9 @@ function subscribeToTimer(cb) {
 function addComment(data) {
     socket.emit('new-comment', data);
 }
+function newMessage(data) {
+    socket.emit('new-message', data);
+}
 function joinToTaskRoom(taskId) {
     // socket.on('connect', () => {
     //     // emiting to everybody
@@ -21,9 +24,18 @@ function joinToTaskRoom(taskId) {
     // })
     socket.emit('join', { room: taskId });
 }
-
+function joinALlProjectsAndSelfUserRoom(userId) {
+    // socket.on('connect', () => {
+    //     // emiting to everybody
+    //
+    // })
+    socket.emit('joinAllProjectsAndSelfUser', { userId: userId });
+}
 
 function appendComment(fn) {
     socket.on('append-comment', comment => fn(comment));
 }
-export { subscribeToTimer, addComment, appendComment, joinToTaskRoom };
+function appendMessage(fn) {
+    socket.on('append-message', data => fn(data));
+}
+export { subscribeToTimer, addComment, appendComment, joinToTaskRoom, joinALlProjectsAndSelfUserRoom, appendMessage, newMessage };
