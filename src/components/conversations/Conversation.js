@@ -27,7 +27,11 @@ class Conversation extends Component {
                 }
                 tempAllMessages[data.conversation].push(data);
                 this.setState({allMessages: tempAllMessages});
-                console.log('message :', data)
+                console.log('message :', data);
+                this.refs.messagesContainer.scrollTop = document.querySelector('.messages-container').scrollHeight;
+                if(this.state.currentChannelOrContact.conversation !== data.conversation){
+                    this.newMessageFound(data.conversation);
+                }
             }
         );
         getCurrentUser().then(
@@ -79,7 +83,7 @@ class Conversation extends Component {
             this.setState({
                 allMessages: tempAllMessages
             });
-            this.refs.messagesContainer.scrollTop = this.refs.messagesContainer.height;
+            this.refs.messagesContainer.scrollTop = document.querySelector('.messages-container').scrollHeight;
         });
     };
 
@@ -87,27 +91,69 @@ class Conversation extends Component {
         this.setState({currentChannelOrContact: contact, currentConversationBox: 'contact'})
     };
     changeCurrentChannel = (channel) => {
-        let tempAllMessages = this.state.allMessages;
-        tempAllMessages[channel.conversation] = [];
-        this.setState({
-            currentChannelOrContact: channel,
-            currentConversationBox: 'project',
-            allMessages: tempAllMessages
+        if(this.state.allMessages[channel.conversation]){
+            this.setState({
+                currentChannelOrContact: channel,
+                currentConversationBox: 'project'
+            });
+            setTimeout(()=>{
+                this.refs.messagesContainer.scrollTop = document.querySelector('.messages-container').scrollHeight;
+            },100);
+        }else {
+            let tempAllMessages = this.state.allMessages;
+            tempAllMessages[channel.conversation] = [];
+            this.setState({
+                currentChannelOrContact: channel,
+                currentConversationBox: 'project',
+                allMessages: tempAllMessages
+            });
+            this.getMessagesOfConversations(channel.conversation);
+        }
+        this.removeNewMessage(channel.conversation);
+    };
+
+    newMessageFound = (taskId) => {
+        let tempProjects = this.state.projects;
+        var project = tempProjects.find(project => {
+            return project.conversation === taskId
         });
-        this.getMessagesOfConversations(channel.conversation)
+        var index = tempProjects.indexOf(project);
+        if (index > -1) {
+            console.log(tempProjects[index]['new_message']);
+            if(tempProjects[index]['new_message']){
+                console.log('if');
+                tempProjects[index]['new_message'] += 1;
+            }else {
+                console.log('else');
+                tempProjects[index]['new_message'] = 1;
+            }
+        }
+        this.setState({projects: tempProjects});
+    };
+
+    removeNewMessage = (taskId) => {
+        let tempProjects = this.state.projects;
+        var project = tempProjects.find(project => {
+            return project.conversation === taskId
+        });
+        var index = tempProjects.indexOf(project);
+        if (index > -1) {
+            tempProjects[index]['new_message'] = 0;
+        }
+        this.setState({projects: tempProjects});
     };
 
     render() {
         return (
             <div className="Conversation">
                 <div className="row">
-                    <div className="col-sm-3 col-md-3 col-lg-3 channels-contacts">
+                    <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 channels-contacts">
                         <h4>
                             Projects channel
                         </h4>
                         {this.state.projects.map(project => <div className="channel-or-contact-list" key={project._id}
                                                                  onClick={() => this.changeCurrentChannel(project)}>
-                            {project.title}
+                            {project.title}{project.new_message? <span className="new-message-icon">new({project.new_message})</span> : ''}
                         </div>)}
                         <div className="separator"></div>
                         <h4>
@@ -119,14 +165,14 @@ class Conversation extends Component {
                                 {contact.username}
                             </div>)}
                     </div>
-                    <div className="col-sm-9 col-md-9 col-lg-9">
+                    <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 conversation-rendering">
                         <div className="channel-contact-info">
                             <span>
                                 {this.state.currentConversationBox == 'project' ? this.state.currentChannelOrContact.title : ''}
                                 {this.state.currentConversationBox == 'contact' ? this.state.currentChannelOrContact.username : ''}
                             </span>
                         </div>
-                        <div className="separator"></div>
+                        {/*<div className="separator"></div>*/}
                         <div ref="messagesContainer" className="messages-container">
                             {this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message => <div
                                 key={message._id} className="message">

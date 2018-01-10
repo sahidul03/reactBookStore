@@ -99,8 +99,20 @@ a.headerMenuActive{
   color: gray;
 }
 .Conversation .channels-contacts{
-  border-right: 1px solid #dadada;
+  /*border-right: 1px solid #dadada;*/
   min-height: 400px;
+}
+.Conversation .channels-contacts .new-message-icon{
+    color: #5d2e0b;
+    font-weight: bold;
+    margin-left: 20px;
+    font-size: 12px;
+    background-color: gold;
+    padding: 0 3px;
+    border-radius: 3px;
+}
+.Conversation .conversation-rendering{
+  border-left: 2px solid #dadada;
 }
 .Conversation .chat-text-box{
   margin-top: 20px;
@@ -110,10 +122,12 @@ a.headerMenuActive{
   overflow-y: scroll;
 }
 .Conversation .channel-contact-info{
-  font-size: 19px;
-  color: green;
-  background-color: aliceblue;
-  padding: 3px 0px 3px 10px;
+    font-size: 19px;
+    color: green;
+    background-color: #b3d4f1;
+    margin-bottom: 10px;
+    padding: 5px 0px 7px 10px;
+    margin-left: -16px;
 }
 .Conversation .channel-or-contact-list{
   padding: 4px;
@@ -147,8 +161,8 @@ a.headerMenuActive{
   font-size: 12px;
 }
 .Conversation .messages-container .message .message-body{
-  float: right;
-  width: 92%;
+  float: left;
+  width: 90%;
   background-color: aliceblue;
   padding: 5px 10px 5px 10px;
   border-radius: 5px;
