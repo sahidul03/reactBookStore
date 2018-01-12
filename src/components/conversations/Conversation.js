@@ -143,6 +143,29 @@ class Conversation extends Component {
         this.setState({projects: tempProjects});
     };
 
+    showHideProjectMembers = () => {
+        // create a new div element
+        var newDiv = document.createElement("div");
+        // and give it some content
+        var newContent = document.createTextNode("Hi there and greetings!");
+        // add the text node to the newly created div
+        newDiv.appendChild(newContent);
+
+        // add the newly created element and its content into the DOM
+        // var currentDiv = document.getElementById("div1");
+        newDiv.onclick =  () => {
+            this.showHideProjectMembers()
+        };
+        this.refs.messagesContainer.append(newDiv);
+        let tempProject = this.state.currentChannelOrContact;
+        if(tempProject.showMembers){
+            tempProject.showMembers = false;
+        }else {
+            tempProject.showMembers = true;
+        }
+        this.setState({currentChannelOrContact: tempProject})
+    };
+
     render() {
         return (
             <div className="Conversation">
@@ -168,9 +191,24 @@ class Conversation extends Component {
                     <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 conversation-rendering">
                         <div className="channel-contact-info">
                             <span>
-                                {this.state.currentConversationBox == 'project' ? this.state.currentChannelOrContact.title : ''}
-                                {this.state.currentConversationBox == 'contact' ? this.state.currentChannelOrContact.username : ''}
+                                {this.state.currentConversationBox === 'project' ? <span>
+                                    <img src="/images/group-2.png" className="group-single-chat-image"/>
+                                    {this.state.currentChannelOrContact.title}
+                                    <span onClick={this.showHideProjectMembers} className="project-members">Members({this.state.currentChannelOrContact.members.length})</span>
+                                    <span className="group-single-chat-title">Group conversation</span>
+                                </span> : ''}
+                                {this.state.currentConversationBox === 'contact' ? <span>
+                                    <img src="/images/group-2.png" className="group-single-chat-image"/>
+                                {this.state.currentChannelOrContact.username}
+                                    <span className="group-single-chat-title">Private conversation</span>
+                                    </span> : ''}
                             </span>
+                            {(this.state.currentConversationBox === 'project' && this.state.currentChannelOrContact.showMembers === true)? <div className="group-members">
+                                {this.state.currentChannelOrContact.members.map(member =>
+                                    <span className="member-list" key={member._id}>
+                                        {member.username}
+                                    </span>)}
+                            </div> : ''}
                         </div>
                         {/*<div className="separator"></div>*/}
                         <div ref="messagesContainer" className="messages-container">
