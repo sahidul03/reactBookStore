@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getConversation, createConversation} from '../../lib/conversationsServices';
-import {getCurrentUser} from '../../lib/usersServices';
+import {getCurrentUser, sendFriendRequest} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
 import {
     NavLink
@@ -14,6 +14,7 @@ class Conversation extends Component {
         projects: [],
         contacts: [],
         ownProjects: [],
+        sentFriendRequests: [],
         message: '',
         currentChannelOrContact: '',
         currentConversationBox: ''
@@ -41,7 +42,8 @@ class Conversation extends Component {
                     user: user,
                     projects: user.projects,
                     ownProjects: user.ownProjects,
-                    contacts: user.contacts
+                    contacts: user.contacts,
+                    sentFriendRequests: user.sentFriendRequests
                 });
                 if (this.state.projects.length > 0) {
                     this.getMessagesOfConversations(this.state.projects[0].conversation);
@@ -144,19 +146,6 @@ class Conversation extends Component {
     };
 
     showHideProjectMembers = () => {
-        // create a new div element
-        var newDiv = document.createElement("div");
-        // and give it some content
-        var newContent = document.createTextNode("Hi there and greetings!");
-        // add the text node to the newly created div
-        newDiv.appendChild(newContent);
-
-        // add the newly created element and its content into the DOM
-        // var currentDiv = document.getElementById("div1");
-        newDiv.onclick =  () => {
-            this.showHideProjectMembers()
-        };
-        this.refs.messagesContainer.append(newDiv);
         let tempProject = this.state.currentChannelOrContact;
         if(tempProject.showMembers){
             tempProject.showMembers = false;
@@ -166,6 +155,64 @@ class Conversation extends Component {
         this.setState({currentChannelOrContact: tempProject})
     };
 
+    showRelationShipWithMember = (memberId, evt) =>{
+        evt.stopPropagation();
+        if(evt.target.children.length === 0){
+            let memberRelationship = document.createElement("span");
+            memberRelationship.className = "member-relationship";
+            var contact = this.state.contacts.find(contact => {
+                return contact._id === memberId
+            });
+            let content = null;
+            let textOfButton = null;
+            if(memberId === this.state.user._id){
+                content = document.createElement("label");
+                textOfButton = document.createTextNode("It's me");
+                content.className = "label label-success label-sm";
+            }
+            else if(contact){
+                content = document.createElement("label");
+                textOfButton = document.createTextNode("Already added");
+                content.className = "label label-success label-sm";
+            }else {
+                var sentRequest = this.state.sentFriendRequests.indexOf(memberId);
+                if(sentRequest > -1){
+                    content = document.createElement("label");
+                    textOfButton = document.createTextNode("Sent Request");
+                    content.className = "label label-success label-sm";
+                }else {
+                    content = document.createElement("button");
+                    textOfButton = document.createTextNode("Add to Contact");
+                    content.className = "btn btn-success btn-xs";
+                    content.onclick =  () => {
+                        this.pleaseSendFriendRequest(memberId);
+                    };
+                    content.onclick =  (e) => {
+                        this.pleaseSendFriendRequest(e,memberId);
+                    };
+                }
+            }
+            content.appendChild(textOfButton);
+            memberRelationship.appendChild(content);
+            evt.target.append(memberRelationship);
+        }else {
+            evt.target.removeChild(evt.target.children[0]);
+        }
+    };
+
+    pleaseSendFriendRequest = (event, memberId) =>{
+        event.stopPropagation();
+        let data = {
+            sender: this.state.user._id,
+            receiver: memberId
+        };
+        sendFriendRequest(data).then(receiver => {
+            let tempSendFriendRequest = this.state.sentFriendRequests;
+            tempSendFriendRequest.push(receiver.receiver);
+            this.setState({ sentFriendRequests: tempSendFriendRequest });
+            event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+        })
+    };
     render() {
         return (
             <div className="Conversation">
@@ -206,7 +253,9 @@ class Conversation extends Component {
                             {(this.state.currentConversationBox === 'project' && this.state.currentChannelOrContact.showMembers === true)? <div className="group-members">
                                 {this.state.currentChannelOrContact.members.map(member =>
                                     <span className="member-list" key={member._id}>
-                                        {member.username}
+                                        {member.username} <span className="cursor-pointer">
+                                        <i className="fa fa-info-circle position-relative" onClick={this.showRelationShipWithMember.bind(this, member._id)}></i>
+                                    </span>
                                     </span>)}
                             </div> : ''}
                         </div>

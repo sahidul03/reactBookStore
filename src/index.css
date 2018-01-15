@@ -243,3 +243,16 @@ a.headerMenuActive {
 .clear {
     clear: both;
 }
+.member-relationship{
+    position: absolute;
+    top: 20px;
+    background-color: #9fadf8;
+    border: 1px solid #545cf5;
+    padding: 5px 10px 5px 10px;
+    border-radius: 3px;
+    color: #2c43a7;
+    right: 0;
+}
+.position-relative{
+    position: relative;
+}
