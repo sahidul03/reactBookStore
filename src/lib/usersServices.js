@@ -15,3 +15,11 @@ export  const getUser = (id) => {
 export  const sendFriendRequest = (data) => {
     return postRequest('/send-friend-request', data);
 };
+
+export  const acceptFriendRequest = (data) => {
+    return postRequest('/accept-friend-request', data);
+};
+
+export  const rejectFriendRequest = (data) => {
+    return postRequest('/reject-friend-request', data);
+};

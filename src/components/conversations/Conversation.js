@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getConversation, createConversation} from '../../lib/conversationsServices';
-import {getCurrentUser, sendFriendRequest} from '../../lib/usersServices';
+import {getCurrentUser, sendFriendRequest, acceptFriendRequest, rejectFriendRequest} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
 import {
     NavLink
@@ -15,6 +15,7 @@ class Conversation extends Component {
         contacts: [],
         ownProjects: [],
         sentFriendRequests: [],
+        gotFriendRequests: [],
         message: '',
         currentChannelOrContact: '',
         currentConversationBox: ''
@@ -43,6 +44,7 @@ class Conversation extends Component {
                     projects: user.projects,
                     ownProjects: user.ownProjects,
                     contacts: user.contacts,
+                    gotFriendRequests: user.gotFriendRequests,
                     sentFriendRequests: user.sentFriendRequests
                 });
                 if (this.state.projects.length > 0) {
@@ -176,17 +178,32 @@ class Conversation extends Component {
                 content.className = "label label-success label-sm";
             }else {
                 var sentRequest = this.state.sentFriendRequests.indexOf(memberId);
+                var gotRequest = this.state.gotFriendRequests.indexOf(memberId);
                 if(sentRequest > -1){
                     content = document.createElement("label");
                     textOfButton = document.createTextNode("Sent Request");
                     content.className = "label label-success label-sm";
-                }else {
+                }
+                else if(gotRequest > -1){
+                    content = document.createElement("button");
+                    textOfButton = document.createTextNode("Accept");
+                    content.className = "btn btn-success btn-xs";
+                    content.onclick =  (e) => {
+                        this.pleaseAcceptFriendRequest(e,memberId);
+                    };
+                    let rejectButton = document.createElement("button");
+                    let textOfRejectButton = document.createTextNode("Reject");
+                    rejectButton.className = "btn btn-danger btn-xs";
+                    rejectButton.onclick =  (e) => {
+                        this.pleaseRejectFriendRequest(e,memberId);
+                    };
+                    rejectButton.appendChild(textOfRejectButton);
+                    memberRelationship.appendChild(rejectButton);
+                }
+                else {
                     content = document.createElement("button");
                     textOfButton = document.createTextNode("Add to Contact");
                     content.className = "btn btn-success btn-xs";
-                    content.onclick =  () => {
-                        this.pleaseSendFriendRequest(memberId);
-                    };
                     content.onclick =  (e) => {
                         this.pleaseSendFriendRequest(e,memberId);
                     };
@@ -198,6 +215,42 @@ class Conversation extends Component {
         }else {
             evt.target.removeChild(evt.target.children[0]);
         }
+    };
+
+    pleaseAcceptFriendRequest = (event, memberId) =>{
+        event.stopPropagation();
+        let data = {
+            receiver: this.state.user._id,
+            sender: memberId
+        };
+        acceptFriendRequest(data).then(contact => {
+            let tempContacts = this.state.contacts;
+            tempContacts.push(contact);
+            let tempGotFriendRequest = this.state.gotFriendRequests;
+            let index = tempGotFriendRequest.indexOf(contact._id);
+            if(index !== -1){
+                tempGotFriendRequest.splice(index, 1);
+            }
+            this.setState({ gotFriendRequests: tempGotFriendRequest, contacts: tempContacts });
+            event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+        })
+    };
+
+    pleaseRejectFriendRequest = (event, memberId) =>{
+        event.stopPropagation();
+        let data = {
+            receiver: this.state.user._id,
+            sender: memberId
+        };
+        rejectFriendRequest(data).then(sender => {
+            let tempGotFriendRequest = this.state.gotFriendRequests;
+            let index = tempGotFriendRequest.indexOf(sender.sender);
+            if(index > -1){
+                tempGotFriendRequest.splice(index, 1);
+            }
+            this.setState({ gotFriendRequests: tempGotFriendRequest});
+            event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+        })
     };
 
     pleaseSendFriendRequest = (event, memberId) =>{
