@@ -7,3 +7,7 @@ export  const getConversation = (id) => {
 export  const createConversation = (conversation) => {
     return postRequest('/conversations', conversation);
 };
+
+export  const getConversationAccordingToContact = (data) => {
+    return postRequest('/conversations/get-conversation-of-contact', data);
+};
