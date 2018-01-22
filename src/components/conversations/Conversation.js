@@ -398,7 +398,7 @@ class Conversation extends Component {
                         {this.state.projects.map(project => <div className="channel-or-contact-list" key={project._id}
                                                                  onClick={() => this.changeCurrentChannel(project)}>
                             {project.title}{project.new_message ?
-                            <span className="new-message-icon">new({project.new_message})</span> : ''}
+                            <span className="new-message-icon pull-right">{project.new_message}</span> : ''}
                         </div>)}
                         <div className="separator"></div>
                         <h4>
@@ -409,7 +409,7 @@ class Conversation extends Component {
                                  onClick={() => this.changeCurrentContact(contact)}>
                                 {contact.username}
                                 {contact.new_message ?
-                                    <span className="new-message-icon">new({contact.new_message})</span> : ''}
+                                    <span className="new-message-icon pull-right">{contact.new_message}</span> : ''}
                             </div>)}
                     </div>
                     <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 conversation-rendering">
@@ -423,7 +423,7 @@ class Conversation extends Component {
                                     <span className="group-single-chat-title">Group conversation</span>
                                 </span> : ''}
                                 {this.state.currentConversationBox === 'contact' ? <span>
-                                    <img src="/images/group-2.png" className="group-single-chat-image"/>
+                                    <img src="/images/pp.png" className="group-single-chat-image"/>
                                     {this.state.currentChannelOrContact.username}
                                     <span className="group-single-chat-title">Private conversation</span>
                                     </span> : ''}
@@ -468,6 +468,7 @@ class Conversation extends Component {
                                 <input name="message" onChange={this.handleMessageInputChange}
                                        value={this.state.message}
                                        className="form-control input-sm" id="description"
+                                       autoComplete="off"
                                        placeholder="Type here and press enter ..." required/>
                             </form>
                         </div>

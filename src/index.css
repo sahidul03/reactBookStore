@@ -156,6 +156,7 @@ a.headerMenuActive {
 .Conversation .channel-contact-info .group-single-chat-image {
     width: 36px;
     margin-right: 10px;
+    border-radius: 50%;
 }
 .Conversation .channel-contact-info .group-single-chat-title {
     margin-left: 10px;
@@ -193,6 +194,8 @@ a.headerMenuActive {
     padding: 4px;
     color: blue;
     cursor: pointer;
+    background-color: aliceblue;
+    margin-top: 3px;
 }
 
 .Conversation .channel-or-contact-list:hover {
