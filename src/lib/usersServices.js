@@ -1,4 +1,4 @@
-import {getRequest, postRequest} from './common/commonApiGetway';
+import {getRequest, postRequest, postUploadImage} from './common/commonApiGetway';
 
 export  const getCurrentUser = () => {
     return getRequest('/current_user');
@@ -22,4 +22,11 @@ export  const acceptFriendRequest = (data) => {
 
 export  const rejectFriendRequest = (data) => {
     return postRequest('/reject-friend-request', data);
+};
+
+export  const uploadImage = (imageFile) => {
+    let imageFormData = new FormData();
+    imageFormData.append('imageFile', imageFile);
+
+    return postUploadImage('/save-profile-image', imageFormData);
 };

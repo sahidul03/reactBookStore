@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {getConversation, createConversation, getConversationAccordingToContact} from '../../lib/conversationsServices';
+import {getConversation, getConversationAccordingToContact} from '../../lib/conversationsServices';
 import {getCurrentUser, sendFriendRequest, acceptFriendRequest, rejectFriendRequest} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
+import config from '../../config';
 import {
     NavLink
 } from 'react-router-dom';
@@ -217,7 +218,7 @@ class Conversation extends Component {
         var contact = tempContacts.find(contact => {
             return contact.conversation === conversationId
         });
-        var index = tempContacts.indexOf(contact);
+        index = tempContacts.indexOf(contact);
         if (index > -1) {
             if (tempContacts[index]['new_message']) {
                 tempContacts[index]['new_message'] += 1;
@@ -245,7 +246,7 @@ class Conversation extends Component {
         var contact = tempContacts.find(contact => {
             return contact.conversation === conversationId
         });
-        var index = tempContacts.indexOf(contact);
+        index = tempContacts.indexOf(contact);
         if (index > -1) {
             tempContacts[index]['new_message'] = 0;
         }
@@ -416,14 +417,16 @@ class Conversation extends Component {
                         <div className="channel-contact-info">
                             <span>
                                 {this.state.currentConversationBox === 'project' ? <span>
-                                    <img src="/images/group-2.png" className="group-single-chat-image"/>
+                                    <img src="/images/group-2.png" alt="" className="group-single-chat-image"/>
                                     {this.state.currentChannelOrContact.title}
                                     <span onClick={this.showHideProjectMembers}
                                           className="project-members">Members({this.state.currentChannelOrContact.members.length})</span>
                                     <span className="group-single-chat-title">Group conversation</span>
                                 </span> : ''}
                                 {this.state.currentConversationBox === 'contact' ? <span>
-                                    <img src="/images/pp.png" className="group-single-chat-image"/>
+                                    <img
+                                        src={config.backendBaseUrl + this.state.currentChannelOrContact.photo}
+                                        alt="" className="group-single-chat-image"/>
                                     {this.state.currentChannelOrContact.username}
                                     <span className="group-single-chat-title">Private conversation</span>
                                     </span> : ''}
@@ -445,8 +448,12 @@ class Conversation extends Component {
                                 <div
                                     key={message._id} className="message">
                                     <div className="message-sender">
-                                        <img src="/images/profile-avater.png" className="profile-image"
-                                             alt={message._id}/>
+                                        <img
+                                            src={config.backendBaseUrl + message.sender.photo}
+                                            className="profile-image"
+                                            alt={message._id}/>
+                                        {/*<img src="/images/profile-avater.png" className="profile-image"*/}
+                                        {/*alt={message._id}/>*/}
                                     </div>
                                     <div className="message-body">
                                         <div className="m-head">

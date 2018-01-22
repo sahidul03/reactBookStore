@@ -22,6 +22,16 @@ export const postRequest = (apiUrl, data) => {
         .catch(err => errorHandle(err))
 };
 
+export const postUploadImage = (apiUrl, formData)=> {
+    return fetch(baseUrl + apiUrl, {
+        method:'POST',
+        headers: formHeaders(),
+        body: formData
+    })
+        .then(res => successHandle(res))
+        .catch(err => errorHandle(err))
+};
+
 function errorHandle(err) {
     console.log(err);
     if(window.location.href !== config.frontendBaseUrl + '/login' && window.location.href !== config.frontendBaseUrl + '/signup'){
@@ -45,6 +55,16 @@ function headers() {
         'Access-Control-Allow-Origin':'*',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'x-access-token': accessToken
+    };
+    return headers;
+}
+function formHeaders() {
+    let accessToken =  localStorage.getItem('token');
+    let headers = {
+        'Access-Control-Allow-Origin':'*',
+        // 'Accept': 'application/json',
+        // 'Content-Type': 'multipart/form-data',
         'x-access-token': accessToken
     };
     return headers;
