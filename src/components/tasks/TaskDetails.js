@@ -199,7 +199,7 @@ class TaskDetails extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-xs-12">
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
                         <h4>Comments:
                             <button onClick={this.handleAddCommentForm} className="btn btn-sm btn-default pull-right">
                                 + Add comment
