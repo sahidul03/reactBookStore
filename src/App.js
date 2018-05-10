@@ -47,25 +47,25 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <div className="container">
+                <div>
                     <nav className="navbar navbar-default">
                         <div className="container-fluid">
                             <div className="navbar-header">
-                                <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
-                                        data-target="#navbar"
-                                        aria-expanded="false" aria-controls="navbar">
-                                    <span className="sr-only">Toggle navigation</span>
-                                    <span className="icon-bar"></span>
-                                    <span className="icon-bar"></span>
-                                    <span className="icon-bar"></span>
-                                </button>
+                                {/*<button type="button" className="navbar-toggle collapsed" data-toggle="collapse"*/}
+                                        {/*data-target="#navbar"*/}
+                                        {/*aria-expanded="false" aria-controls="navbar">*/}
+                                    {/*<span className="sr-only">Toggle navigation</span>*/}
+                                    {/*<span className="icon-bar"></span>*/}
+                                    {/*<span className="icon-bar"></span>*/}
+                                    {/*<span className="icon-bar"></span>*/}
+                                {/*</button>*/}
                                 <NavLink className="navbar-brand" to="/">Task Manager</NavLink>
                                 {/*<a class="navbar-brand" href="#">Project name</a>*/}
                             </div>
-                            <div id="navbar" className="navbar-collapse collapse">
+                            <div id="navbar" className="">
                                 <ul className="nav navbar-nav">
-                                    <li><NavLink activeClassName="headerMenuActive" exact={true} to="/">Home</NavLink>
-                                    </li>
+                                    {/*<li><NavLink activeClassName="headerMenuActive" exact={true} to="/">Home</NavLink>*/}
+                                    {/*</li>*/}
                                     {/*<li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>*/}
                                     {/*<li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>*/}
                                     {/*<li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>*/}
@@ -100,7 +100,7 @@ class App extends Component {
                         </div>
                     </nav>
 
-                    <div>
+                    <div className="semi_container">
                         <Route exact path="/" component={Home}/>
                         <Route path="/about" component={About}/>
                         <Route path="/todo" component={Todo}/>

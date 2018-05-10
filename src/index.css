@@ -74,6 +74,10 @@ a.headerMenuActive {
     margin: 8px 0px 8px 0px;
 }
 
+.semi_container{
+    padding: 15px;
+}
+
 .AddMemberFrom {
     padding-top: 10px;
     padding-bottom: 10px;
