@@ -1,123 +1,70 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import Todo from './Todo';
-import {
-    BrowserRouter as Router,
-    Route,
-    NavLink
-} from 'react-router-dom';
-import {About} from './components/others/About';
-import Home from './components/others/Home';
-import ProjectDetails from './components/Projects/ProjectDetails';
-import NewProject from './components/Projects/NewProject';
-import NewTask from './components/tasks/NewTask';
-import UserProfile from './components/users/UserProfile';
-import TaskDetails from './components/tasks/TaskDetails';
-import Conversation from './components/conversations/Conversation';
-import {Topics} from './components/others/Topics';
+// Styles
+// Import Flag Icons Set
+import 'flag-icon-css/css/flag-icon.min.css';
+// Import Font Awesome Icons Set
+import 'font-awesome/css/font-awesome.min.css';
+// Import Simple Line Icons Set
+import 'simple-line-icons/css/simple-line-icons.css';
+// Import Main styles for this application
+import './scss/style.css'
+// import '../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss';
+
+// Containers
+import { Full } from './containers';
+// Pages
+// import { Login, Page404, Page500, Register } from './views/Pages';
+import { Page404, Page500 } from './views/Pages';
 import Login from './components/layouts/Login';
 import SignUp from './components/layouts/Signup';
+
 import {logout} from './lib/authenticationService';
 import {loggingStatus} from './lib/authenticationService';
 import config from './config';
 
+// import { renderRoutes } from 'react-router-config';
+
 class App extends Component {
-    state = {
-        initializationHeaderMenu: false,
-        isLoggedIn: false
-    };
+  state = {
+    initializationHeaderMenu: false,
+    isLoggedIn: false
+  };
 
-    logoutSubmit() {
-        logout().then(response => {
-            if (response.flag === 1) {
-                window.location.href = config.frontendBaseUrl + '/login';
-            }
-        })
-    }
+  logoutSubmit() {
+    logout().then(response => {
+      if (response.flag === 1) {
+        window.location.href = config.frontendBaseUrl + '#/login';
+      }
+    })
+  };
 
-    componentDidMount() {
-        loggingStatus().then(response => {
-            this.setState({initializationHeaderMenu: true});
-            if (response.flag === 1) {
-                this.setState({isLoggedIn: true});
-            }
-        })
-    }
+  componentDidMount() {
+    loggingStatus().then(response => {
+      this.setState({initializationHeaderMenu: true});
+      if (response.flag === 1) {
+        this.setState({isLoggedIn: true});
+      }
+    })
+  };
 
-    render() {
-        return (
-            <Router>
-                <div>
-                    <nav className="navbar navbar-default">
-                        <div className="container-fluid">
-                            <div className="navbar-header">
-                                {/*<button type="button" className="navbar-toggle collapsed" data-toggle="collapse"*/}
-                                        {/*data-target="#navbar"*/}
-                                        {/*aria-expanded="false" aria-controls="navbar">*/}
-                                    {/*<span className="sr-only">Toggle navigation</span>*/}
-                                    {/*<span className="icon-bar"></span>*/}
-                                    {/*<span className="icon-bar"></span>*/}
-                                    {/*<span className="icon-bar"></span>*/}
-                                {/*</button>*/}
-                                <NavLink className="navbar-brand" to="/">Task Manager</NavLink>
-                                {/*<a class="navbar-brand" href="#">Project name</a>*/}
-                            </div>
-                            <div id="navbar" className="">
-                                <ul className="nav navbar-nav">
-                                    {/*<li><NavLink activeClassName="headerMenuActive" exact={true} to="/">Home</NavLink>*/}
-                                    {/*</li>*/}
-                                    {/*<li><NavLink activeClassName="headerMenuActive" to="/about">About</NavLink></li>*/}
-                                    {/*<li><NavLink activeClassName="headerMenuActive" to="/topics">Topics</NavLink></li>*/}
-                                    {/*<li><NavLink activeClassName="headerMenuActive" to="/todo">Todo</NavLink></li>*/}
-                                    {(this.state.initializationHeaderMenu && this.state.isLoggedIn === false) ?
-                                        <li><NavLink activeClassName="headerMenuActive" to="/login">Login</NavLink></li> : ''}
-                                    {(this.state.initializationHeaderMenu && this.state.isLoggedIn  === false) ?
-                                        <li><NavLink activeClassName="headerMenuActive" to="/signup">SignUp</NavLink></li> : ''}
-                                    {(this.state.initializationHeaderMenu && this.state.isLoggedIn) ?
-                                        <li><a className="logoutButton" onClick={this.logoutSubmit}>Logout</a></li> : ''}
+  render() {
+    return (
+      <HashRouter>
+        <Switch>
+          {/*<Route exact path="/login" name="Login Page" component={Login} />*/}
+          {/*<Route exact path="/register" name="Register Page" component={Register} />*/}
 
-
-                                    {/*<li><a className="logoutButton" onClick={this.logoutSubmit}>Logout</a></li>*/}
-                                    {/*<li class="dropdown">*/}
-                                    {/*<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>*/}
-                                    {/*<ul class="dropdown-menu">*/}
-                                    {/*<li><a href="#">Action</a></li>*/}
-                                    {/*<li><a href="#">Another action</a></li>*/}
-                                    {/*<li><a href="#">Something else here</a></li>*/}
-                                    {/*<li role="separator" class="divider"></li>*/}
-                                    {/*<li class="dropdown-header">Nav header</li>*/}
-                                    {/*<li><a href="#">Separated NavLink</a></li>*/}
-                                    {/*<li><a href="#">One more separated NavLink</a></li>*/}
-                                    {/*</ul>*/}
-                                    {/*</li>*/}
-                                </ul>
-                                {/*<ul class="nav navbar-nav navbar-right">*/}
-                                {/*<li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>*/}
-                                {/*<li><a href="../navbar-static-top/">Static top</a></li>*/}
-                                {/*<li><a href="../navbar-fixed-top/">Fixed top</a></li>*/}
-                                {/*</ul>*/}
-                            </div>
-                        </div>
-                    </nav>
-
-                    <div className="semi_container">
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/about" component={About}/>
-                        <Route path="/todo" component={Todo}/>
-                        <Route path="/topics" component={Topics}/>
-                        <Route path="/login" component={Login}/>
-                        <Route path="/signup" component={SignUp}/>
-                        <Route path="/projects/:id" component={ProjectDetails}/>
-                        <Route path="/project/new" component={NewProject}/>
-                        <Route path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
-                        <Route path="/users/:id" component={UserProfile}/>
-                        <Route path="/tasks/:id" component={TaskDetails}/>
-                        <Route path="/conversation" component={Conversation}/>
-                    </div>
-                </div>
-            </Router>
-        );
-    }
+          <Route exact path="/login" component={Login}/>
+          <Route exact path="/signup" component={SignUp}/>
+          <Route exact path="/404" name="Page 404" component={Page404} />
+          <Route exact path="/500" name="Page 500" component={Page500} />
+          <Route path="/" name="Home" component={Full} />
+        </Switch>
+      </HashRouter>
+    );
+  }
 }
 
 export default App;

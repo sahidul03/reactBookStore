@@ -34,15 +34,15 @@ export const postUploadImage = (apiUrl, formData)=> {
 
 function errorHandle(err) {
     console.log(err);
-    if(window.location.href !== config.frontendBaseUrl + '/login' && window.location.href !== config.frontendBaseUrl + '/signup'){
-        window.location.href = config.frontendBaseUrl + '/login';
+    if(window.location.href !== config.frontendBaseUrl + '#/login' && window.location.href !== config.frontendBaseUrl + '#/signup'){
+        window.location.href = config.frontendBaseUrl + '#/login';
     }
 }
 
 function successHandle(res) {
     if(res.status === 401){
-        if(window.location.href !== config.frontendBaseUrl + '/login' && window.location.href !== config.frontendBaseUrl + '/signup'){
-            window.location.href = config.frontendBaseUrl + '/login';
+        if(window.location.href !== config.frontendBaseUrl + '#/login' && window.location.href !== config.frontendBaseUrl + '#/signup'){
+            window.location.href = config.frontendBaseUrl + '#/login';
         }
     }else {
         return res.json();

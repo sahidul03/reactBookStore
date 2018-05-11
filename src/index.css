@@ -1,265 +1,243 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-}
-
-a.headerMenuActive {
-    background-image: -webkit-linear-gradient(top, #dbdbdb 0, #e2e2e2 100%);
-    background-image: -o-linear-gradient(top, #dbdbdb 0, #e2e2e2 100%);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#dbdbdb), to(#e2e2e2));
-    background-image: linear-gradient(to bottom, #dbdbdb 0, #e2e2e2 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdbdbdb', endColorstr='#ffe2e2e2', GradientType=0);
-    background-repeat: repeat-x;
-    -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
-}
-
-/*body {*/
-/*padding-top: 40px;*/
-/*padding-bottom: 40px;*/
-/*background-color: #eee;*/
-/*}*/
 
 .form-signin {
-    max-width: 330px;
-    padding: 15px;
-    margin: 0 auto;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
 }
 
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .form-signin .checkbox {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .form-signin .form-control {
-    position: relative;
-    box-sizing: border-box;
-    height: auto;
-    padding: 10px;
-    font-size: 16px;
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
 }
 
 .form-signin .form-control:focus {
-    z-index: 2;
+  z-index: 2;
 }
 
 .form-signin input[type="email"] {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .form-signin input[type="password"] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .logoutButton {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .separator {
-    height: 1px;
-    background-color: #dadada;
-    margin: 8px 0px 8px 0px;
+  height: 1px;
+  background-color: #dadada;
+  margin: 8px 0px 8px 0px;
 }
 
 .semi_container{
-    padding: 15px;
+  padding: 15px;
 }
 
 .AddMemberFrom {
-    padding-top: 10px;
-    padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .remove-icon-project-members {
-    margin: 1px 0px 1px 10px;
+  margin: 1px 0px 1px 10px;
 }
 
 .comments-container .profile-image {
-    width: 26px;
-    border-radius: 50%;
+  width: 26px;
+  border-radius: 50%;
 }
 
 .comments-container .profile-name {
-    margin-left: 10px;
-    font-size: 16px;
-    color: teal;
+  margin-left: 10px;
+  font-size: 16px;
+  color: teal;
 }
 
 .comments-container .comment-body {
-    font-size: 13px;
-    margin: 5px 0px 5px 0px;
-    background-color: #fbf5eb;
-    padding: 10px;
-    border-radius: 4px;
+  font-size: 13px;
+  margin: 5px 0px 5px 0px;
+  background-color: #fbf5eb;
+  padding: 10px;
+  border-radius: 4px;
 }
 
 .comments-container .comment {
-    border-bottom: 1px solid #dadada;
-    margin-bottom: 12px;
-    background-color: #fbfbfb;
-    padding: 5px;
-    border-radius: 5px;
+  border-bottom: 1px solid #dadada;
+  margin-bottom: 12px;
+  background-color: #fbfbfb;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .comments-container .created-date {
-    margin-left: 10px;
-    font-size: 10px;
-    color: gray;
+  margin-left: 10px;
+  font-size: 10px;
+  color: gray;
 }
 
 .Conversation .channels-contacts {
-    /*border-right: 1px solid #dadada;*/
-    min-height: 400px;
+  /*border-right: 1px solid #dadada;*/
+  min-height: 400px;
 }
 
 .Conversation .channels-contacts .new-message-icon {
-    color: #5d2e0b;
-    font-weight: bold;
-    margin-left: 20px;
-    font-size: 12px;
-    background-color: gold;
-    padding: 0 3px;
-    border-radius: 3px;
+  color: #5d2e0b;
+  font-weight: bold;
+  margin-left: 20px;
+  font-size: 12px;
+  background-color: gold;
+  padding: 0 3px;
+  border-radius: 3px;
 }
 
 .Conversation .conversation-rendering {
-    border-left: 2px solid #dadada;
+  border-left: 2px solid #dadada;
 }
 
 .Conversation .chat-text-box {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .Conversation .messages-container {
-    height: 450px;
-    overflow-y: scroll;
+  height: 450px;
+  overflow-y: scroll;
 }
 
 .Conversation .channel-contact-info {
-    font-size: 19px;
-    color: green;
-    background-color: #b3d4f1;
-    margin-bottom: 10px;
-    padding: 5px 0px 7px 10px;
-    margin-left: -16px;
+  font-size: 19px;
+  color: green;
+  background-color: #b3d4f1;
+  margin-bottom: 10px;
+  padding: 5px 0px 7px 10px;
+  margin-left: -16px;
 }
 
 .Conversation .channel-contact-info .group-single-chat-image {
-    width: 36px;
-    margin-right: 10px;
-    border-radius: 50%;
+  width: 36px;
+  margin-right: 10px;
+  border-radius: 50%;
 }
 .Conversation .channel-contact-info .group-single-chat-title {
-    margin-left: 10px;
-    font-size: 11px;
-    color: azure;
+  margin-left: 10px;
+  font-size: 11px;
+  color: azure;
 }
 .Conversation .channel-contact-info .project-members {
-    margin-left: 10px;
-    font-size: 13px;
-    color: #1f254a;
-    cursor: pointer;
+  margin-left: 10px;
+  font-size: 13px;
+  color: #1f254a;
+  cursor: pointer;
 }
 .Conversation .channel-contact-info .group-members .member-list {
-    margin: 5px;
-    padding: 2px 7px 2px 7px;
-    border-radius: 3px;
-    background-color: #415ae6;
-    float: left;
+  margin: 5px;
+  padding: 2px 7px 2px 7px;
+  border-radius: 3px;
+  background-color: #415ae6;
+  float: left;
 }
 .Conversation .channel-contact-info .group-members {
-    background-color: #594ae933;
-    /*margin: 10px 10px 0px 0px;*/
-    border-radius: 2px;
-    font-size: 15px;
-    font-weight: normal;
-    padding: 10px;
-    color: #22f52c;
-    position: absolute;
-    width: 95%;
-    left: 0;
-    top: 47px;
+  background-color: #594ae933;
+  /*margin: 10px 10px 0px 0px;*/
+  border-radius: 2px;
+  font-size: 15px;
+  font-weight: normal;
+  padding: 10px;
+  color: #22f52c;
+  position: absolute;
+  width: 95%;
+  left: 0;
+  top: 47px;
 }
 
 .Conversation .channel-or-contact-list {
-    padding: 4px;
-    color: blue;
-    cursor: pointer;
-    background-color: aliceblue;
-    margin-top: 3px;
+  padding: 4px;
+  color: blue;
+  cursor: pointer;
+  background-color: aliceblue;
+  margin-top: 3px;
 }
 
 .Conversation .channel-or-contact-list:hover {
-    background-color: mediumblue;
-    color: white;
+  background-color: mediumblue;
+  color: white;
 }
 
 .Conversation .messages-container .message {
-    margin: 10px 0px 0px 0px;
+  margin: 10px 0px 0px 0px;
 }
 
 .Conversation .messages-container .message .profile-image {
-    width: 26px;
-    border-radius: 50%;
-    margin-top: 10px;
+  width: 26px;
+  border-radius: 50%;
+  margin-top: 10px;
 }
 
 .Conversation .messages-container .message .created-date {
-    font-size: 10px;
-    color: yellowgreen;
+  font-size: 10px;
+  color: yellowgreen;
 }
 
 .Conversation .messages-container .message .message-sender {
-    float: left;
-    width: 8%;
+  float: left;
+  width: 8%;
 }
 
 .Conversation .messages-container .message .profile-name {
-    color: deepskyblue;
-    font-size: 12px;
+  color: deepskyblue;
+  font-size: 12px;
 }
 
 .Conversation .messages-container .message .message-body {
-    float: left;
-    width: 90%;
-    background-color: aliceblue;
-    padding: 5px 10px 5px 10px;
-    border-radius: 5px;
+  float: left;
+  width: 90%;
+  background-color: aliceblue;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
 }
 
 .Conversation .messages-container .message .m-body {
-    font-size: 13px;
-    line-height: 1.6;
-    color: darkcyan;
-    padding: 3px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: darkcyan;
+  padding: 3px;
 }
 
 .clear {
-    clear: both;
+  clear: both;
 }
 .member-relationship{
-    position: absolute;
-    top: 20px;
-    background-color: #9fadf8;
-    border: 1px solid #545cf5;
-    padding: 5px 10px 5px 10px;
-    border-radius: 3px;
-    color: #2c43a7;
-    right: 0;
+  position: absolute;
+  top: 20px;
+  background-color: #9fadf8;
+  border: 1px solid #545cf5;
+  padding: 5px 10px 5px 10px;
+  border-radius: 3px;
+  color: #2c43a7;
+  right: 0;
 }
 .position-relative{
-    position: relative;
+  position: relative;
 }
