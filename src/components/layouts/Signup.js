@@ -30,11 +30,11 @@ class SignUp extends Component {
   };
 
   componentWillMount() {
-    // getRequest('/profile').then(response => {
-    //     if(response){
-    //         window.location.href = config.frontendBaseUrl;
-    //     }
-    // })
+    getRequest('/profile').then(response => {
+        if(response){
+            window.location.href = config.frontendBaseUrl;
+        }
+    })
   }
 
   handleSubmit = (evt) => {
@@ -91,7 +91,7 @@ class SignUp extends Component {
                       <Input name="username" type="text" onChange={this.handleInputChange}
                              value={this.state.signUpFormData.username}
                              id="name"
-                             placeholder="UserName" required/>
+                             placeholder="UserName"/>
                     </InputGroup>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -100,7 +100,7 @@ class SignUp extends Component {
                       <Input name="email" type="email" onChange={this.handleInputChange}
                              value={this.state.signUpFormData.email}
                              id="email"
-                             placeholder="Email" required/>
+                             placeholder="Email"/>
                     </InputGroup>
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -111,7 +111,7 @@ class SignUp extends Component {
                       <Input name="password" type="password" onChange={this.handleInputChange}
                              value={this.state.signUpFormData.password}
                              id="email"
-                             placeholder="Password" required/>
+                             placeholder="Password"/>
                     </InputGroup>
                     <InputGroup className="mb-4">
                       <InputGroupAddon addonType="prepend">
@@ -122,18 +122,15 @@ class SignUp extends Component {
                       <Input name="passwordConf" type="password" onChange={this.handleInputChange}
                              value={this.state.signUpFormData.passwordConf}
                              id="email"
-                             placeholder="Password Confirmation" required/>
+                             placeholder="Password Confirmation"/>
                     </InputGroup>
                     <Button type="submit" color="success" block>Create Account</Button>
                   </form>
                 </CardBody>
                 <CardFooter className="p-4">
                   <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook" block><span>facebook</span></Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter" block><span>twitter</span></Button>
+                    <Col xs="12" sm="12">
+                      <a href="#/login"  className="btn btn-primary btn-block"><span>Sign In</span></a>
                     </Col>
                   </Row>
                 </CardFooter>

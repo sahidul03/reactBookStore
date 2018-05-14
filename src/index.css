@@ -122,7 +122,7 @@
 }
 
 .Conversation .messages-container {
-  height: 450px;
+  height: 400px;
   overflow-y: scroll;
 }
 
@@ -240,4 +240,8 @@
 }
 .position-relative{
   position: relative;
+}
+.header-json{
+  font-style: italic;
+  font-family: initial;
 }

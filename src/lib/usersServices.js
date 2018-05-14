@@ -4,6 +4,10 @@ export  const getCurrentUser = () => {
     return getRequest('/current_user');
 };
 
+export  const getCurrentUserBasicInfo = () => {
+    return getRequest('/current_user_basic_info');
+};
+
 export  const getAllUsers = () => {
     return getRequest('/users');
 };

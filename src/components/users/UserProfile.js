@@ -55,7 +55,6 @@ class UserProfile extends Component {
     render() {
         return (
             <div className="Home">
-                <h4>Username: {this.state.user.username}, Email: {this.state.user.email}</h4>
                 <div className="row">
                     <div className="col-sm-6 col-md-6 col-lg-6">
                         {this.state.user.photo? <img width="120" src={config.backendBaseUrl + this.state.user.photo}/> : ''}
