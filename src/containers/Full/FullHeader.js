@@ -55,12 +55,13 @@ class FullHeader extends Component {
             <NavLink href="#/conversation">Conversation</NavLink>
           </NavItem>
           <NavItem className="px-3">
-            <NavLink href={'#/users/' + this.state.basicUserInfo._id}>Settings</NavLink>
+            {this.state.basicUserInfo ? <NavLink href={'#/users/' + this.state.basicUserInfo._id}>Settings</NavLink> : ''}
+
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
           <NavItem className="d-md-down-none header-json">
-            { '{ username: ' + this.state.basicUserInfo.username + ', email: ' + this.state.basicUserInfo.email + ' }'}
+            {this.state.basicUserInfo ? '{ username: ' + this.state.basicUserInfo.username + ', email: ' + this.state.basicUserInfo.email + ' }' : ''}
           </NavItem>
           {/*<NavItem className="d-md-down-none">*/}
             {/*<NavLink href="#"><i className="icon-list"></i></NavLink>*/}
@@ -86,9 +87,12 @@ class FullHeader extends Component {
             </DropdownMenu>
           </AppHeaderDropdown>
           <AppHeaderDropdown direction="down">
-            <DropdownToggle nav>
+            { this.state.basicUserInfo ?
+              <DropdownToggle nav>
               <img src={config.backendBaseUrl + this.state.basicUserInfo.photo} className="img-avatar" alt="admin@bootstrapmaster.com" />
-            </DropdownToggle>
+              </DropdownToggle> : ''
+            }
+            { this.state.basicUserInfo ?
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center">
                 <strong>{this.state.basicUserInfo.username}</strong>
@@ -112,7 +116,7 @@ class FullHeader extends Component {
               {/*<DropdownItem divider />*/}
               {/*<DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem>*/}
               <DropdownItem onClick={ this.logoutSubmit}><i className="fa fa-lock"></i> Logout</DropdownItem>
-            </DropdownMenu>
+            </DropdownMenu> : ''}
           </AppHeaderDropdown>
         </Nav>
         {/*<AppAsideToggler className="d-md-down-none" />*/}

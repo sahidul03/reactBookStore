@@ -19,7 +19,9 @@ class Home extends Component {
         }));
         getCurrentUser().then(
             user => {
+              if(user){
                 this.setState({user: user, projects: user.projects, ownProjects: user.ownProjects});
+              }
             }
         )
     }
