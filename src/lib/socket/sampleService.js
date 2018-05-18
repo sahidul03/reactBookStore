@@ -7,10 +7,6 @@ const socket = openSocket(config.socketUrl, {transports: ['websocket', 'polling'
 // import io from 'socket.io-client';
 // const socket = io('http://localhost');
 
-function subscribeToTimer(cb) {
-    socket.on('timer', timestamp => cb(null, timestamp));
-    socket.emit('subscribeToTimer', 1000);
-}
 
 function addComment(data) {
     socket.emit('new-comment', data);
@@ -60,7 +56,6 @@ function getNotificationForAcceptFriendRequest(fn) {
 }
 
 export {
-    subscribeToTimer,
     addComment,
     appendComment,
     joinToTaskRoom,

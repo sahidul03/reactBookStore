@@ -3,7 +3,6 @@ import {getCurrentUser} from '../../lib/usersServices';
 import {
     NavLink
 } from 'react-router-dom';
-import { subscribeToTimer } from '../../lib/socket/sampleService';
 
 class Home extends Component {
     state = {
@@ -14,9 +13,6 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        subscribeToTimer((err, timestamp) => this.setState({
-            timestamp
-        }));
         getCurrentUser().then(
             user => {
               if(user){

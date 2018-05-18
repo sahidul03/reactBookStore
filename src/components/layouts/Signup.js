@@ -90,7 +90,7 @@ class SignUp extends Component {
                       </InputGroupAddon>
                       <Input name="username" type="text" onChange={this.handleInputChange}
                              value={this.state.signUpFormData.username}
-                             id="name"
+                             id="username"
                              placeholder="UserName"/>
                     </InputGroup>
                     <InputGroup className="mb-3">
@@ -110,7 +110,7 @@ class SignUp extends Component {
                       </InputGroupAddon>
                       <Input name="password" type="password" onChange={this.handleInputChange}
                              value={this.state.signUpFormData.password}
-                             id="email"
+                             id="password"
                              placeholder="Password"/>
                     </InputGroup>
                     <InputGroup className="mb-4">
@@ -121,7 +121,7 @@ class SignUp extends Component {
                       </InputGroupAddon>
                       <Input name="passwordConf" type="password" onChange={this.handleInputChange}
                              value={this.state.signUpFormData.passwordConf}
-                             id="email"
+                             id="passwordConf"
                              placeholder="Password Confirmation"/>
                     </InputGroup>
                     <Button type="submit" color="success" block>Create Account</Button>
