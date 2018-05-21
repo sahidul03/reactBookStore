@@ -124,6 +124,7 @@
 .Conversation .messages-container {
   height: 400px;
   overflow-y: scroll;
+  margin-left: -30px;
 }
 
 .Conversation .channel-contact-info {
@@ -245,4 +246,87 @@
   font-style: italic;
   font-family: initial;
   color: #D1D1D1;
+}
+
+
+ .messages {
+  height: auto;
+  min-height: calc(100% - 93px);
+  max-height: calc(100% - 93px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+@media screen and (max-width: 735px) {
+   .messages {
+    max-height: calc(100% - 105px);
+  }
+}
+ .messages::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+ .messages::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+ .messages ul li {
+  display: inline-block;
+  clear: both;
+  float: left;
+  /*margin: 15px 15px 5px 15px;*/
+  width: calc(100% - 25px);
+  font-size: 0.9em;
+}
+ .messages ul li:nth-last-child(1) {
+  margin-bottom: 20px;
+}
+ .messages ul li.sent img {
+  margin: 6px 8px 0 0;
+}
+ .messages ul li.sent p {
+  background: #435f7a;
+  color: #f5f5f5;
+}
+ .messages ul li.replies img {
+  float: right;
+  margin: 6px 0 0 8px;
+}
+ .messages ul li.replies p {
+  background: #f5f5f5;
+  float: right;
+   text-align: right;
+}
+.messages ul li.replies p .date_time {
+  float: left;
+  font-size: 9px;
+  color: cadetblue;
+  margin-right: 50px;
+}
+.messages ul li.replies p .user_name {
+  float: right;
+  color: grey;
+}
+.messages ul li.sent p .date_time {
+  float: right;
+  font-size: 9px;
+}
+.messages ul li.sent p .user_name {
+  float: left;
+  margin-right: 50px;
+}
+ .messages ul li img {
+  width: 32px;
+  border-radius: 50%;
+  float: left;
+}
+ .messages ul li p {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 205px;
+  line-height: 130%;
+}
+@media screen and (min-width: 735px) {
+   .messages ul li p {
+    max-width: 300px;
+  }
 }

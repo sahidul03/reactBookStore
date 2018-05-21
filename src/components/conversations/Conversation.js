@@ -413,7 +413,7 @@ class Conversation extends Component {
                                     <span className="new-message-icon pull-right">{contact.new_message}</span> : ''}
                             </div>)}
                     </div>
-                    <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 conversation-rendering">
+                    <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 conversation-rendering messages">
                         <div className="channel-contact-info">
                             <span>
                                 {this.state.currentConversationBox === 'project' ? <span>
@@ -443,33 +443,23 @@ class Conversation extends Component {
                                 </div> : ''}
                         </div>
                         {/*<div className="separator"></div>*/}
-                        <div ref="messagesContainer" className="messages-container">
-                            {this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message =>
-                                <div
-                                    key={message._id} className="message">
-                                    <div className="message-sender">
-                                        <img
-                                            src={config.backendBaseUrl + message.sender.photo}
-                                            className="profile-image"
-                                            alt={message._id}/>
-                                        {/*<img src="/images/profile-avater.png" className="profile-image"*/}
-                                        {/*alt={message._id}/>*/}
-                                    </div>
-                                    <div className="message-body">
-                                        <div className="m-head">
-                                            <NavLink className="profile-name"
-                                                     to={"/users/" + message.sender._id}>{message.sender.username}</NavLink>
-                                            <span className="created-date pull-right"><Timestamp
-                                                time={message.updated_at} format='full'
-                                                includeDay/></span>
-                                        </div>
-                                        <div className="m-body">
-                                            {message.body}
-                                        </div>
-                                    </div>
-                                    <div className="clear"></div>
-                                </div>) : ''}
-                        </div>
+                        <ul ref="messagesContainer" className="messages-container">
+                          {this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message =>
+                            <li
+                              key={message._id} className={message.sender._id == this.state.user._id ? 'replies' : 'sent'}>
+                              <img src={config.backendBaseUrl + message.sender.photo} alt={message.sender.username} />
+                              <p>
+                                <span className="date_time">
+                                  <Timestamp time={message.updated_at} format='full' includeDay/>
+                                </span>
+                                <span className="user_name">
+                                  <NavLink className="profile-name" to={"/users/" + message.sender._id}>{message.sender.username}</NavLink>
+                                </span>
+                                <br/>
+                                {message.body}
+                              </p>
+                            </li>) : ''}
+                        </ul>
                         <div className="chat-text-box">
                             <form onSubmit={this.handleMessageSubmit}>
                                 <input name="message" onChange={this.handleMessageInputChange}
