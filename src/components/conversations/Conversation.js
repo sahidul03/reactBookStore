@@ -447,17 +447,14 @@ class Conversation extends Component {
                           {this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message =>
                             <li
                               key={message._id} className={message.sender._id == this.state.user._id ? 'replies' : 'sent'}>
-                              <img src={config.backendBaseUrl + message.sender.photo} alt={message.sender.username} />
+                                <img src={config.backendBaseUrl + message.sender.photo} alt={message.sender.username} />
                               <p>
+                                <span className="message_body">{message.body}</span><br/>
                                 <span className="date_time">
-                                  <Timestamp time={message.updated_at} format='full' includeDay/>
+                                  <Timestamp time={message.updated_at} twentyFourHour autoUpdate={60}/>
                                 </span>
-                                <span className="user_name">
-                                  <NavLink className="profile-name" to={"/users/" + message.sender._id}>{message.sender.username}</NavLink>
-                                </span>
-                                <br/>
-                                {message.body}
                               </p>
+
                             </li>) : ''}
                         </ul>
                         <div className="chat-text-box">
