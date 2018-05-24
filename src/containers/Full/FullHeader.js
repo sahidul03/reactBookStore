@@ -20,6 +20,9 @@ class FullHeader extends Component {
   logoutSubmit() {
     logout().then(response => {
       if (response.flag === 1) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('currentChannelOrContact');
+        localStorage.removeItem('currentConversationBox');
         window.location.href = config.frontendBaseUrl + '#/login';
       }
     })

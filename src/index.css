@@ -99,7 +99,8 @@ main.main{
   font-size: 10px;
   color: gray;
 }
-
+.Conversation{
+}
 .Conversation .channels-contacts {
   /*border-right: 1px solid #dadada;*/
   min-height: 400px;
@@ -132,10 +133,11 @@ main.main{
 .Conversation .channel-contact-info {
   font-size: 19px;
   color: green;
-  background-color: #b3d4f1;
+  /*background-color: #b3d4f1;*/
   margin-bottom: 10px;
   padding: 5px 0px 7px 10px;
   margin-left: -16px;
+  background-image: linear-gradient(to right, #42f261, #00e4cd, #00c9ff, #00a1ff, #af70d1);
 }
 
 .Conversation .channel-contact-info .group-single-chat-image {
@@ -290,7 +292,10 @@ main.main{
  .messages ul li.sent p .message_body{
    /*background: #fdd6f0a3;*/
    color: #b10aa1;
-   border: 1px solid #e060e08a;
+   border: 1px solid #eca3ec8a;
+   -webkit-box-shadow: 1px 1px 6px 1px rgb(243, 215, 240);
+   -moz-box-shadow: 1px 1px 6px 1px rgb(243, 215, 240);
+   box-shadow: 1px 1px 6px 1px rgb(243, 215, 240);
 }
  .messages ul li.replies img {
   float: right;
@@ -302,9 +307,12 @@ main.main{
 }
  .messages ul li.replies p .message_body{
    /*background: #edf7df;*/
-   border: 1px solid #70cc70;
+   border: 1px solid #a5e4a5;
    text-align: left;
    color: #117711;
+   -webkit-box-shadow: 1px 1px 6px 1px rgb(219, 251, 219);
+   -moz-box-shadow: 1px 1px 6px 1px rgb(219, 251, 219);
+   box-shadow: 1px 1px 6px 1px rgb(219, 251, 219);
 }
 .messages ul li.replies p .date_time {
   float: right;
@@ -330,7 +338,10 @@ main.main{
   width: 32px;
   border-radius: 50%;
   float: left;
-   border: 2px solid #dadada;
+   /*border: 2px solid #dadada;*/
+   -webkit-box-shadow: 2px 2px 6px 1px rgba(131,196,214,1);
+   -moz-box-shadow: 2px 2px 6px 1px rgba(131,196,214,1);
+   box-shadow: 2px 2px 6px 1px rgba(131,196,214,1);
 }
  .messages ul li p {
   max-width: 205px;
