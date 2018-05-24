@@ -3,6 +3,7 @@ import {getConversation, getConversationAccordingToContact} from '../../lib/conv
 import {getCurrentUser, sendFriendRequest, acceptFriendRequest, rejectFriendRequest} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
 import config from '../../config';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     NavLink
 } from 'react-router-dom';
@@ -410,6 +411,19 @@ class Conversation extends Component {
     };
 
     render() {
+      const messages = this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message =>
+        <li
+          key={message._id} className={message.sender._id == this.state.user._id ? 'replies' : 'sent'}>
+          <img src={config.backendBaseUrl + message.sender.photo} alt={message.sender.username} />
+          <p>
+            <span className="message_body">{message.body}</span><br/>
+            <span className="date_time">
+                                  <Timestamp time={message.updated_at} twentyFourHour autoUpdate={60}/>
+                                </span>
+          </p>
+
+        </li>) : '';
+
         return (
             <div className="Conversation">
                 <div className="row">
@@ -465,18 +479,16 @@ class Conversation extends Component {
                         </div>
                         {/*<div className="separator"></div>*/}
                         <ul ref="messagesContainer" className="messages-container">
-                          {this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message =>
-                            <li
-                              key={message._id} className={message.sender._id == this.state.user._id ? 'replies' : 'sent'}>
-                                <img src={config.backendBaseUrl + message.sender.photo} alt={message.sender.username} />
-                              <p>
-                                <span className="message_body">{message.body}</span><br/>
-                                <span className="date_time">
-                                  <Timestamp time={message.updated_at} twentyFourHour autoUpdate={60}/>
-                                </span>
-                              </p>
-
-                            </li>) : ''}
+                          {this.state.currentChannelOrContact ? <ReactCSSTransitionGroup
+                            transitionName="list-item"
+                            transitionAppear={true}
+                            transitionAppearTimeout={500}
+                            transitionEnter={true}
+                            transitionEnterTimeout={500}
+                            transitionLeave={true}
+                            transitionLeaveTimeout={300}>
+                            {messages}
+                          </ReactCSSTransitionGroup> : ''}
                         </ul>
                         <div className="chat-text-box">
                             <form onSubmit={this.handleMessageSubmit}>
