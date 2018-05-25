@@ -41,6 +41,7 @@ class Login extends Component {
     console.log('Authenticating....');
     if (this.state.loginFormData) {
       login(this.state.loginFormData).then(response => {
+        if(response){
           if (response.flag === 1) {
             let formData = {
               username: '',
@@ -52,6 +53,7 @@ class Login extends Component {
           } else {
             this.setState({message: '', errorMessage: response.message, flag: response.flag});
           }
+        }
         }
       )
     }
