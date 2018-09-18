@@ -7,6 +7,7 @@ class NewProject extends Component {
     state = {
         project: {
             title: '',
+            shortName: '',
             description: ''
         },
         flag: null,
@@ -57,6 +58,13 @@ class NewProject extends Component {
                                        value={this.state.project.title}
                                        className="form-control input-sm" id="title"
                                        placeholder="Title" required/>
+                            </div>
+                            <div className="form-group col-md-12 col-sm-12">
+                                <label>Short Name*</label>
+                                <input name="shortName" type="text" onChange={this.handleInputChange}
+                                       value={this.state.project.shortName}
+                                       className="form-control input-sm" id="title"
+                                       placeholder="Short Name" required/>
                             </div>
                             <div className="form-group col-md-12 col-sm-12">
                                 <label>Description*</label>
