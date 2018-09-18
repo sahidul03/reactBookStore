@@ -48,6 +48,14 @@ main.main{
   cursor: pointer;
 }
 
+.m-b-10 {
+  margin-bottom: 10px;
+}
+
+.mtb-10 {
+  margin-top: 10px;
+}
+
 .separator {
   height: 1px;
   background-color: #dadada;
@@ -137,7 +145,7 @@ main.main{
   margin-bottom: 10px;
   padding: 5px 0px 7px 10px;
   margin-left: -16px;
-  background-image: linear-gradient(to right, #42f261, #00e4cd, #00c9ff, #00a1ff, #af70d1);
+  background-image: linear-gradient(to right, #e2f5e5, #a0d2cd, #b1bcbf, #acc6d5, #d9b7ec);
 }
 
 .Conversation .channel-contact-info .group-single-chat-image {
@@ -257,7 +265,7 @@ main.main{
   height: auto;
   min-height: calc(100% - 93px);
   max-height: calc(100% - 93px);
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 @media screen and (max-width: 735px) {
