@@ -111,7 +111,7 @@ class ProjectDetails extends Component {
                     </div>
                         
                         {this.state.tasks.length > 0 ? <div><h4>Tasks list</h4>
-                        <table class="table table-hover">
+                        <table className="table table-hover">
                           <thead>
                             <tr>
                               <th scope="col">Task Number</th>
@@ -132,13 +132,13 @@ class ProjectDetails extends Component {
                           </tbody>
                         </table></div> : ''}
                     </div>
-                    <div className="col-sm-4 col-md-4 col-lg-4">
+                    <div className="col-sm-4 col-md-4 col-lg-4 border-left-2-grey">
                         <h4>Creator: {this.state.project.creator ? <NavLink to={"/users/" + this.state.project.creator._id}>{this.state.project.creator.username}</NavLink>: ''}</h4><br/>
                         <h4>
                             <button className="btn btn-default pull-right" onClick={this.handleAddMembersForm}>+ Add Members</button>
-                        </h4>
+                        </h4><br/>
                         {this.state.showAddMembersForm ? <div className="AddMemberFrom">
-                            <select className="form-control"  onChange={this.handleInputChange} name="member_id" value={this.state.member_id}>
+                            <select className="form-control m-b-10 m-t-10"  onChange={this.handleInputChange} name="member_id" value={this.state.member_id}>
                                 <option key={0} value=''>Please select one user</option>
                                 {this.state.availableUsers.map(user => <option key={user._id} value={user._id} className="form-control">{user.username}</option>)}
                             </select>
@@ -148,7 +148,7 @@ class ProjectDetails extends Component {
                             <strong>Members: </strong>
                             {this.state.members.map(member => <div key={member._id}>
                                 <NavLink to={"/users/" + member._id}>{member.username}</NavLink>
-                                <button onClick={() => this.removeMemberFromThisProject(member._id)} className="btn btn-xs cursor-pointer remove-icon-project-members">X</button>
+                                <span onClick={() => this.removeMemberFromThisProject(member._id)} className="badge badge-danger cursor-pointer remove-icon-project-members">x</span>
                             </div>)}
                         </div>
                     </div>

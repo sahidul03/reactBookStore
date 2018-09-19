@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink } from 'reactstrap';
+import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-
+import { NavLink } from 'react-router-dom';
 import {logout} from '../../lib/authenticationService';
 import {getCurrentUserBasicInfo} from '../../lib/usersServices';
 import config from '../../config';
@@ -17,15 +17,19 @@ class FullHeader extends Component {
   state = {
     basicUserInfo: ''
   };
-  logoutSubmit() {
+  logoutSubmit = () => {
     logout().then(response => {
       if (response.flag === 1) {
         localStorage.removeItem('token');
         localStorage.removeItem('currentChannelOrContact');
         localStorage.removeItem('currentConversationBox');
-        window.location.href = config.frontendBaseUrl + '#/login';
+        this.props.history.push('/login');
       }
     })
+  };
+
+  navigateTo = (url) => {
+    this.props.history.push(url);
   };
 
   componentDidMount() {
@@ -52,13 +56,13 @@ class FullHeader extends Component {
 
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
-            <NavLink href="#/">Home</NavLink>
+            <NavLink to={'/'}>Home</NavLink>
           </NavItem>
           <NavItem className="px-3">
-            <NavLink href="#/conversation">Conversation</NavLink>
+            <NavLink to={'/conversation'}>Conversation</NavLink>
           </NavItem>
           <NavItem className="px-3">
-            {this.state.basicUserInfo ? <NavLink href={'#/users/' + this.state.basicUserInfo._id}>Settings</NavLink> : ''}
+            {this.state.basicUserInfo ? <NavLink to={'/users/' + this.state.basicUserInfo._id}>Settings</NavLink> : ''}
 
           </NavItem>
         </Nav>
@@ -108,10 +112,10 @@ class FullHeader extends Component {
               {/*<DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge></DropdownItem>*/}
               {/*<DropdownItem><i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge></DropdownItem>*/}
               {/*<DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>*/}
-              <DropdownItem href={'#/users/' + this.state.basicUserInfo._id}>
+              <DropdownItem onClick={() => this.navigateTo('/users/' + this.state.basicUserInfo._id)}>
                 <i className="fa fa-user"></i> Profile
               </DropdownItem>
-              <DropdownItem href={'#/users/' + this.state.basicUserInfo._id}>
+              <DropdownItem onClick={() => this.navigateTo('/users/' + this.state.basicUserInfo._id)}>
                 <i className="fa fa-wrench"></i> Settings
               </DropdownItem>
               {/*<DropdownItem><i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge></DropdownItem>*/}

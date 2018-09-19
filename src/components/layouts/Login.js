@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { NavLink } from 'react-router-dom';
 import {login} from '../../lib/authenticationService';
 import {getRequest} from '../../lib/common/commonApiGetway';
 import config from '../../config';
@@ -31,7 +32,7 @@ class Login extends Component {
   componentWillMount() {
     getRequest('/profile').then(response => {
       if (response) {
-        window.location.href = config.frontendBaseUrl;
+        this.props.history.push('/');
       }
     })
   }
@@ -49,7 +50,7 @@ class Login extends Component {
             };
             this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
             localStorage.setItem('token', response.token);
-            window.location.href = config.frontendBaseUrl;
+            this.props.history.push('/');
           } else {
             this.setState({message: '', errorMessage: response.message, flag: response.flag});
           }
@@ -120,7 +121,7 @@ class Login extends Component {
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore magna aliqua.</p>
                       {/*<Button color="primary" className="mt-3" active>Register Now!</Button>*/}
-                      <a href="#/signup" className="mt-3 btn btn-primary active">Register Now!</a>
+                      <NavLink to={'/signup'} className="mt-3 btn btn-primary active">Register Now!</NavLink>
                     </div>
                   </CardBody>
                 </Card>

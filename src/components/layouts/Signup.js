@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { NavLink } from 'react-router-dom';
 import {signUp} from '../../lib/authenticationService';
 import {
   Button,
@@ -32,7 +33,7 @@ class SignUp extends Component {
   componentWillMount() {
     getRequest('/profile').then(response => {
         if(response){
-            window.location.href = config.frontendBaseUrl;
+            this.props.history.push('/');
         }
     })
   }
@@ -51,7 +52,7 @@ class SignUp extends Component {
             };
             this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
             localStorage.setItem('token', response.token);
-            window.location.href = config.frontendBaseUrl;
+            this.props.history.push('/');
           } else {
             this.setState({message: '', errorMessage: response.message, flag: response.flag});
           }
@@ -130,7 +131,7 @@ class SignUp extends Component {
                 <CardFooter className="p-4">
                   <Row>
                     <Col xs="12" sm="12">
-                      <a href="#/login"  className="btn btn-primary btn-block"><span>Sign In</span></a>
+                      <NavLink to={'/login'} className="btn btn-primary btn-block"><span>Sign In</span></NavLink>
                     </Col>
                   </Row>
                 </CardFooter>

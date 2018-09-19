@@ -49,7 +49,7 @@ class NewTask extends Component {
                             description: ''
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, task: formData});
-                        window.location.href = config.frontendBaseUrl + '/projects/' + this.state.project._id;
+                        this.props.history.push('/projects/' + this.state.project._id);
                     }else {
                         this.setState({message: '', errorMessage: response.message, flag: response.flag});
                     }

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { Router , Route, Switch } from 'react-router-dom';
+import createHistory from "history/createBrowserHistory"
+
 import './App.css';
 // Styles
 // Import Flag Icons Set
@@ -25,6 +27,7 @@ import {loggingStatus} from './lib/authenticationService';
 import config from './config';
 
 // import { renderRoutes } from 'react-router-config';
+const history = createHistory()
 
 class App extends Component {
   state = {
@@ -35,7 +38,7 @@ class App extends Component {
   logoutSubmit() {
     logout().then(response => {
       if (response.flag === 1) {
-        window.location.href = config.frontendBaseUrl + '#/login';
+        this.props.history.push('/login');
       }
     })
   };
@@ -51,7 +54,7 @@ class App extends Component {
 
   render() {
     return (
-      <HashRouter>
+      <Router  history={history}>
         <Switch>
           {/*<Route exact path="/login" name="Login Page" component={Login} />*/}
           {/*<Route exact path="/register" name="Register Page" component={Register} />*/}
@@ -62,7 +65,7 @@ class App extends Component {
           <Route exact path="/500" name="Page 500" component={Page500} />
           <Route path="/" name="Home" component={Full} />
         </Switch>
-      </HashRouter>
+      </Router >
     );
   }
 }

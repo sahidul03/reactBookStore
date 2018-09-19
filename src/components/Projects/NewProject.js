@@ -25,7 +25,7 @@ class NewProject extends Component {
                             description: ''
                         };
                         this.setState({message: response.message, errorMessage: '', flag: response.flag, project: formData});
-                        window.location.href = config.frontendBaseUrl;
+                        this.props.history.push('/');
                     }else {
                         this.setState({message: '', errorMessage: response.message, flag: response.flag});
                     }

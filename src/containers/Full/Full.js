@@ -39,7 +39,7 @@ class Full extends Component {
     return (
       <div className="app">
         <AppHeader fixed>
-          <FullHeader />
+          <FullHeader {...this.props}/>
         </AppHeader>
         <div className="app-body">
           {/*<AppSidebar fixed display="lg">*/}

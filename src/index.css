@@ -52,8 +52,12 @@ main.main{
   margin-bottom: 10px;
 }
 
-.mtb-10 {
+.m-t-10 {
   margin-top: 10px;
+}
+
+.border-left-2-grey {
+  border-left: 2px solid grey;
 }
 
 .separator {
