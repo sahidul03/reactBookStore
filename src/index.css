@@ -1,6 +1,9 @@
 main.main{
   background-color: white;
 }
+.main .container-fluid {
+  padding: 15px 30px !important;
+}
 .form-signin {
   max-width: 330px;
   padding: 15px;
@@ -44,6 +47,9 @@ main.main{
   cursor: pointer;
 }
 
+.color-cadetblue {
+  color: cadetblue;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -92,8 +98,8 @@ main.main{
 
 .comments-container .comment-body {
   font-size: 13px;
-  margin: 5px 0px 5px 0px;
-  background-color: #fbf5eb;
+  margin: 5px 0 0 0;
+  background-color: white;
   padding: 10px;
   border-radius: 4px;
 }
@@ -101,9 +107,13 @@ main.main{
 .comments-container .comment {
   border-bottom: 1px solid #dadada;
   margin-bottom: 12px;
-  background-color: #fbfbfb;
+  background-color: #e4e7ea;
   padding: 5px;
   border-radius: 5px;
+}
+
+.comments-container .comment:hover {
+  background-color: #acb4bc;
 }
 
 .comments-container .created-date {

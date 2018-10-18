@@ -3,6 +3,8 @@ import {getTask, addAssigneeToTask} from '../../lib/tasksServices';
 import {createComment} from '../../lib/commentsServices';
 import {getAllUsers} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
+import TaskList from './TaskList';
+import TaskCommentList from '../taskComments/TaskCommentList'
 import {
     NavLink
 } from 'react-router-dom';
@@ -153,15 +155,13 @@ class TaskDetails extends Component {
                         {this.state.parentTask ? <h5><strong>Parent task: </strong><NavLink
                             to={"/tasks/" + this.state.parentTask._id}>{this.state.parentTask.title}</NavLink>
                         </h5> : ''}
-                        <h4><strong>Title: </strong>{this.state.task.title}</h4>
+                        <h4 className="color-cadetblue">{this.state.task.title}</h4>
                         <p><strong>Description: </strong>{this.state.task.description}</p>
                         <NavLink className="cursor-pointer"
                                  to={"/" + this.state.project._id + "/tasks/new/" + this.state.task._id}> + Create a sub
                             task</NavLink>
-                        <h4>Sub Tasks list</h4>
-                        {this.state.subTasks.map(task => <div key={task._id}><NavLink
-                            to={"/tasks/" + task._id}>{task.title}</NavLink>
-                        </div>)}
+                        {this.state.subTasks.length > 0 ? <TaskList tasks={this.state.subTasks} title={"List of sub tasks"}/> : ''}
+
                     </div>
                     <div className="col-sm-4 col-md-4 col-lg-4">
                         <h5>
@@ -200,7 +200,7 @@ class TaskDetails extends Component {
                         </div>
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-                        <h4>Comments:
+                        <h4>
                             <button onClick={this.handleAddCommentForm} className="btn btn-sm btn-default pull-right">
                                 + Add comment
                             </button>
@@ -222,17 +222,7 @@ class TaskDetails extends Component {
                                 </div>
                             </form>
                         </div> : ''}
-                        <div className="comments-container">
-                            {this.state.comments.map(comment => <div key={comment._id} className="comment">
-                                <div className="comment-header">
-                                    <img src="/images/profile-avater.png" className="profile-image" alt={comment._id}/>
-                                    <NavLink className="profile-name"
-                                             to={"/users/" + comment.commenter._id}>{comment.commenter.username}</NavLink>
-                                    <span className="created-date"><Timestamp time={comment.updated_at} format='full' includeDay /></span>
-                                </div>
-                                <div className="comment-body">{comment.description}</div>
-                            </div>)}
-                        </div>
+                        {this.state.comments.length > 0 ? <TaskCommentList comments={this.state.comments}/>  : ''}
                     </div>
                 </div>
             </div>

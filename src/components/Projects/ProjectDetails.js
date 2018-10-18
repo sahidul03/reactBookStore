@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Timestamp from 'react-timestamp';
 import {getProject, addMemberToProject, removeMemberFromProject} from '../../lib/projectsServices';
 import {getAllUsers} from '../../lib/usersServices';
+import TaskList from '../tasks/TaskList';
 import {
     NavLink
 } from 'react-router-dom';
@@ -100,7 +101,7 @@ class ProjectDetails extends Component {
     render() {
         return (
             <div className="ProjectDetails">
-                <h4><strong>Title: </strong>{this.state.project.title}</h4>
+                <h4><strong>Project Name: </strong>{this.state.project.title}</h4>
                 <p><strong>Short Name: {this.state.project.shortName}</strong></p>
                 <p><strong>Description: </strong>{this.state.project.description}</p>
                 <div className="row">
@@ -110,27 +111,7 @@ class ProjectDetails extends Component {
                                  to={"/" + this.state.project._id + "/tasks/new/00000000000"}> + Create a task</NavLink>
                     </div>
                         
-                        {this.state.tasks.length > 0 ? <div><h4>Tasks list</h4>
-                        <table className="table table-hover">
-                          <thead>
-                            <tr>
-                              <th scope="col">Task Number</th>
-                              <th scope="col">Title</th>
-                              <th scope="col">Assignee</th>
-                              <th scope="col">Updated</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                          {this.state.tasks.map(task =>
-                        <tr key={task._id}>
-                              <td scope="row"><NavLink to={"/tasks/" + task._id}>{task.taskNumber}</NavLink></td>
-                              <td><NavLink to={"/tasks/" + task._id}> {task.title}</NavLink></td>
-                              <td><NavLink to={"/users/" + task.creator._id}>{task.creator.username}</NavLink></td>
-                              <td><Timestamp time={task.updated_at} format='full' /></td>
-                            </tr>
-                            )}                            
-                          </tbody>
-                        </table></div> : ''}
+                        {this.state.tasks.length > 0 ? <TaskList tasks={this.state.tasks} title={"Task list"}/> : ''}
                     </div>
                     <div className="col-sm-4 col-md-4 col-lg-4 border-left-2-grey">
                         <h4>Creator: {this.state.project.creator ? <NavLink to={"/users/" + this.state.project.creator._id}>{this.state.project.creator.username}</NavLink>: ''}</h4><br/>
