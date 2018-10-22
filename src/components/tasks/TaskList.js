@@ -9,7 +9,7 @@ class TaskList extends Component {
     render() {
         return (
             <div>
-                <h4>{this.props.title} <span class="badge badge-success">{this.props.tasks.length}</span></h4>
+                <h4>{this.props.title} <span className="badge badge-success">{this.props.tasks.length}</span></h4>
                 <table className="table table-hover">
                   <thead>
                     <tr>
@@ -17,10 +17,11 @@ class TaskList extends Component {
                       <th scope="col">Title</th>
                       <th scope="col">Assignee</th>
                       <th scope="col">Updated</th>
+                      <th scope="col">Creator</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {this.props.tasks.map(task => <TaskRow task={task}/>
+                  {this.props.tasks.map(task => <TaskRow key={task._id} task={task}/>
                     )}                            
                   </tbody>
                 </table>

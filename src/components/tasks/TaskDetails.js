@@ -163,7 +163,7 @@ class TaskDetails extends Component {
                         {this.state.subTasks.length > 0 ? <TaskList tasks={this.state.subTasks} title={"List of sub tasks"}/> : ''}
 
                     </div>
-                    <div className="col-sm-4 col-md-4 col-lg-4">
+                    <div className="col-sm-4 col-md-4 col-lg-4 border-left-2-grey">
                         <h5>
                             <strong>Creator:</strong> {this.state.task.creator ? <NavLink
                             to={"/users/" + this.state.task.creator._id}>{this.state.task.creator.username}</NavLink> : ''}
@@ -211,14 +211,14 @@ class TaskDetails extends Component {
                                     <h5 className="text-danger">{this.state.errorMessage}</h5>
                                 </div>
                                 <div className="form-group col-md-12 col-sm-12">
-                                    <label>Comments*</label>
+                                    <label>Add Comments*</label>
                                     <textarea name="description" onChange={this.handleCommentInputChange}
                                               value={this.state.newCommentDescription}
                                               className="form-control input-sm" id="description"
-                                              placeholder="Comments" required></textarea>
+                                              placeholder="Write Comments here ..." required></textarea>
                                 </div>
-                                <div className="col-md-12 col-sm-12">
-                                    <input type="submit" className="btn btn-primary pull-right" value="Add"/>
+                                <div className="col-md-12 col-sm-12 text-right">
+                                    <input type="submit" className="btn btn-primary" value="Add"/>
                                 </div>
                             </form>
                         </div> : ''}

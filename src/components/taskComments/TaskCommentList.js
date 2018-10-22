@@ -11,7 +11,7 @@ class TaskCommentList extends Component {
         return (
             <div className="comments-container">
                 <h4>Comments:</h4>
-                {this.props.comments.map(comment => <SingleComment comment={comment}/>)}
+                {this.props.comments.map(comment => <SingleComment key={comment._id} comment={comment}/>)}
             </div>
         );
     }
