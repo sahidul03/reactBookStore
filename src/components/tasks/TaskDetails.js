@@ -10,6 +10,10 @@ import {
 } from 'react-router-dom';
 import { appendComment, addComment , joinToTaskRoom} from '../../lib/socket/sampleService';
 
+import 'jodit';
+import 'jodit/build/jodit.min.css';
+import JoditEditor from "jodit-react";
+
 class TaskDetails extends Component {
     state = {
         availableUsers: [],
@@ -24,8 +28,21 @@ class TaskDetails extends Component {
         userFetched: false,
         assignee_id: '',
         showAddCommentForm: false,
-        newCommentDescription: ''
+        newCommentDescription: '',
     };
+
+    updateContent = (value) => {
+        this.setState({newCommentDescription:value})
+    }
+    /**
+     * @property Jodit jodit instance of native Jodit
+     */
+    jodit;
+    setRef = jodit => this.jodit = jodit;
+    
+    config = {
+        readonly: false // all options from https://xdsoft.net/jodit/doc/
+    }
 
     componentWillReceiveProps(newProps) {
         joinToTaskRoom(newProps.match.params.id);
@@ -212,10 +229,12 @@ class TaskDetails extends Component {
                                 </div>
                                 <div className="form-group col-md-12 col-sm-12">
                                     <label>Add Comments*</label>
-                                    <textarea name="description" onChange={this.handleCommentInputChange}
-                                              value={this.state.newCommentDescription}
-                                              className="form-control input-sm" id="description"
-                                              placeholder="Write Comments here ..." required></textarea>
+                                    <JoditEditor
+                                        editorRef={this.setRef}
+                                        value={this.state.newCommentDescription}
+                                        config={this.config}
+                                        onChange={this.updateContent}
+                                        placeholder="Write Comments here ..." required/>
                                 </div>
                                 <div className="col-md-12 col-sm-12 text-right">
                                     <input type="submit" className="btn btn-primary" value="Add"/>

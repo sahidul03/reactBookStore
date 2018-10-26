@@ -103,6 +103,9 @@ main.main{
   padding: 10px;
   border-radius: 4px;
 }
+.comments-container .comment-body table td, th {
+  border: 1px solid lightgray;
+}
 
 .comments-container .comment {
   border-bottom: 1px solid #dadada;

@@ -6,6 +6,10 @@ import {
 import config from '../../config';
 
 class SingleComment extends Component {
+    createMarkup = (text) => {
+      return {__html: text};
+    }
+
     render() {
         return (
             <div key={this.props.comment._id} className="comment">
@@ -15,7 +19,7 @@ class SingleComment extends Component {
                              to={"/users/" + this.props.comment.commenter._id}>{this.props.comment.commenter.username}</NavLink>
                     <span className="created-date"><Timestamp time={this.props.comment.updated_at} format='full' includeDay /></span>
                 </div>
-                <div className="comment-body">{this.props.comment.description}</div>
+                <div className="comment-body" dangerouslySetInnerHTML={this.createMarkup(this.props.comment.description)}></div>
             </div>
         );
     }
