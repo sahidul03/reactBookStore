@@ -62,7 +62,8 @@ class UserProfile extends Component {
                     <div className="col-sm-6 col-md-6 col-lg-6">
                         <form onSubmit={this.handleImageUploadSubmit}>
                             <input type="file" onChange={this.handleImageChange} />
-                            <button type="submit" onClick={this.handleImageUploadSubmit}>Upload Image</button>
+                            {this.state.imagePreviewUrl ? <button type="submit" className="btn btn-primary" onClick={this.handleImageUploadSubmit}>Upload Image</button> : ''}
+
                         </form>
                         <img src={this.state.imagePreviewUrl} width="200" />
                     </div>

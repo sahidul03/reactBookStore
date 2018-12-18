@@ -47,14 +47,14 @@ class FullHeader extends Component {
 
     return (
       <React.Fragment>
-        <AppSidebarToggler className="d-lg-none" display="md" mobile />
-        <AppNavbarBrand
+        {/* <AppSidebarToggler className="d-lg-none" display="md" mobile /> */}
+        <AppNavbarBrand className="d-md-down-none" display="lg"
           full={{ src: process.env.PUBLIC_URL + 'assets/img/brand/btm-logo.png', width: 89, height: 25, alt: 'BTM Logo' }}
           minimized={{ src: process.env.PUBLIC_URL + 'assets/img/brand/btm-logo.png', width: 30, height: 30, alt: 'BTM Logo' }}
         />
         {/*<AppSidebarToggler className="d-md-down-none" display="lg" />config.backendBaseUrl + this.state.basicUserInfo.photo*/}
 
-        <Nav className="d-md-down-none" navbar>
+        <Nav navbar>
           <NavItem className="px-3">
             <NavLink to={'/'}>Home</NavLink>
           </NavItem>
@@ -67,7 +67,7 @@ class FullHeader extends Component {
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-          <NavItem className="d-md-down-none header-json">
+          <NavItem className="header-json">
             {this.state.basicUserInfo ? '{ username: ' + this.state.basicUserInfo.username + ', email: ' + this.state.basicUserInfo.email + ' }' : ''}
           </NavItem>
           {/*<NavItem className="d-md-down-none">*/}
@@ -76,7 +76,7 @@ class FullHeader extends Component {
           {/*<NavItem className="d-md-down-none">*/}
             {/*<NavLink href="#"><i className="icon-location-pin"></i></NavLink>*/}
           {/*</NavItem>*/}
-          <AppHeaderDropdown direction="down">
+          {/* <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
               <i className="icon-bell"></i><Badge pill color="danger">5</Badge>
             </DropdownToggle>
@@ -86,13 +86,13 @@ class FullHeader extends Component {
               <DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge></DropdownItem>
-              {/*<DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>*/}
+              <DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>
               <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
               <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
               <DropdownItem><i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge></DropdownItem>
             </DropdownMenu>
-          </AppHeaderDropdown>
+          </AppHeaderDropdown> */}
           <AppHeaderDropdown direction="down">
             { this.state.basicUserInfo ?
               <DropdownToggle nav>
