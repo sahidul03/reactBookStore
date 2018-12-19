@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
-import {signUp} from '../../lib/authenticationService';
+import {loggingStatus, signUp} from '../../lib/authenticationService';
 import {
   Button,
   Card,
@@ -14,8 +14,6 @@ import {
   InputGroupText,
   Row
 } from 'reactstrap';
-import {getRequest} from '../../lib/common/commonApiGetway';
-import config from '../../config';
 
 class SignUp extends Component {
   state = {
@@ -31,11 +29,11 @@ class SignUp extends Component {
   };
 
   componentWillMount() {
-    getRequest('/profile').then(response => {
-        if(response){
-            this.props.history.push('/');
-        }
-    })
+    loggingStatus().then(response => {
+      if (response && response.flag === 1) {
+        this.props.history.push('/');
+      }
+    });
   }
 
   handleSubmit = (evt) => {

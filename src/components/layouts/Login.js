@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
-import {login} from '../../lib/authenticationService';
-import {getRequest} from '../../lib/common/commonApiGetway';
-import config from '../../config';
+import {loggingStatus, login} from '../../lib/authenticationService';
 import {
   Button,
   Card,
@@ -30,11 +28,11 @@ class Login extends Component {
   };
 
   componentWillMount() {
-    getRequest('/profile').then(response => {
-      if (response) {
+    loggingStatus().then(response => {
+      if (response && response.flag === 1) {
         this.props.history.push('/');
       }
-    })
+    });
   }
 
   handleSubmit = (evt) => {
@@ -108,7 +106,7 @@ class Login extends Component {
                           <Button color="primary" className="px-4">Login</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button type="submit" color="link" className="px-0">Forgot password?</Button>
+                          <Button type="button" color="link" className="px-0">Forgot password?</Button>
                         </Col>
                       </Row>
                     </form>
@@ -118,9 +116,11 @@ class Login extends Component {
                   <CardBody className="text-center">
                     <div>
                       <h2>Sign up</h2>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                      {/*<Button color="primary" className="mt-3" active>Register Now!</Button>*/}
+                      <p>
+                        This is a Task management application. Here you can easily manage your projects.
+                        Can create task, sub task, assign members to project and one member to each task.
+                        You also can communicate(individual chat and group chat) with your projects members through this application.
+                      </p>
                       <NavLink to={'/signup'} className="mt-3 btn btn-primary active">Register Now!</NavLink>
                     </div>
                   </CardBody>

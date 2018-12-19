@@ -24,7 +24,6 @@ import SignUp from './components/layouts/Signup';
 
 import {logout} from './lib/authenticationService';
 import {loggingStatus} from './lib/authenticationService';
-import config from './config';
 
 // import { renderRoutes } from 'react-router-config';
 const history = createHistory()
@@ -46,7 +45,7 @@ class App extends Component {
   componentDidMount() {
     loggingStatus().then(response => {
       this.setState({initializationHeaderMenu: true});
-      if (response.flag === 1) {
+      if (response && response.flag === 1) {
         this.setState({isLoggedIn: true});
       }
     })
