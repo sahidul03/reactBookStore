@@ -72,9 +72,9 @@ class Full extends Component {
               </Switch>
             </Container>
           </main>
-          <AppAside fixed hidden>
+          {/* <AppAside fixed hidden>
             <FullAside />
-          </AppAside>
+          </AppAside> */}
         </div>
         <AppFooter>
           <FullFooter />

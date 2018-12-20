@@ -50,12 +50,32 @@ main.main{
 .color-cadetblue {
   color: cadetblue;
 }
+
+.color-blue {
+  color: 	#20a8d8;
+}
 .cursor-pointer {
   cursor: pointer;
 }
 
 .m-b-10 {
   margin-bottom: 10px;
+}
+
+.m-r-10 {
+  margin-right: 10px;
+}
+
+.p-r-10 {
+  padding-right: 10px;
+}
+
+.m-l-10 {
+  margin-left: 10px;
+}
+
+.p-l-10 {
+  padding-left: 10px;
 }
 
 .m-t-10 {

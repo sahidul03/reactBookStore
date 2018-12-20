@@ -31,7 +31,7 @@ class UserProfile extends Component {
             let tempUser = this.state.user;
             tempUser.photo = response.photo;
             this.setState({user: tempUser, imagePreviewUrl: '', file: ''});
-            console.log('Response', response);
+            document.getElementById('profile-right-side-avatar').src = config.backendBaseUrl + this.state.user.photo;
         })
     };
 

@@ -96,7 +96,7 @@ class FullHeader extends Component {
           <AppHeaderDropdown direction="down">
             { this.state.basicUserInfo ?
               <DropdownToggle nav>
-              <img src={config.backendBaseUrl + this.state.basicUserInfo.photo} className="img-avatar" alt="admin@bootstrapmaster.com" />
+              <img id="profile-right-side-avatar" src={config.backendBaseUrl + this.state.basicUserInfo.photo} className="img-avatar" alt={this.state.basicUserInfo.email}/>
               </DropdownToggle> : ''
             }
             { this.state.basicUserInfo ?

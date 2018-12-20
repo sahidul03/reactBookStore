@@ -22,6 +22,7 @@ class Login extends Component {
       username: '',
       password: ''
     },
+    submitted: false,
     flag: null,
     message: '',
     errorMessage: ''
@@ -38,6 +39,7 @@ class Login extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
     console.log('Authenticating....');
+    this.setState({ submitted: true})
     if (this.state.loginFormData) {
       login(this.state.loginFormData).then(response => {
         if(response){
@@ -46,11 +48,11 @@ class Login extends Component {
               username: '',
               password: ''
             };
-            this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
+            this.setState({message: response.message, submitted: false, errorMessage: '', flag: response.flag, loginFormData: formData});
             localStorage.setItem('token', response.token);
             this.props.history.push('/');
           } else {
-            this.setState({message: '', errorMessage: response.message, flag: response.flag});
+            this.setState({message: '', submitted: false, errorMessage: response.message, flag: response.flag});
           }
         }
         }
@@ -103,7 +105,8 @@ class Login extends Component {
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button color="primary" className="px-4">Login</Button>
+                          <Button color="primary" className={"px-4 " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Login</Button>
+                          {this.state.submitted ? <span className="m-l-10 color-blue"><i className="fa fa-spinner fa-spin"></i></span> : ''}
                         </Col>
                         <Col xs="6" className="text-right">
                           <Button type="button" color="link" className="px-0">Forgot password?</Button>
