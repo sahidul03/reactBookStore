@@ -106,7 +106,7 @@ class Login extends Component {
                       <Row>
                         <Col xs="6">
                           <Button color="primary" className={"px-4 " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Login</Button>
-                          {this.state.submitted ? <span className="m-l-10 color-blue"><i className="fa fa-spinner fa-spin"></i></span> : ''}
+                          {this.state.submitted ? <span className="m-l-10 color-blue"><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
                         </Col>
                         <Col xs="6" className="text-right">
                           <Button type="button" color="link" className="px-0">Forgot password?</Button>

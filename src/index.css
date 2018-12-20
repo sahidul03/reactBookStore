@@ -1,3 +1,7 @@
+/* CSS for profile page START */
+
+/* CSS for profile page END */
+
 main.main{
   background-color: white;
 }
@@ -80,6 +84,10 @@ main.main{
 
 .m-t-10 {
   margin-top: 10px;
+}
+
+.m-t-m15 {
+  margin-top: -15px;
 }
 
 .border-left-2-grey {

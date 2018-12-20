@@ -25,7 +25,8 @@ class SignUp extends Component {
     },
     flag: null,
     message: '',
-    errorMessage: ''
+    errorMessage: '',
+    submitted: false
   };
 
   componentWillMount() {
@@ -39,6 +40,7 @@ class SignUp extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
     console.log('Authenticating....');
+    this.setState({ submitted: true})
     if (this.state.signUpFormData) {
       signUp(this.state.signUpFormData).then(response => {
           if (response.flag === 1) {
@@ -48,11 +50,11 @@ class SignUp extends Component {
               password: '',
               passwordConf: ''
             };
-            this.setState({message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
+            this.setState({submitted: false, message: response.message, errorMessage: '', flag: response.flag, loginFormData: formData});
             localStorage.setItem('token', response.token);
             this.props.history.push('/');
           } else {
-            this.setState({message: '', errorMessage: response.message, flag: response.flag});
+            this.setState({submitted: false, message: '', errorMessage: response.message, flag: response.flag});
           }
         }
       )
@@ -123,13 +125,16 @@ class SignUp extends Component {
                              id="passwordConf"
                              placeholder="Password Confirmation"/>
                     </InputGroup>
-                    <Button type="submit" color="success" block>Create Account</Button>
+                    <Button type="submit" color="success" block className={"" + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>
+                    Create Account
+                    {this.state.submitted ? <span className="m-l-10"><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
+                    </Button>
                   </form>
                 </CardBody>
                 <CardFooter className="p-4">
                   <Row>
                     <Col xs="12" sm="12">
-                      <NavLink to={'/login'} className="btn btn-primary btn-block"><span>Sign In</span></NavLink>
+                      <NavLink to={'/login'} className={"btn btn-primary btn-block " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}><span>Sign In</span></NavLink>
                     </Col>
                   </Row>
                 </CardFooter>
