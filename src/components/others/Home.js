@@ -23,11 +23,13 @@ class Home extends Component {
     }
 
     render() {
+      if(this.state.user){
         return (
             <div className="Home">
                 <div className="row">
                     <div className="col-sm-6 col-md-6 col-lg-6">
                         <h4>All projects of mine</h4>
+                        {this.state.projects.length == 0? <p><mark>Currently you have not any project and also you are not assigned to any project.</mark></p>:""}
                         {this.state.projects.map(project => <div key={project._id}><NavLink
                         to={"/projects/" + project._id}>
                         {project.title} {project.creator == this.state.user._id ? <span className="badge badge-info">Owner</span> : ''}
@@ -41,7 +43,10 @@ class Home extends Component {
                     </div>
                 </div>
             </div>
-        );
+        );}
+        else{
+          return <div className="whole-page-spiner color-blue"><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import {getAllUsers} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
 import TaskList from './TaskList';
 import TaskCommentList from '../taskComments/TaskCommentList'
+import { toast } from 'react-toastify';
 import {
     NavLink
 } from 'react-router-dom';
@@ -39,7 +40,7 @@ class TaskDetails extends Component {
      */
     jodit;
     setRef = jodit => this.jodit = jodit;
-    
+
     config = {
         readonly: false // all options from https://xdsoft.net/jodit/doc/
     }
@@ -64,6 +65,7 @@ class TaskDetails extends Component {
     componentDidMount() {
         joinToTaskRoom(this.props.match.params.id);
         appendComment((comment) => {
+            toast.info( comment.commenter.username + " added a comment in this task.");
             var tempComments = this.state.comments;
             tempComments.push(comment);
             this.setState({comments: tempComments});
@@ -127,6 +129,11 @@ class TaskDetails extends Component {
                         var index = availableUsers.indexOf(abUser);
                         if (index > -1) {
                             availableUsers.splice(index, 1);
+                        }
+                        if(this.state.assignee){
+                          toast.success("Assignee changed successfully!");
+                        }else{
+                          toast.success("Assignee assigned successfully!");
                         }
                         this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user});
                     }
@@ -195,7 +202,7 @@ class TaskDetails extends Component {
                             </button>
                         </h5>
                         {this.state.showAddAssigneeForm ? <h5 className="AddMemberFrom">
-                            <select className="form-control" onChange={this.handleInputChange} name="member_id"
+                            <select className="form-control m-b-10 m-t-10" onChange={this.handleInputChange} name="member_id"
                                     value={this.state.assignee_id}>
                                 <option key={0} value=''>Please select one user</option>
                                 {this.state.availableUsers.map(user => <option key={user._id} value={user._id}
@@ -218,7 +225,7 @@ class TaskDetails extends Component {
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
                         <h4>
-                            <button onClick={this.handleAddCommentForm} className="btn btn-sm btn-default pull-right">
+                            <button onClick={this.handleAddCommentForm} className="btn btn-sm btn-default">
                                 + Add comment
                             </button>
                         </h4>

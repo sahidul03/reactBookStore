@@ -13,6 +13,18 @@ main.main{
   padding: 15px;
   margin: 0 auto;
 }
+.whole-page-spiner {
+  z-index: 9999;
+  background-color: white;
+  text-align: center;
+  font-size: 100px;
+  padding-top: 150px;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
 
 .form-signin .form-signin-heading,
 .form-signin .checkbox {

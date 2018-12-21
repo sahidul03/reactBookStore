@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {createProject} from '../../lib/projectsServices';
 import config from '../../config';
+import { toast } from 'react-toastify';
 
 
 class NewProject extends Component {
@@ -12,22 +13,25 @@ class NewProject extends Component {
         },
         flag: null,
         message: '',
+        submitted: false,
         errorMessage: ''
     };
 
     handleSubmit = (evt) => {
         evt.preventDefault();
         if (this.state.project) {
+          this.setState({submitted: true});
             createProject(this.state.project).then(response => {
                     if(response._id){
-                        let formData = {
-                            title: '',
-                            description: ''
-                        };
-                        this.setState({message: response.message, errorMessage: '', flag: response.flag, project: formData});
+                        toast.success("Project has been created successfully!");
+                        // let formData = {
+                        //     title: '',
+                        //     description: ''
+                        // };
+                        // this.setState({message: response.message, errorMessage: '', flag: response.flag, project: formData});
                         this.props.history.push('/');
                     }else {
-                        this.setState({message: '', errorMessage: response.message, flag: response.flag});
+                        this.setState({message: '', errorMessage: response.message, flag: response.flag, submitted: false});
                     }
                 }
             )
@@ -74,7 +78,7 @@ class NewProject extends Component {
                                           placeholder="Description" required></textarea>
                             </div>
                             <div className="col-md-12 col-sm-12">
-                                <input type="submit" className="btn btn-primary pull-right" value="Submit"/>
+                                <button type="submit" className={"btn btn-primary pull-right " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Submit {this.state.submitted ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}</button>
                             </div>
                         </form>
                     </div>

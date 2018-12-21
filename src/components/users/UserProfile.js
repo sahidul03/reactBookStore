@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {getUser, uploadImage} from '../../lib/usersServices';
+import {getUser, uploadImage, getCurrentUserBasicInfo} from '../../lib/usersServices';
 import config from '../../config';
+import { toast } from 'react-toastify';
 import './profile.css';
 import {
     NavLink
@@ -9,6 +10,7 @@ import {
 class UserProfile extends Component {
     state = {
         user: '',
+        currentUser: '',
         projects: [],
         ownProjects: [],
         file: '',
@@ -22,6 +24,11 @@ class UserProfile extends Component {
                 this.setState({user: user, projects: user.projects, ownProjects: user.ownProjects});
             }
         )
+        getCurrentUserBasicInfo().then(
+          user => {
+            this.setState({currentUser: user});
+          }
+        )
     }
 
     handleImageUploadSubmit = (e) => {
@@ -31,6 +38,7 @@ class UserProfile extends Component {
 
         this.setState({uploading: true});
         uploadImage(this.state.file).then(response => {
+            toast.success("Profile picture updated successfully!")
             let tempUser = this.state.user;
             tempUser.photo = response.photo;
             this.setState({uploading: false, user: tempUser, imagePreviewUrl: '', file: ''});
@@ -40,6 +48,10 @@ class UserProfile extends Component {
 
     cancelUploadImage = (e) => {
       this.setState({ imagePreviewUrl: '', file: ''});
+    };
+
+    capitalize = (str) => {
+      return str? str.charAt(0).toUpperCase() + str.slice(1) : '';
     };
 
     handleImageChange = (e) => {
@@ -72,10 +84,11 @@ class UserProfile extends Component {
                         <div className="profile-img">
                             {this.state.imagePreviewUrl? <img src={this.state.imagePreviewUrl}/> : ''}
                             {(this.state.imagePreviewUrl == '' && this.state.user.photo)? <img src={config.backendBaseUrl + this.state.user.photo}/> : ''}
-                            <div className="file btn btn-lg btn-primary">
+                            {(this.state.currentUser && this.state.user && this.state.currentUser._id == this.state.user._id)? <div className="file btn btn-lg btn-primary">
                                 Change Photo
                                 <input type="file" onChange={this.handleImageChange}/>
-                            </div>
+                            </div> : ""}
+
                             {this.state.imagePreviewUrl ? <div role="group" className="btn-group  m-t-m15">
                               <button className={"btn btn-primary " + (this.state.uploading ? 'disabled' : '')} disabled={this.state.uploading} onClick={this.handleImageUploadSubmit}>
                               Save
@@ -89,11 +102,9 @@ class UserProfile extends Component {
                     </div>
                     <div className="col-md-6">
                         <div className="profile-head">
-                                    <h5>
-                                        Kshiti Ghelani
-                                    </h5>
+                                    <h5>{this.capitalize(this.state.user.username)}</h5>
                                     <h6>
-                                        Web Developer and Designer
+                                        Software Developer and Designer
                                     </h6>
                                     <p className="proile-rating">RANKINGS : <span>8/10</span></p>
                             <ul className="nav nav-tabs" id="myTab" role="tablist">
@@ -118,11 +129,11 @@ class UserProfile extends Component {
                             <a href="">Bootsnipp Profile</a><br/>
                             <a href="">Bootply Profile</a>
                             <p>SKILLS</p>
-                            <a href="">Web Designer</a><br/>
-                            <a href="">Web Developer</a><br/>
-                            <a href="">WordPress</a><br/>
-                            <a href="">WooCommerce</a><br/>
-                            <a href="">PHP, .Net</a><br/>
+                            <a href="">Software Developer</a><br/>
+                            <a href="">HTML5, CSS3, Bootstrap</a><br/>
+                            <a href="">JavaScript</a><br/>
+                            <a href="">Angular, ReactJS, VueJS</a><br/>
+                            <a href="">Ruby, Python, .Net, PHP</a><br/>
                         </div>
                     </div>
                     <div className="col-md-8">
@@ -133,7 +144,7 @@ class UserProfile extends Component {
                                                 <label>User Id</label>
                                             </div>
                                             <div className="col-md-6">
-                                                <p>Kshiti123</p>
+                                                <p>{this.state.user.username}</p>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -141,7 +152,7 @@ class UserProfile extends Component {
                                                 <label>Name</label>
                                             </div>
                                             <div className="col-md-6">
-                                                <p>Kshiti Ghelani</p>
+                                                <p>{this.capitalize(this.state.user.username)}</p>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -149,7 +160,7 @@ class UserProfile extends Component {
                                                 <label>Email</label>
                                             </div>
                                             <div className="col-md-6">
-                                                <p>kshitighelani@gmail.com</p>
+                                                <p>{this.state.user.email}</p>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -165,7 +176,7 @@ class UserProfile extends Component {
                                                 <label>Profession</label>
                                             </div>
                                             <div className="col-md-6">
-                                                <p>Web Developer and Designer</p>
+                                                <p>Software Developer and Designer</p>
                                             </div>
                                         </div>
                             </div>
@@ -183,7 +194,7 @@ class UserProfile extends Component {
                                                 <label>Hourly Rate</label>
                                             </div>
                                             <div className="col-md-6">
-                                                <p>10$/hr</p>
+                                                <p>15$/hr</p>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -222,35 +233,7 @@ class UserProfile extends Component {
                 </div>
             </form>
         </div>
-                <div className="row">
-                    <div className="col-sm-6 col-md-6 col-lg-6">
-                        {this.state.user.photo? <img width="120" src={config.backendBaseUrl + this.state.user.photo}/> : ''}
-                    </div>
-                    <div className="col-sm-6 col-md-6 col-lg-6">
-                        <form onSubmit={this.handleImageUploadSubmit}>
-                            <input type="file" onChange={this.handleImageChange} />
-                            {this.state.imagePreviewUrl ? <button type="submit" className="btn btn-primary" onClick={this.handleImageUploadSubmit}>Upload Image</button> : ''}
 
-                        </form>
-                        <img src={this.state.imagePreviewUrl} width="200" />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-sm-6 col-md-6 col-lg-6">
-                        <h4>
-                            Projects created by {this.state.user.username}
-                        </h4>
-                        {this.state.ownProjects.map(project => <div key={project._id}><NavLink activeClassName="headerMenuActive"
-                                                                                               to={"/projects/" + project._id}>{project.title}</NavLink>
-                        </div>)}
-                    </div>
-                    <div className="col-sm-6 col-md-6 col-lg-6 text-right">
-                        <h4>All projects</h4>
-                        {this.state.projects.map(project => <div key={project._id}><NavLink activeClassName="headerMenuActive"
-                                                                                            to={"/projects/" + project._id}>{project.title}</NavLink>
-                        </div>)}
-                    </div>
-                </div>
             </div>
         );
     }

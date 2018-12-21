@@ -13,7 +13,7 @@ class TaskList extends Component {
                 <table className="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">Task Number</th>
+                      <th scope="col">Task ID</th>
                       <th scope="col">Title</th>
                       <th scope="col">Assignee</th>
                       <th scope="col">Updated</th>
@@ -22,7 +22,7 @@ class TaskList extends Component {
                   </thead>
                   <tbody>
                   {this.props.tasks.map(task => <TaskRow key={task._id} task={task}/>
-                    )}                            
+                    )}
                   </tbody>
                 </table>
             </div>

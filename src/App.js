@@ -14,6 +14,8 @@ import 'simple-line-icons/css/simple-line-icons.css';
 import './scss/style.css'
 // import '../node_modules/@coreui/styles/scss/_dropdown-menu-right.scss';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 // Containers
 import { Full } from './containers';
 // Pages

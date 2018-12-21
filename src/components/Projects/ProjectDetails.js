@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Timestamp from 'react-timestamp';
 import {getProject, addMemberToProject, removeMemberFromProject} from '../../lib/projectsServices';
+import { toast } from 'react-toastify';
 import {getAllUsers} from '../../lib/usersServices';
 import TaskList from '../tasks/TaskList';
 import {
@@ -63,6 +64,8 @@ class ProjectDetails extends Component {
                             tempAvailableUser.splice(index, 1);
                             this.setState({availableUsers: tempAvailableUser});
                         }
+                        var toastMsg = "Added " + user.username + " to this project."
+                        toast.success(toastMsg);
                         this.setState({members: members, member_id: ''});
                     }
                 );
@@ -77,6 +80,8 @@ class ProjectDetails extends Component {
             if(removedMember){
                 removeMemberFromProject({project_id: this.state.project._id, member_id: member_id}).then(
                     user => {
+                        var toastMsg = "Removed " + user.username + " from this project."
+                        toast.error(toastMsg);
                         var members = this.state.members;
                         var index = members.indexOf(removedMember);
                         if (index > -1) {
@@ -110,7 +115,7 @@ class ProjectDetails extends Component {
                         <NavLink className="cursor-pointer"
                                  to={"/" + this.state.project._id + "/tasks/new/00000000000"}> + Create a task</NavLink>
                     </div>
-                        
+
                         {this.state.tasks.length > 0 ? <TaskList tasks={this.state.tasks} title={"Task list"}/> : ''}
                     </div>
                     <div className="col-sm-4 col-md-4 col-lg-4 border-left-2-grey">

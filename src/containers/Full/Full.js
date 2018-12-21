@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+
 
 import {
   AppAside,
@@ -79,6 +81,7 @@ class Full extends Component {
         <AppFooter>
           <FullFooter />
         </AppFooter>
+        <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} transition={Slide} />
       </div>
     );
   }
