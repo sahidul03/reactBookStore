@@ -1,4 +1,7 @@
 import config from '../../config'
+import createHistory from "history/createBrowserHistory"
+
+const history = createHistory({forceRefresh:true})
 const baseUrl = config.backendBaseUrl;
 
 export const getRequest = (apiUrl) => {
@@ -34,15 +37,21 @@ export const postUploadImage = (apiUrl, formData)=> {
 
 function errorHandle(err) {
     console.log(err);
-    if(window.location.href !== config.frontendBaseUrl + '/login' && window.location.href !== config.frontendBaseUrl + '/signup'){
-        window.location.href = config.frontendBaseUrl + '/login';
+    if(window.location.href !== config.frontendBaseUrl + '/#/login' && window.location.href !== config.frontendBaseUrl + '/#/signup'){
+      localStorage.removeItem('token');
+      localStorage.removeItem('currentChannelOrContact');
+      localStorage.removeItem('currentConversationBox');
+      history.push('/login');
     }
 }
 
 function successHandle(res) {
     if(res.status === 401){
         if(window.location.href !== config.frontendBaseUrl + '/login' && window.location.href !== config.frontendBaseUrl + '/signup'){
-            window.location.href = config.frontendBaseUrl + '/login';
+          localStorage.removeItem('token');
+          localStorage.removeItem('currentChannelOrContact');
+          localStorage.removeItem('currentConversationBox');
+          history.push('/login');
         }
     }else {
         return res.json();

@@ -3,10 +3,17 @@ import {getTask, addAssigneeToTask} from '../../lib/tasksServices';
 import {createComment} from '../../lib/commentsServices';
 import {getAllUsers} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
+import TaskList from './TaskList';
+import TaskCommentList from '../taskComments/TaskCommentList'
+import { toast } from 'react-toastify';
 import {
     NavLink
 } from 'react-router-dom';
 import { appendComment, addComment , joinToTaskRoom} from '../../lib/socket/sampleService';
+
+import 'jodit';
+import 'jodit/build/jodit.min.css';
+import JoditEditor from "jodit-react";
 
 class TaskDetails extends Component {
     state = {
@@ -22,8 +29,21 @@ class TaskDetails extends Component {
         userFetched: false,
         assignee_id: '',
         showAddCommentForm: false,
-        newCommentDescription: ''
+        newCommentDescription: '',
     };
+
+    updateContent = (value) => {
+        this.setState({newCommentDescription:value})
+    }
+    /**
+     * @property Jodit jodit instance of native Jodit
+     */
+    jodit;
+    setRef = jodit => this.jodit = jodit;
+
+    config = {
+        readonly: false // all options from https://xdsoft.net/jodit/doc/
+    }
 
     componentWillReceiveProps(newProps) {
         joinToTaskRoom(newProps.match.params.id);
@@ -45,6 +65,7 @@ class TaskDetails extends Component {
     componentDidMount() {
         joinToTaskRoom(this.props.match.params.id);
         appendComment((comment) => {
+            toast.info( comment.commenter.username + " added a comment in this task.");
             var tempComments = this.state.comments;
             tempComments.push(comment);
             this.setState({comments: tempComments});
@@ -109,6 +130,11 @@ class TaskDetails extends Component {
                         if (index > -1) {
                             availableUsers.splice(index, 1);
                         }
+                        if(this.state.assignee){
+                          toast.success("Assignee changed successfully!");
+                        }else{
+                          toast.success("Assignee assigned successfully!");
+                        }
                         this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user});
                     }
                 );
@@ -153,17 +179,15 @@ class TaskDetails extends Component {
                         {this.state.parentTask ? <h5><strong>Parent task: </strong><NavLink
                             to={"/tasks/" + this.state.parentTask._id}>{this.state.parentTask.title}</NavLink>
                         </h5> : ''}
-                        <h4><strong>Title: </strong>{this.state.task.title}</h4>
+                        <h4 className="color-cadetblue">{this.state.task.title}</h4>
                         <p><strong>Description: </strong>{this.state.task.description}</p>
                         <NavLink className="cursor-pointer"
                                  to={"/" + this.state.project._id + "/tasks/new/" + this.state.task._id}> + Create a sub
                             task</NavLink>
-                        <h4>Sub Tasks list</h4>
-                        {this.state.subTasks.map(task => <div key={task._id}><NavLink
-                            to={"/tasks/" + task._id}>{task.title}</NavLink>
-                        </div>)}
+                        {this.state.subTasks.length > 0 ? <TaskList tasks={this.state.subTasks} title={"List of sub tasks"}/> : ''}
+
                     </div>
-                    <div className="col-sm-4 col-md-4 col-lg-4">
+                    <div className="col-sm-4 col-md-4 col-lg-4 border-left-2-grey">
                         <h5>
                             <strong>Creator:</strong> {this.state.task.creator ? <NavLink
                             to={"/users/" + this.state.task.creator._id}>{this.state.task.creator.username}</NavLink> : ''}
@@ -178,7 +202,7 @@ class TaskDetails extends Component {
                             </button>
                         </h5>
                         {this.state.showAddAssigneeForm ? <h5 className="AddMemberFrom">
-                            <select className="form-control" onChange={this.handleInputChange} name="member_id"
+                            <select className="form-control m-b-10 m-t-10" onChange={this.handleInputChange} name="member_id"
                                     value={this.state.assignee_id}>
                                 <option key={0} value=''>Please select one user</option>
                                 {this.state.availableUsers.map(user => <option key={user._id} value={user._id}
@@ -200,8 +224,8 @@ class TaskDetails extends Component {
                         </div>
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-                        <h4>Comments:
-                            <button onClick={this.handleAddCommentForm} className="btn btn-sm btn-default pull-right">
+                        <h4>
+                            <button onClick={this.handleAddCommentForm} className="btn btn-sm btn-default">
                                 + Add comment
                             </button>
                         </h4>
@@ -211,28 +235,20 @@ class TaskDetails extends Component {
                                     <h5 className="text-danger">{this.state.errorMessage}</h5>
                                 </div>
                                 <div className="form-group col-md-12 col-sm-12">
-                                    <label>Comments*</label>
-                                    <textarea name="description" onChange={this.handleCommentInputChange}
-                                              value={this.state.newCommentDescription}
-                                              className="form-control input-sm" id="description"
-                                              placeholder="Comments" required></textarea>
+                                    <label>Add Comments*</label>
+                                    <JoditEditor
+                                        editorRef={this.setRef}
+                                        value={this.state.newCommentDescription}
+                                        config={this.config}
+                                        onChange={this.updateContent}
+                                        placeholder="Write Comments here ..." required/>
                                 </div>
-                                <div className="col-md-12 col-sm-12">
-                                    <input type="submit" className="btn btn-primary pull-right" value="Add"/>
+                                <div className="col-md-12 col-sm-12 text-right">
+                                    <input type="submit" className="btn btn-primary" value="Add"/>
                                 </div>
                             </form>
                         </div> : ''}
-                        <div className="comments-container">
-                            {this.state.comments.map(comment => <div key={comment._id} className="comment">
-                                <div className="comment-header">
-                                    <img src="/images/profile-avater.png" className="profile-image" alt={comment._id}/>
-                                    <NavLink className="profile-name"
-                                             to={"/users/" + comment.commenter._id}>{comment.commenter.username}</NavLink>
-                                    <span className="created-date"><Timestamp time={comment.updated_at} format='full' includeDay /></span>
-                                </div>
-                                <div className="comment-body">{comment.description}</div>
-                            </div>)}
-                        </div>
+                        {this.state.comments.length > 0 ? <TaskCommentList comments={this.state.comments}/>  : ''}
                     </div>
                 </div>
             </div>

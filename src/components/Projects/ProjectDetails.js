@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import Timestamp from 'react-timestamp';
 import {getProject, addMemberToProject, removeMemberFromProject} from '../../lib/projectsServices';
+import { toast } from 'react-toastify';
 import {getAllUsers} from '../../lib/usersServices';
+import TaskList from '../tasks/TaskList';
 import {
     NavLink
 } from 'react-router-dom';
@@ -61,6 +64,8 @@ class ProjectDetails extends Component {
                             tempAvailableUser.splice(index, 1);
                             this.setState({availableUsers: tempAvailableUser});
                         }
+                        var toastMsg = "Added " + user.username + " to this project."
+                        toast.success(toastMsg);
                         this.setState({members: members, member_id: ''});
                     }
                 );
@@ -75,6 +80,8 @@ class ProjectDetails extends Component {
             if(removedMember){
                 removeMemberFromProject({project_id: this.state.project._id, member_id: member_id}).then(
                     user => {
+                        var toastMsg = "Removed " + user.username + " from this project."
+                        toast.error(toastMsg);
                         var members = this.state.members;
                         var index = members.indexOf(removedMember);
                         if (index > -1) {
@@ -99,24 +106,25 @@ class ProjectDetails extends Component {
     render() {
         return (
             <div className="ProjectDetails">
-                <h4><strong>Title: </strong>{this.state.project.title}</h4>
+                <h4><strong>Project Name: </strong>{this.state.project.title}</h4>
+                <p><strong>Short Name: {this.state.project.shortName}</strong></p>
                 <p><strong>Description: </strong>{this.state.project.description}</p>
                 <div className="row">
-                    <div className="col-sm-6 col-md-6 col-lg-6">
+                    <div className="col-sm-8 col-md-8 col-lg-8">
+                    <div className="m-b-10">
                         <NavLink className="cursor-pointer"
                                  to={"/" + this.state.project._id + "/tasks/new/00000000000"}> + Create a task</NavLink>
-                        <h4>Tasks list</h4>
-                        {this.state.tasks.map(task => <div key={task._id}><NavLink
-                            to={"/tasks/" + task._id}>{task.title}</NavLink>
-                        </div>)}
                     </div>
-                    <div className="col-sm-6 col-md-6 col-lg-6">
+
+                        {this.state.tasks.length > 0 ? <TaskList tasks={this.state.tasks} title={"Task list"}/> : ''}
+                    </div>
+                    <div className="col-sm-4 col-md-4 col-lg-4 border-left-2-grey">
                         <h4>Creator: {this.state.project.creator ? <NavLink to={"/users/" + this.state.project.creator._id}>{this.state.project.creator.username}</NavLink>: ''}</h4><br/>
                         <h4>
                             <button className="btn btn-default pull-right" onClick={this.handleAddMembersForm}>+ Add Members</button>
-                        </h4>
+                        </h4><br/>
                         {this.state.showAddMembersForm ? <div className="AddMemberFrom">
-                            <select className="form-control"  onChange={this.handleInputChange} name="member_id" value={this.state.member_id}>
+                            <select className="form-control m-b-10 m-t-10"  onChange={this.handleInputChange} name="member_id" value={this.state.member_id}>
                                 <option key={0} value=''>Please select one user</option>
                                 {this.state.availableUsers.map(user => <option key={user._id} value={user._id} className="form-control">{user.username}</option>)}
                             </select>
@@ -126,7 +134,7 @@ class ProjectDetails extends Component {
                             <strong>Members: </strong>
                             {this.state.members.map(member => <div key={member._id}>
                                 <NavLink to={"/users/" + member._id}>{member.username}</NavLink>
-                                <button onClick={() => this.removeMemberFromThisProject(member._id)} className="btn btn-xs cursor-pointer remove-icon-project-members">X</button>
+                                <span onClick={() => this.removeMemberFromThisProject(member._id)} className="badge badge-danger cursor-pointer remove-icon-project-members">x</span>
                             </div>)}
                         </div>
                     </div>

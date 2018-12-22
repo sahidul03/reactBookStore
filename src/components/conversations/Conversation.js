@@ -3,6 +3,7 @@ import {getConversation, getConversationAccordingToContact} from '../../lib/conv
 import {getCurrentUser, sendFriendRequest, acceptFriendRequest, rejectFriendRequest} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
 import config from '../../config';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     NavLink
 } from 'react-router-dom';
@@ -73,27 +74,44 @@ class Conversation extends Component {
         );
         getCurrentUser().then(
             user => {
+              if(user){
                 joinALlProjectsAndSelfUserRoom(user._id);
                 this.setState({
-                    user: user,
-                    projects: user.projects,
-                    ownProjects: user.ownProjects,
-                    contacts: user.contacts,
-                    gotFriendRequests: user.gotFriendRequests,
-                    sentFriendRequests: user.sentFriendRequests
+                  user: user,
+                  projects: user.projects,
+                  ownProjects: user.ownProjects,
+                  contacts: user.contacts,
+                  gotFriendRequests: user.gotFriendRequests,
+                  sentFriendRequests: user.sentFriendRequests
                 });
-                if (this.state.projects.length > 0) {
+                let currentChannelOrContact =  localStorage.getItem('currentChannelOrContact');
+                let currentConversationBox =  localStorage.getItem('currentConversationBox');
+                if(!(currentChannelOrContact && currentConversationBox)){
+                  if (this.state.projects.length > 0) {
                     this.getMessagesOfConversations(this.state.projects[0].conversation);
                     let tempAllMessages = this.state.allMessages;
                     tempAllMessages[this.state.projects[0].conversation] = [];
                     this.setState({
-                        currentChannelOrContact: this.state.projects[0],
-                        currentConversationBox: 'project',
-                        allMessages: tempAllMessages
+                      currentChannelOrContact: this.state.projects[0],
+                      currentConversationBox: 'project',
+                      allMessages: tempAllMessages
                     })
-                } else if (this.state.projects.length <= 0 && this.state.projects.length > 0) {
+                  } else if (this.state.projects.length <= 0 && this.state.contacts.length > 0) {
                     this.setState({currentChannelOrContact: this.state.contacts[0], currentConversationBox: 'contact'})
+                  }
+                }else {
+                  currentChannelOrContact = JSON.parse(currentChannelOrContact);
+                  this.getMessagesOfConversations(currentChannelOrContact.conversation);
+                  let tempAllMessages = this.state.allMessages;
+                  tempAllMessages[currentChannelOrContact.conversation] = [];
+                  this.setState({
+                    currentChannelOrContact: currentChannelOrContact,
+                    currentConversationBox: currentConversationBox,
+                    allMessages: tempAllMessages
+                  })
                 }
+
+              }
             }
         )
     }
@@ -128,6 +146,8 @@ class Conversation extends Component {
 
     changeCurrentContact = (contact) => {
         if (contact.conversation) {
+          localStorage.setItem('currentChannelOrContact', JSON.stringify(contact));
+          localStorage.setItem('currentConversationBox', 'contact');
             this.setState({currentChannelOrContact: contact, currentConversationBox: 'contact'});
             if (this.state.allMessages[contact.conversation]) {
                 this.setState({
@@ -177,6 +197,8 @@ class Conversation extends Component {
     };
 
     changeCurrentChannel = (channel) => {
+      localStorage.setItem('currentChannelOrContact', JSON.stringify(channel));
+      localStorage.setItem('currentConversationBox', 'project');
         if (this.state.allMessages[channel.conversation]) {
             this.setState({
                 currentChannelOrContact: channel,
@@ -389,6 +411,19 @@ class Conversation extends Component {
     };
 
     render() {
+      const messages = this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message =>
+        <li
+          key={message._id} className={message.sender._id == this.state.user._id ? 'replies' : 'sent'}>
+          <img src={config.backendBaseUrl + message.sender.photo} alt={message.sender.username} />
+          <p>
+            <span className="message_body">{message.body}</span><br/>
+            <span className="date_time">
+                                  <Timestamp time={message.updated_at} twentyFourHour autoUpdate={60}/>
+                                </span>
+          </p>
+
+        </li>) : '';
+
         return (
             <div className="Conversation">
                 <div className="row">
@@ -413,7 +448,7 @@ class Conversation extends Component {
                                     <span className="new-message-icon pull-right">{contact.new_message}</span> : ''}
                             </div>)}
                     </div>
-                    <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 conversation-rendering">
+                    <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9 conversation-rendering messages">
                         <div className="channel-contact-info">
                             <span>
                                 {this.state.currentConversationBox === 'project' ? <span>
@@ -443,33 +478,18 @@ class Conversation extends Component {
                                 </div> : ''}
                         </div>
                         {/*<div className="separator"></div>*/}
-                        <div ref="messagesContainer" className="messages-container">
-                            {this.state.currentChannelOrContact ? this.state.allMessages[this.state.currentChannelOrContact.conversation].map(message =>
-                                <div
-                                    key={message._id} className="message">
-                                    <div className="message-sender">
-                                        <img
-                                            src={config.backendBaseUrl + message.sender.photo}
-                                            className="profile-image"
-                                            alt={message._id}/>
-                                        {/*<img src="/images/profile-avater.png" className="profile-image"*/}
-                                        {/*alt={message._id}/>*/}
-                                    </div>
-                                    <div className="message-body">
-                                        <div className="m-head">
-                                            <NavLink className="profile-name"
-                                                     to={"/users/" + message.sender._id}>{message.sender.username}</NavLink>
-                                            <span className="created-date pull-right"><Timestamp
-                                                time={message.updated_at} format='full'
-                                                includeDay/></span>
-                                        </div>
-                                        <div className="m-body">
-                                            {message.body}
-                                        </div>
-                                    </div>
-                                    <div className="clear"></div>
-                                </div>) : ''}
-                        </div>
+                        <ul ref="messagesContainer" className="messages-container">
+                          {this.state.currentChannelOrContact ? <ReactCSSTransitionGroup
+                            transitionName="list-item"
+                            transitionAppear={true}
+                            transitionAppearTimeout={500}
+                            transitionEnter={true}
+                            transitionEnterTimeout={500}
+                            transitionLeave={true}
+                            transitionLeaveTimeout={300}>
+                            {messages}
+                          </ReactCSSTransitionGroup> : ''}
+                        </ul>
                         <div className="chat-text-box">
                             <form onSubmit={this.handleMessageSubmit}>
                                 <input name="message" onChange={this.handleMessageInputChange}

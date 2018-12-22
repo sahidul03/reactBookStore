@@ -1,32 +1,37 @@
 import React, {Component} from 'react';
 import {createProject} from '../../lib/projectsServices';
 import config from '../../config';
+import { toast } from 'react-toastify';
 
 
 class NewProject extends Component {
     state = {
         project: {
             title: '',
+            shortName: '',
             description: ''
         },
         flag: null,
         message: '',
+        submitted: false,
         errorMessage: ''
     };
 
     handleSubmit = (evt) => {
         evt.preventDefault();
         if (this.state.project) {
+          this.setState({submitted: true});
             createProject(this.state.project).then(response => {
                     if(response._id){
-                        let formData = {
-                            title: '',
-                            description: ''
-                        };
-                        this.setState({message: response.message, errorMessage: '', flag: response.flag, project: formData});
-                        window.location.href = config.frontendBaseUrl;
+                        toast.success("Project has been created successfully!");
+                        // let formData = {
+                        //     title: '',
+                        //     description: ''
+                        // };
+                        // this.setState({message: response.message, errorMessage: '', flag: response.flag, project: formData});
+                        this.props.history.push('/');
                     }else {
-                        this.setState({message: '', errorMessage: response.message, flag: response.flag});
+                        this.setState({message: '', errorMessage: response.message, flag: response.flag, submitted: false});
                     }
                 }
             )
@@ -59,6 +64,13 @@ class NewProject extends Component {
                                        placeholder="Title" required/>
                             </div>
                             <div className="form-group col-md-12 col-sm-12">
+                                <label>Short Name*</label>
+                                <input name="shortName" type="text" onChange={this.handleInputChange}
+                                       value={this.state.project.shortName}
+                                       className="form-control input-sm" id="title"
+                                       placeholder="Short Name" required/>
+                            </div>
+                            <div className="form-group col-md-12 col-sm-12">
                                 <label>Description*</label>
                                 <textarea name="description" onChange={this.handleInputChange}
                                           value={this.state.project.description}
@@ -66,7 +78,7 @@ class NewProject extends Component {
                                           placeholder="Description" required></textarea>
                             </div>
                             <div className="col-md-12 col-sm-12">
-                                <input type="submit" className="btn btn-primary pull-right" value="Submit"/>
+                                <button type="submit" className={"btn btn-primary pull-right " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Submit {this.state.submitted ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}</button>
                             </div>
                         </form>
                     </div>
