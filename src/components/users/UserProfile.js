@@ -19,11 +19,20 @@ class UserProfile extends Component {
     };
 
     componentDidMount() {
-        getUser(this.props.match.params.id).then(
+        if(this.props.match.params.id){
+          getUser(this.props.match.params.id).then(
             user => {
                 this.setState({user: user, projects: user.projects, ownProjects: user.ownProjects});
             }
-        )
+          )
+        }else{
+          getUser(this.props.currentUser._id).then(
+            user => {
+                this.setState({user: user, projects: user.projects, ownProjects: user.ownProjects});
+            }
+          )
+        }
+
     }
 
     handleImageUploadSubmit = (e) => {

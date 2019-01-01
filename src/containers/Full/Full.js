@@ -17,7 +17,7 @@ import {
   AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
-import navigation from '../../_nav';
+import navigation from '../../_leftSideBarMenu';
 // routes config
 import routes from '../../routes';
 import FullAside from './FullAside';
@@ -62,13 +62,13 @@ class Full extends Component {
           <FullHeader currentUser={this.state.currentUser} {...this.props}/>
         </AppHeader>
         <div className="app-body">
-          {/*<AppSidebar fixed display="lg">*/}
-            {/*<AppSidebarHeader />*/}
-            {/*<AppSidebarForm />*/}
-            {/*<AppSidebarNav navConfig={navigation} {...this.props} />*/}
-            {/*<AppSidebarFooter />*/}
-            {/*<AppSidebarMinimizer />*/}
-          {/*</AppSidebar>*/}
+          <AppSidebar fixed display="lg">
+            {/* <AppSidebarHeader /> */}
+            {/* <AppSidebarForm /> */}
+            <AppSidebarNav navConfig={navigation} {...this.props} />
+            <AppSidebarFooter />
+            <AppSidebarMinimizer />
+          </AppSidebar>
           <main className="main">
             {/*<AppBreadcrumb appRoutes={routes}/>*/}
             <Container fluid>
@@ -86,6 +86,7 @@ class Full extends Component {
                 <Route exact path="/project/new" component={NewProject}/>
                 <Route exact path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
                 <Route exact path="/users/:id" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
+                <Route exact path="/settings" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/tasks/:id" component={TaskDetails}/>
                 <Route exact path="/conversation" component={Conversation}/>
                 {/*<Redirect from="/" to="/dashboard" />*/}

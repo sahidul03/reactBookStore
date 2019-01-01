@@ -40,23 +40,22 @@ class FullHeader extends Component {
 
     return (
       <React.Fragment>
-        {/* <AppSidebarToggler className="d-lg-none" display="md" mobile /> */}
+        <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand className="d-md-down-none" display="lg"
           full={{ src: process.env.PUBLIC_URL + 'assets/img/brand/btm-logo.png', width: 89, height: 25, alt: 'BTM Logo' }}
           minimized={{ src: process.env.PUBLIC_URL + 'assets/img/brand/btm-logo.png', width: 30, height: 30, alt: 'BTM Logo' }}
         />
-        {/*<AppSidebarToggler className="d-md-down-none" display="lg" />config.backendBaseUrl + this.props.currentUser.photo*/}
+        <AppSidebarToggler className="d-md-down-none" display="lg" />
 
         <Nav navbar>
-          <NavItem className="px-3">
+          <NavItem className="px-3 d-md-down-none">
             <NavLink to={'/'}>Home</NavLink>
           </NavItem>
-          <NavItem className="px-3">
+          <NavItem className="px-3 d-md-down-none">
             <NavLink to={'/conversation'}>Conversation</NavLink>
           </NavItem>
-          <NavItem className="px-3">
-            {this.props.currentUser ? <NavLink to={'/users/' + this.props.currentUser._id}>Settings</NavLink> : ''}
-
+          <NavItem className="px-3 d-md-down-none">
+            {this.props.currentUser ? <NavLink to={'/settings'}>Settings</NavLink> : ''}
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
