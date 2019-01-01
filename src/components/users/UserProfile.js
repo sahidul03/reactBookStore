@@ -24,17 +24,10 @@ class UserProfile extends Component {
                 this.setState({user: user, projects: user.projects, ownProjects: user.ownProjects});
             }
         )
-        getCurrentUserBasicInfo().then(
-          user => {
-            this.setState({currentUser: user});
-          }
-        )
     }
 
     handleImageUploadSubmit = (e) => {
         e.preventDefault();
-        // TODO: do something with -> this.state.file
-        // console.log('this.state.file', this.state.file);
 
         this.setState({uploading: true});
         uploadImage(this.state.file).then(response => {
@@ -42,7 +35,9 @@ class UserProfile extends Component {
             let tempUser = this.state.user;
             tempUser.photo = response.photo;
             this.setState({uploading: false, user: tempUser, imagePreviewUrl: '', file: ''});
-            document.getElementById('profile-right-side-avatar').src = config.backendBaseUrl + this.state.user.photo;
+            let tempCurrentUser = this.props.currentUser;
+            tempCurrentUser.photo = response.photo;
+            this.props.callbackOnCurrentUserChange(tempCurrentUser);
         })
     };
 
@@ -84,7 +79,7 @@ class UserProfile extends Component {
                         <div className="profile-img">
                             {this.state.imagePreviewUrl? <img src={this.state.imagePreviewUrl}/> : ''}
                             {(this.state.imagePreviewUrl == '' && this.state.user.photo)? <img src={config.backendBaseUrl + this.state.user.photo}/> : ''}
-                            {(this.state.currentUser && this.state.user && this.state.currentUser._id == this.state.user._id)? <div className="file btn btn-lg btn-primary">
+                            {(this.props.currentUser && this.state.user && this.props.currentUser._id == this.state.user._id)? <div className="file btn btn-lg btn-primary">
                                 Change Photo
                                 <input type="file" onChange={this.handleImageChange}/>
                             </div> : ""}

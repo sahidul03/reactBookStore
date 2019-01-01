@@ -33,15 +33,33 @@ import TaskDetails from '../../components/tasks/TaskDetails';
 import Conversation from '../../components/conversations/Conversation';
 import {Topics} from '../../components/others/Topics';
 import {loggingStatus} from '../../lib/authenticationService';
+import {getCurrentUserBasicInfo} from '../../lib/usersServices';
 import config from '../../config';
 
 class Full extends Component {
+
+  state = {
+    currentUser: ''
+  };
+
+  componentDidMount() {
+    getCurrentUserBasicInfo().then(
+      user => {
+        this.setState({currentUser: user});
+      }
+    )
+  }
+
+  onCurrentUserChange = (currentUser, event) => {
+    console.log("Fired parent function", currentUser);
+    this.setState({currentUser: currentUser});
+  };
 
   render() {
     return (
       <div className="app">
         <AppHeader fixed>
-          <FullHeader {...this.props}/>
+          <FullHeader currentUser={this.state.currentUser} {...this.props}/>
         </AppHeader>
         <div className="app-body">
           {/*<AppSidebar fixed display="lg">*/}
@@ -67,7 +85,7 @@ class Full extends Component {
                 <Route exact path="/projects/:id" component={ProjectDetails}/>
                 <Route exact path="/project/new" component={NewProject}/>
                 <Route exact path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
-                <Route exact path="/users/:id" component={UserProfile}/>
+                <Route exact path="/users/:id" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/tasks/:id" component={TaskDetails}/>
                 <Route exact path="/conversation" component={Conversation}/>
                 {/*<Redirect from="/" to="/dashboard" />*/}
