@@ -20,6 +20,10 @@ class ProjectDetails extends Component {
         member_id: ''
     };
 
+    createMarkup = (text) => {
+      return {__html: text};
+    }
+
     componentDidMount() {
         getProject(this.props.match.params.id).then(
             project => {
@@ -108,7 +112,8 @@ class ProjectDetails extends Component {
             <div className="ProjectDetails">
                 <h4><strong>Project Name: </strong>{this.state.project.title}</h4>
                 <p><strong>Short Name: {this.state.project.shortName}</strong></p>
-                <p><strong>Description: </strong>{this.state.project.description}</p>
+                <label>Description: </label>
+                <div className="projectDescription" dangerouslySetInnerHTML={this.createMarkup(this.state.project.description)}></div>
                 <div className="row">
                     <div className="col-sm-8 col-md-8 col-lg-8">
                     <div className="m-b-10">

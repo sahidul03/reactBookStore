@@ -160,6 +160,22 @@ main.main{
   border: 1px solid lightgray;
 }
 
+.taskDescription{
+  border: 1px solid #dadada;
+  padding: 10px;
+}
+.taskDescription table td, th {
+  border: 1px solid lightgray;
+}
+
+.projectDescription{
+  border: 1px solid #dadada;
+  padding: 10px;
+}
+.projectDescription table td, th {
+  border: 1px solid lightgray;
+}
+
 .comments-container .comment {
   border-bottom: 1px solid #dadada;
   margin-bottom: 12px;
@@ -181,7 +197,8 @@ main.main{
 }
 .Conversation .channels-contacts {
   /*border-right: 1px solid #dadada;*/
-  min-height: 400px;
+  /* min-height: 400px; */
+  margin-bottom: 15px;
 }
 
 .Conversation .channels-contacts .new-message-icon {
@@ -196,6 +213,7 @@ main.main{
 
 .Conversation .conversation-rendering {
   border-left: 2px solid #dadada;
+  padding-bottom: 10px;
 }
 
 .Conversation .chat-text-box {
@@ -203,7 +221,7 @@ main.main{
 }
 
 .Conversation .messages-container {
-  height: 400px;
+  height: 395px;
   overflow-y: scroll;
   margin-left: -30px;
 }

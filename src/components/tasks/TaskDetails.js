@@ -45,6 +45,10 @@ class TaskDetails extends Component {
         readonly: false // all options from https://xdsoft.net/jodit/doc/
     }
 
+    createMarkup = (text) => {
+      return {__html: text};
+    }
+
     componentWillReceiveProps(newProps) {
         joinToTaskRoom(newProps.match.params.id);
         getTask(newProps.match.params.id).then(
@@ -131,9 +135,9 @@ class TaskDetails extends Component {
                             availableUsers.splice(index, 1);
                         }
                         if(this.state.assignee){
-                          toast.success("Assignee changed successfully!");
+                          toast("Assignee changed successfully!");
                         }else{
-                          toast.success("Assignee assigned successfully!");
+                          toast("Assignee assigned successfully!");
                         }
                         this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user});
                     }
@@ -180,7 +184,8 @@ class TaskDetails extends Component {
                             to={"/tasks/" + this.state.parentTask._id}>{this.state.parentTask.title}</NavLink>
                         </h5> : ''}
                         <h4 className="color-cadetblue">{this.state.task.title}</h4>
-                        <p><strong>Description: </strong>{this.state.task.description}</p>
+                        <label>Description: </label>
+                        <div className="taskDescription" dangerouslySetInnerHTML={this.createMarkup(this.state.task.description)}></div>
                         <NavLink className="cursor-pointer"
                                  to={"/" + this.state.project._id + "/tasks/new/" + this.state.task._id}> + Create a sub
                             task</NavLink>

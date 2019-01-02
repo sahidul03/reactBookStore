@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {createProject} from '../../lib/projectsServices';
 import config from '../../config';
 import { toast } from 'react-toastify';
+import 'jodit';
+import 'jodit/build/jodit.min.css';
+import JoditEditor from "jodit-react";
 
 
 class NewProject extends Component {
@@ -16,6 +19,16 @@ class NewProject extends Component {
         submitted: false,
         errorMessage: ''
     };
+
+    /**
+     * @property Jodit jodit instance of native Jodit
+     */
+    jodit;
+    setRef = jodit => this.jodit = jodit;
+
+    config = {
+        readonly: false // all options from https://xdsoft.net/jodit/doc/
+    }
 
     handleSubmit = (evt) => {
         evt.preventDefault();
@@ -41,10 +54,14 @@ class NewProject extends Component {
     handleInputChange = (evt) => {
         let formData = this.state.project;
         formData[evt.target.name] = evt.target.value;
-        this.setState({
-            project: formData
-        });
+        this.setState({ project: formData });
     };
+
+    handleDescriptionChange = (value) => {
+      let formData = this.state.project;
+        formData['description'] = value;
+        this.setState({ project: formData });
+    }
 
     render() {
         return (
@@ -72,10 +89,12 @@ class NewProject extends Component {
                             </div>
                             <div className="form-group col-md-12 col-sm-12">
                                 <label>Description*</label>
-                                <textarea name="description" onChange={this.handleInputChange}
-                                          value={this.state.project.description}
-                                          className="form-control input-sm" id="description"
-                                          placeholder="Description" required></textarea>
+                                <JoditEditor
+                                        editorRef={this.setRef}
+                                        value={this.state.project.description}
+                                        config={this.config}
+                                        onChange={this.handleDescriptionChange}
+                                        placeholder="Write Description here ..." required/>
                             </div>
                             <div className="col-md-12 col-sm-12">
                                 <button type="submit" className={"btn btn-primary pull-right " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Submit {this.state.submitted ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}</button>
