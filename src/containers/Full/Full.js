@@ -80,7 +80,7 @@ class Full extends Component {
                       : (null);
                   },
                 )}
-                <Route exact path="/" component={Home}/>
+                <Route exact path="/" render={(props) => <Home {...props} currentUser={this.state.currentUser}/> }/>
                 <Route exact path="/about" component={About}/>
                 <Route exact path="/projects/:id" component={ProjectDetails}/>
                 <Route exact path="/project/new" component={NewProject}/>
@@ -88,7 +88,7 @@ class Full extends Component {
                 <Route exact path="/users/:id" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/settings" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/tasks/:id" component={TaskDetails}/>
-                <Route exact path="/conversation" component={Conversation}/>
+                <Route exact path="/conversation" render={(props) => <Conversation {...props} currentUser={this.state.currentUser}/> }/>
                 {/*<Redirect from="/" to="/dashboard" />*/}
               </Switch>
             </Container>

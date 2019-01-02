@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {getUser, uploadImage, getCurrentUserBasicInfo} from '../../lib/usersServices';
+import {getUser, uploadImage, getCurrentUser} from '../../lib/usersServices';
+import AppLoader from '../shared/AppLoader';
 import config from '../../config';
 import { toast } from 'react-toastify';
 import './profile.css';
@@ -26,7 +27,7 @@ class UserProfile extends Component {
             }
           )
         }else{
-          getUser(this.props.currentUser._id).then(
+          getCurrentUser().then(
             user => {
                 this.setState({user: user, projects: user.projects, ownProjects: user.ownProjects});
             }
@@ -79,6 +80,7 @@ class UserProfile extends Component {
 
 
     render() {
+      if(this.state.user)
         return (
             <div className="Home btm-profile-page">
             <div className="container emp-profile">
@@ -240,6 +242,8 @@ class UserProfile extends Component {
 
             </div>
         );
+      else
+        return <AppLoader currentUser={this.props.currentUser}/>
     }
 }
 

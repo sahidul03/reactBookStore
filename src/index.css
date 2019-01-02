@@ -6,7 +6,7 @@ main.main{
   background-color: white;
 }
 .main .container-fluid {
-  padding: 15px 30px !important;
+  padding: 15px 30px 0px 30px !important;
 }
 .form-signin {
   max-width: 330px;
@@ -19,6 +19,19 @@ main.main{
   text-align: center;
   font-size: 100px;
   padding-top: 150px;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.container-block-spiner {
+  z-index: 1;
+  background-color: white;
+  text-align: center;
+  font-size: 100px;
+  padding-top: 210px;
   position: fixed;
   height: 100%;
   width: 100%;

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {getConversation, getConversationAccordingToContact} from '../../lib/conversationsServices';
 import {getCurrentUser, sendFriendRequest, acceptFriendRequest, rejectFriendRequest} from '../../lib/usersServices';
+import AppLoader from '../shared/AppLoader';
 import Timestamp from 'react-timestamp';
 import config from '../../config';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -424,6 +425,7 @@ class Conversation extends Component {
 
         </li>) : '';
 
+      if(this.state.user)
         return (
             <div className="Conversation">
                 <div className="row">
@@ -503,6 +505,8 @@ class Conversation extends Component {
                 </div>
             </div>
         );
+      else
+        return <AppLoader currentUser={this.props.currentUser}/>;
     }
 }
 
