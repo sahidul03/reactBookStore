@@ -82,12 +82,12 @@ class Full extends Component {
                 )}
                 <Route exact path="/" render={(props) => <Home {...props} currentUser={this.state.currentUser}/> }/>
                 <Route exact path="/about" component={About}/>
-                <Route exact path="/projects/:id" component={ProjectDetails}/>
+                <Route exact path="/projects/:id" render={(props) => <ProjectDetails {...props} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/project/new" component={NewProject}/>
                 <Route exact path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
                 <Route exact path="/users/:id" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/settings" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
-                <Route exact path="/tasks/:id" component={TaskDetails}/>
+                <Route exact path="/tasks/:id" render={(props) => <TaskDetails {...props} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/conversation" render={(props) => <Conversation {...props} currentUser={this.state.currentUser}/> }/>
                 {/*<Redirect from="/" to="/dashboard" />*/}
               </Switch>

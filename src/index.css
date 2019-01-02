@@ -83,6 +83,10 @@ main.main{
 .color-blue {
   color: 	#20a8d8;
 }
+
+.color-white {
+  color: 	#ffffff;
+}
 .cursor-pointer {
   cursor: pointer;
 }

@@ -6,6 +6,7 @@ import Timestamp from 'react-timestamp';
 import TaskList from './TaskList';
 import TaskCommentList from '../taskComments/TaskCommentList'
 import { toast } from 'react-toastify';
+import AppLoader from '../shared/AppLoader';
 import {
     NavLink
 } from 'react-router-dom';
@@ -26,10 +27,10 @@ class TaskDetails extends Component {
         subTasks: [],
         comments: [],
         showAddAssigneeForm: false,
-        userFetched: false,
         assignee_id: '',
         showAddCommentForm: false,
         newCommentDescription: '',
+        submittingAssigneeForm: false,
     };
 
     updateContent = (value) => {
@@ -84,30 +85,26 @@ class TaskDetails extends Component {
                     assignee: task.assignee,
                     creator: task.creator,
                     parentTask: task.parentTask,
-                    comments: task.comments
+                    comments: task.comments,
+                    availableUsers: task.project.members
                 });
+                if (this.state.assignee) {
+                  var tempUsers = this.state.availableUsers;
+                  var u = tempUsers.find(user => {
+                      return user._id === this.state.assignee._id
+                  });
+                  var index = tempUsers.indexOf(u);
+                  if (index > -1) {
+                    tempUsers.splice(index, 1);
+                  }
+                  this.setState({ availableUsers: tempUsers });
+                }
             }
         )
     }
 
     handleAddAssigneeForm = () => {
         var tempFlag = this.state.showAddAssigneeForm;
-        if (!this.state.userFetched) {
-            getAllUsers().then(
-                users => {
-                    if (this.state.assignee) {
-                        var u = users.find(user => {
-                            return user._id === this.state.assignee._id
-                        });
-                        var index = users.indexOf(u);
-                        if (index > -1) {
-                            users.splice(index, 1);
-                        }
-                    }
-                    this.setState({availableUsers: users, userFetched: true});
-                }
-            );
-        }
         this.setState({showAddAssigneeForm: !tempFlag});
     };
 
@@ -121,6 +118,7 @@ class TaskDetails extends Component {
                 console.log('Already assigned this user.');
             } else {
                 var data = {task_id: this.state.task._id, assignee_id: this.state.assignee_id};
+                this.setState({submittingAssigneeForm: true})
                 addAssigneeToTask(data).then(
                     user => {
                         var availableUsers = this.state.availableUsers;
@@ -139,7 +137,7 @@ class TaskDetails extends Component {
                         }else{
                           toast("Assignee assigned successfully!");
                         }
-                        this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user});
+                        this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user, submittingAssigneeForm: false, showAddAssigneeForm: false});
                     }
                 );
             }
@@ -176,6 +174,7 @@ class TaskDetails extends Component {
     };
 
     render() {
+      if(this.state.task)
         return (
             <div className="TaskDetails">
                 <div className="row">
@@ -213,8 +212,8 @@ class TaskDetails extends Component {
                                 {this.state.availableUsers.map(user => <option key={user._id} value={user._id}
                                                                                className="form-control">{user.username}</option>)}
                             </select>
-                            <button className="pull-right btn btn-info" onClick={this.addAssigneeToThisTask}>Add
-                                assignee
+                            <button className={"btn btn-info pull-right " + (this.state.submittingAssigneeForm ? 'disabled' : '')} disabled={this.state.submittingAssigneeForm} onClick={this.addAssigneeToThisTask}>Add
+                                assignee {this.state.submittingAssigneeForm ? <span><i className="fa fa-spinner fa-pulse fa-fw color-white"></i></span> : ''}
                             </button>
                             <br/><br/>
                         </h5> : ""}
@@ -258,6 +257,8 @@ class TaskDetails extends Component {
                 </div>
             </div>
         );
+      else
+        return <AppLoader currentUser={this.props.currentUser}/>
     }
 }
 
