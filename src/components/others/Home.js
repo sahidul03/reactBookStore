@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {getCurrentUser} from '../../lib/usersServices';
 import AppLoader from '../shared/AppLoader';
-import {
-    NavLink
-} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class Home extends Component {
     state = {

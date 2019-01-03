@@ -67,7 +67,7 @@ class NewProject extends Component {
         return (
             <div className="NewProject">
                 <h4><strong>Create a new project</strong></h4>
-                <div className="row">
+                <div className="row m-b-20">
                     <div className="col-sm-12 col-md-12 col-lg-12">
                         <form onSubmit={this.handleSubmit}>
                             <div className="form-group col-md-12 col-sm-12">
@@ -98,6 +98,7 @@ class NewProject extends Component {
                             </div>
                             <div className="col-md-12 col-sm-12">
                                 <button type="submit" className={"btn btn-primary pull-right " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Submit {this.state.submitted ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}</button>
+                                <span className="btn btn-default pull-right color-blue" onClick={()=>this.props.history.goBack()}>Cancel</span>
                             </div>
                         </form>
                     </div>

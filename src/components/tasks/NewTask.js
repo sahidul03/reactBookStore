@@ -3,9 +3,7 @@ import {createTask, getMinTask} from '../../lib/tasksServices';
 import {getMinProject} from '../../lib/projectsServices';
 import { toast } from 'react-toastify';
 import config from '../../config';
-import {
-    NavLink
-} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import 'jodit';
 import 'jodit/build/jodit.min.css';
 import JoditEditor from "jodit-react";
@@ -90,7 +88,7 @@ class NewTask extends Component {
         return (
             <div className="NewTask">
                 <h4><strong>Create a new task</strong></h4>
-                <div className="row">
+                <div className="row m-b-20">
                     <div className="col-sm-12 col-md-12 col-lg-12">
                         <form onSubmit={this.handleSubmit}>
                             <div className="form-group col-md-12 col-sm-12">
@@ -123,6 +121,7 @@ class NewTask extends Component {
                             </div>
                             <div className="col-md-12 col-sm-12">
                                 <button type="submit" className={"btn btn-primary pull-right " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Submit {this.state.submitted ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}</button>
+                                <span className="btn btn-default pull-right color-blue" onClick={()=>this.props.history.goBack()}>Cancel</span>
                             </div>
                         </form>
                     </div>
