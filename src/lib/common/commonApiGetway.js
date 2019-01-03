@@ -37,7 +37,7 @@ export const postUploadImage = (apiUrl, formData)=> {
 
 function errorHandle(err) {
     console.log(err);
-    if(window.location.href !== config.frontendBaseUrl + '/#/login' && window.location.href !== config.frontendBaseUrl + '/#/signup'){
+    if(err.status === 401 && window.location.href !== config.frontendBaseUrl + '/#/login' && window.location.href !== config.frontendBaseUrl + '/#/signup'){
       localStorage.removeItem('token');
       localStorage.removeItem('currentChannelOrContact');
       localStorage.removeItem('currentConversationBox');
@@ -53,7 +53,10 @@ function successHandle(res) {
           localStorage.removeItem('currentConversationBox');
           history.push('/login');
         }
-    }else {
+    }else if(res.status === 404){
+      history.push('/404');
+    }
+    else {
         return res.json();
     }
 }
