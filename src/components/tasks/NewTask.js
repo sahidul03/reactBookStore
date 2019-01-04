@@ -100,7 +100,7 @@ class NewTask extends Component {
                             </div>
                             {this.state.parentTask ? <div className="form-group col-md-12 col-sm-12">
                                 <label>Parent Task: </label>
-                                <NavLink to={"/tasks/" + this.state.parentTask._id }> { this.state.parentTask.title}</NavLink>
+                                <NavLink to={"/tasks/" + this.state.parentTask._id }> [{this.state.parentTask.taskNumber}] { this.state.parentTask.title}</NavLink>
                             </div> : ''}
 
                             <div className="form-group col-md-12 col-sm-12">
