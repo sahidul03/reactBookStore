@@ -20,7 +20,8 @@ class ProjectDetails extends Component {
         userFetched: false,
         member_id: '',
         submittingAssigneeForm: false,
-        fetchingUserForAssign: false
+        fetchingUserForAssign: false,
+        submittingRemoveMemberId: {}
     };
 
     createMarkup = (text) => {
@@ -88,6 +89,9 @@ class ProjectDetails extends Component {
         if(member_id){
             var removedMember = this.state.members.find((obj)=> { return obj._id === member_id });
             if(removedMember){
+                var tempSubmittingRemoveMemberId = this.state.submittingRemoveMemberId;
+                tempSubmittingRemoveMemberId[member_id] = true;
+                this.setState({submittingRemoveMemberId: tempSubmittingRemoveMemberId});
                 removeMemberFromProject({project_id: this.state.project._id, member_id: member_id}).then(
                     user => {
                         var toastMsg = "Removed " + user.username + " from this project."
@@ -100,7 +104,9 @@ class ProjectDetails extends Component {
                         }
                         var tempAvailableUser = this.state.availableUsers;
                         tempAvailableUser.push(removedMember);
-                        this.setState({availableUsers: tempAvailableUser});
+                        var tempSubmittingRemoveMemberId = this.state.submittingRemoveMemberId;
+                        tempSubmittingRemoveMemberId[member_id] = false;
+                        this.setState({availableUsers: tempAvailableUser, submittingRemoveMemberId: tempSubmittingRemoveMemberId});
                     }
                 );
             }else {
@@ -151,7 +157,7 @@ class ProjectDetails extends Component {
                             <strong>Members: </strong>
                             {this.state.members.map(member => <div key={member._id}>
                                 <NavLink to={"/users/" + member._id}>{member.username}</NavLink>
-                                <span onClick={() => this.removeMemberFromThisProject(member._id)} className="badge badge-danger cursor-pointer remove-icon-project-members">x</span>
+                                { this.state.submittingRemoveMemberId[member._id] ? <span><i className="fa fa-spinner fa-pulse fa-fw color-blue"></i></span> : <span onClick={() => this.removeMemberFromThisProject(member._id)} className="badge badge-danger cursor-pointer remove-icon-project-members">x</span>}
                             </div>)}
                         </div>
                     </div>
