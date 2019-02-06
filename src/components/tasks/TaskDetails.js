@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {getTask, addAssigneeToTask} from '../../lib/tasksServices';
+import {getTask, addAssigneeToTask, changeTaskStatus} from '../../lib/tasksServices';
 import {createComment} from '../../lib/commentsServices';
 import {getAllUsers} from '../../lib/usersServices';
 import Timestamp from 'react-timestamp';
 import TaskList from './TaskList';
 import TaskCommentList from '../taskComments/TaskCommentList'
 import { toast } from 'react-toastify';
+import AppLoader from '../shared/AppLoader';
 import {
     NavLink
 } from 'react-router-dom';
@@ -26,10 +27,11 @@ class TaskDetails extends Component {
         subTasks: [],
         comments: [],
         showAddAssigneeForm: false,
-        userFetched: false,
         assignee_id: '',
         showAddCommentForm: false,
         newCommentDescription: '',
+        submittingAssigneeForm: false,
+        submittingStatusChangingForm: false
     };
 
     updateContent = (value) => {
@@ -43,6 +45,10 @@ class TaskDetails extends Component {
 
     config = {
         readonly: false // all options from https://xdsoft.net/jodit/doc/
+    }
+
+    createMarkup = (text) => {
+      return {__html: text};
     }
 
     componentWillReceiveProps(newProps) {
@@ -80,31 +86,41 @@ class TaskDetails extends Component {
                     assignee: task.assignee,
                     creator: task.creator,
                     parentTask: task.parentTask,
-                    comments: task.comments
+                    comments: task.comments,
+                    availableUsers: task.project.members
                 });
+                if (this.state.assignee) {
+                  var tempUsers = this.state.availableUsers;
+                  var u = tempUsers.find(user => {
+                      return user._id === this.state.assignee._id
+                  });
+                  var index = tempUsers.indexOf(u);
+                  if (index > -1) {
+                    tempUsers.splice(index, 1);
+                  }
+                  this.setState({ availableUsers: tempUsers });
+                }
             }
         )
     }
 
     handleAddAssigneeForm = () => {
         var tempFlag = this.state.showAddAssigneeForm;
-        if (!this.state.userFetched) {
-            getAllUsers().then(
-                users => {
-                    if (this.state.assignee) {
-                        var u = users.find(user => {
-                            return user._id === this.state.assignee._id
-                        });
-                        var index = users.indexOf(u);
-                        if (index > -1) {
-                            users.splice(index, 1);
-                        }
-                    }
-                    this.setState({availableUsers: users, userFetched: true});
-                }
-            );
-        }
         this.setState({showAddAssigneeForm: !tempFlag});
+    };
+
+    changeTaskStatus = (status) => {
+        this.setState({submittingStatusChangingForm: true});
+        var data = {task_id: this.state.task._id, status: status};
+        changeTaskStatus(data).then(
+            user => {
+                var toastMsg = "Status of task changed to " + status;
+                toast.info(toastMsg);
+                var tempTask = this.state.task;
+                tempTask.status = status;
+                this.setState({task: tempTask, submittingStatusChangingForm: false});
+            }
+        );
     };
 
     handleAddCommentForm = () => {
@@ -117,6 +133,7 @@ class TaskDetails extends Component {
                 console.log('Already assigned this user.');
             } else {
                 var data = {task_id: this.state.task._id, assignee_id: this.state.assignee_id};
+                this.setState({submittingAssigneeForm: true})
                 addAssigneeToTask(data).then(
                     user => {
                         var availableUsers = this.state.availableUsers;
@@ -131,11 +148,11 @@ class TaskDetails extends Component {
                             availableUsers.splice(index, 1);
                         }
                         if(this.state.assignee){
-                          toast.success("Assignee changed successfully!");
+                          toast("Assignee changed successfully!");
                         }else{
-                          toast.success("Assignee assigned successfully!");
+                          toast("Assignee assigned successfully!");
                         }
-                        this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user});
+                        this.setState({availableUsers: availableUsers, assignee_id: '', assignee: user, submittingAssigneeForm: false, showAddAssigneeForm: false});
                     }
                 );
             }
@@ -172,6 +189,7 @@ class TaskDetails extends Component {
     };
 
     render() {
+      if(this.state.task)
         return (
             <div className="TaskDetails">
                 <div className="row">
@@ -180,7 +198,8 @@ class TaskDetails extends Component {
                             to={"/tasks/" + this.state.parentTask._id}>{this.state.parentTask.title}</NavLink>
                         </h5> : ''}
                         <h4 className="color-cadetblue">{this.state.task.title}</h4>
-                        <p><strong>Description: </strong>{this.state.task.description}</p>
+                        <label>Description: </label>
+                        <div className="taskDescription" dangerouslySetInnerHTML={this.createMarkup(this.state.task.description)}></div>
                         <NavLink className="cursor-pointer"
                                  to={"/" + this.state.project._id + "/tasks/new/" + this.state.task._id}> + Create a sub
                             task</NavLink>
@@ -208,8 +227,8 @@ class TaskDetails extends Component {
                                 {this.state.availableUsers.map(user => <option key={user._id} value={user._id}
                                                                                className="form-control">{user.username}</option>)}
                             </select>
-                            <button className="pull-right btn btn-info" onClick={this.addAssigneeToThisTask}>Add
-                                assignee
+                            <button className={"btn btn-info pull-right " + (this.state.submittingAssigneeForm ? 'disabled' : '')} disabled={this.state.submittingAssigneeForm} onClick={this.addAssigneeToThisTask}>Add
+                                assignee {this.state.submittingAssigneeForm ? <span><i className="fa fa-spinner fa-pulse fa-fw color-white"></i></span> : ''}
                             </button>
                             <br/><br/>
                         </h5> : ""}
@@ -220,6 +239,72 @@ class TaskDetails extends Component {
                                     <NavLink
                                         to={"/users/" + this.state.assignee._id}>{this.state.assignee.username}</NavLink>
                                     : "Not assigned yet"}
+                            </div>
+                            <div>
+                                <strong>Type: </strong>
+                                {this.state.task.type === 'Bug' ?
+                                    <span className="badge badge-danger"> <i className="fa fa-bug"></i> {this.state.task.type}</span>
+                                    : ""}
+                                {this.state.task.type === 'Task' ?
+                                    <span className="badge badge-success"> <i className="fa fa-tasks"></i> {this.state.task.type}</span>
+                                    : ""}
+                                {this.state.task.type === 'Story' ?
+                                    <span className="badge badge-primary"> <i className="fa fa-tasks"></i> {this.state.task.type}</span>
+                                    : ""}
+                                {this.state.task.type === 'Change Request' ?
+                                    <span className="badge badge-warning"> <i className="fa fa-tasks"></i> {this.state.task.type}</span>
+                                    : ""}
+                            </div>
+                            <div>
+                                <strong>Status: </strong>
+                                {this.state.task.status === 'Open' ?
+                                    <span>
+                                      <span className="badge badge-primary"> {this.state.task.status}</span>
+                                      <button className={"btn btn-outline-primary btn-sm m-l-20 min-width-120 " + (this.state.submittingStatusChangingForm ? 'disabled' : '')} disabled={this.state.submittingStatusChangingForm} onClick={() => this.changeTaskStatus('In Progress')}>
+                                        Start Progress {this.state.submittingStatusChangingForm ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
+                                      </button>
+                                    </span>
+                                    : ""}
+                                {this.state.task.status === 'In Progress'?
+                                    <span>
+                                      <span className="badge badge-warning"> {this.state.task.status}</span>
+                                      <button className={"btn btn-outline-primary btn-sm m-l-20 min-width-120 " + (this.state.submittingStatusChangingForm ? 'disabled' : '')} disabled={this.state.submittingStatusChangingForm} onClick={() => this.changeTaskStatus('In Review')}>
+                                        Review Request {this.state.submittingStatusChangingForm ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
+                                      </button>
+                                    </span>
+                                    : ""}
+                                {this.state.task.status === 'In Review'?
+                                    <span>
+                                      <span className="badge badge-warning"> {this.state.task.status}</span>
+                                      <button className={"btn btn-outline-primary btn-sm m-l-20 min-width-120 " + (this.state.submittingStatusChangingForm ? 'disabled' : '')} disabled={this.state.submittingStatusChangingForm} onClick={() => this.changeTaskStatus('Resolved')}>
+                                      Resolve {this.state.submittingStatusChangingForm ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
+                                      </button>
+                                    </span>
+                                    : ""}
+                                {this.state.task.status === 'Reopen'?
+                                    <span>
+                                      <span className="badge badge-warning"> {this.state.task.status}</span>
+                                      <button className={"btn btn-outline-primary btn-sm m-l-20 min-width-120 " + (this.state.submittingStatusChangingForm ? 'disabled' : '')} disabled={this.state.submittingStatusChangingForm} onClick={() => this.changeTaskStatus('In Progress')}>
+                                      Start Progress {this.state.submittingStatusChangingForm ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
+                                      </button>
+                                    </span>
+                                    : ""}
+                                {this.state.task.status === 'Resolved' ?
+                                    <span>
+                                      <span className="badge badge-success"> {this.state.task.status}</span>
+                                      <button className={"btn btn-outline-primary btn-sm m-l-20 min-width-120 " + (this.state.submittingStatusChangingForm ? 'disabled' : '')} disabled={this.state.submittingStatusChangingForm} onClick={() => this.changeTaskStatus('Closed')}>
+                                      Close {this.state.submittingStatusChangingForm ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
+                                      </button>
+                                    </span>
+                                    : ""}
+                                {this.state.task.status === 'Closed' ?
+                                    <span>
+                                      <span className="badge badge-success"> {this.state.task.status}</span>
+                                      <button className={"btn btn-outline-primary btn-sm m-l-20 min-width-120 " + (this.state.submittingStatusChangingForm ? 'disabled' : '')} disabled={this.state.submittingStatusChangingForm} onClick={() => this.changeTaskStatus('Reopen')}>
+                                      Open Again {this.state.submittingStatusChangingForm ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}
+                                      </button>
+                                    </span>
+                                    : ""}
                             </div>
                         </div>
                     </div>
@@ -253,6 +338,8 @@ class TaskDetails extends Component {
                 </div>
             </div>
         );
+      else
+        return <AppLoader currentUser={this.props.currentUser}/>
     }
 }
 

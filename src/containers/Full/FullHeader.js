@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import { NavLink } from 'react-router-dom';
 import {logout} from '../../lib/authenticationService';
-import {getCurrentUserBasicInfo} from '../../lib/usersServices';
 import config from '../../config';
 
 const propTypes = {
@@ -14,9 +13,7 @@ const propTypes = {
 const defaultProps = {};
 
 class FullHeader extends Component {
-  state = {
-    basicUserInfo: ''
-  };
+
   logoutSubmit = () => {
     logout().then(response => {
       if (response.flag === 1) {
@@ -33,11 +30,7 @@ class FullHeader extends Component {
   };
 
   componentDidMount() {
-    getCurrentUserBasicInfo().then(
-      user => {
-        this.setState({basicUserInfo: user});
-      }
-    )
+
   }
 
   render() {
@@ -47,28 +40,27 @@ class FullHeader extends Component {
 
     return (
       <React.Fragment>
-        {/* <AppSidebarToggler className="d-lg-none" display="md" mobile /> */}
+        <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand className="d-md-down-none" display="lg"
           full={{ src: process.env.PUBLIC_URL + 'assets/img/brand/btm-logo.png', width: 89, height: 25, alt: 'BTM Logo' }}
           minimized={{ src: process.env.PUBLIC_URL + 'assets/img/brand/btm-logo.png', width: 30, height: 30, alt: 'BTM Logo' }}
         />
-        {/*<AppSidebarToggler className="d-md-down-none" display="lg" />config.backendBaseUrl + this.state.basicUserInfo.photo*/}
+        <AppSidebarToggler className="d-md-down-none" display="lg" />
 
         <Nav navbar>
-          <NavItem className="px-3">
+          <NavItem className="px-3 d-md-down-none">
             <NavLink to={'/'}>Home</NavLink>
           </NavItem>
-          <NavItem className="px-3">
+          <NavItem className="px-3 d-md-down-none">
             <NavLink to={'/conversation'}>Conversation</NavLink>
           </NavItem>
-          <NavItem className="px-3">
-            {this.state.basicUserInfo ? <NavLink to={'/users/' + this.state.basicUserInfo._id}>Settings</NavLink> : ''}
-
+          <NavItem className="px-3 d-md-down-none">
+            {this.props.currentUser ? <NavLink to={'/settings'}>Settings</NavLink> : ''}
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
           <NavItem className="header-json">
-            {this.state.basicUserInfo ? '{ username: ' + this.state.basicUserInfo.username + ', email: ' + this.state.basicUserInfo.email + ' }' : ''}
+            {this.props.currentUser ? '{ username: ' + this.props.currentUser.username + ', email: ' + this.props.currentUser.email + ' }' : ''}
           </NavItem>
           {/*<NavItem className="d-md-down-none">*/}
             {/*<NavLink href="#"><i className="icon-list"></i></NavLink>*/}
@@ -94,17 +86,17 @@ class FullHeader extends Component {
             </DropdownMenu>
           </AppHeaderDropdown> */}
           <AppHeaderDropdown direction="down">
-            { this.state.basicUserInfo ?
+            { this.props.currentUser ?
               <DropdownToggle nav>
-              <img id="profile-right-side-avatar" src={config.backendBaseUrl + this.state.basicUserInfo.photo} className="img-avatar" alt={this.state.basicUserInfo.email}/>
+              <img id="profile-right-side-avatar" src={config.backendBaseUrl + this.props.currentUser.photo} className="img-avatar" alt={this.props.currentUser.email}/>
               </DropdownToggle> : ''
             }
-            { this.state.basicUserInfo ?
+            { this.props.currentUser ?
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center">
-                <strong>{this.state.basicUserInfo.username}</strong>
+                <strong>{this.props.currentUser.username}</strong>
                   <br/>
-                  {this.state.basicUserInfo.email}
+                  {this.props.currentUser.email}
 
               </DropdownItem>
               {/*<DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge></DropdownItem>*/}
@@ -112,10 +104,10 @@ class FullHeader extends Component {
               {/*<DropdownItem><i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge></DropdownItem>*/}
               {/*<DropdownItem><i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge></DropdownItem>*/}
               {/*<DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>*/}
-              <DropdownItem onClick={() => this.navigateTo('/users/' + this.state.basicUserInfo._id)}>
+              <DropdownItem onClick={() => this.navigateTo('/users/' + this.props.currentUser._id)}>
                 <i className="fa fa-user"></i> Profile
               </DropdownItem>
-              <DropdownItem onClick={() => this.navigateTo('/users/' + this.state.basicUserInfo._id)}>
+              <DropdownItem onClick={() => this.navigateTo('/users/' + this.props.currentUser._id)}>
                 <i className="fa fa-wrench"></i> Settings
               </DropdownItem>
               {/*<DropdownItem><i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge></DropdownItem>*/}

@@ -17,7 +17,7 @@ import {
   AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
-import navigation from '../../_nav';
+import navigation from '../../_leftSideBarMenu';
 // routes config
 import routes from '../../routes';
 import FullAside from './FullAside';
@@ -33,24 +33,42 @@ import TaskDetails from '../../components/tasks/TaskDetails';
 import Conversation from '../../components/conversations/Conversation';
 import {Topics} from '../../components/others/Topics';
 import {loggingStatus} from '../../lib/authenticationService';
+import {getCurrentUserBasicInfo} from '../../lib/usersServices';
 import config from '../../config';
 
 class Full extends Component {
+
+  state = {
+    currentUser: ''
+  };
+
+  componentDidMount() {
+    getCurrentUserBasicInfo().then(
+      user => {
+        this.setState({currentUser: user});
+      }
+    )
+  }
+
+  onCurrentUserChange = (currentUser, event) => {
+    console.log("Fired parent function", currentUser);
+    this.setState({currentUser: currentUser});
+  };
 
   render() {
     return (
       <div className="app">
         <AppHeader fixed>
-          <FullHeader {...this.props}/>
+          <FullHeader currentUser={this.state.currentUser} {...this.props}/>
         </AppHeader>
         <div className="app-body">
-          {/*<AppSidebar fixed display="lg">*/}
-            {/*<AppSidebarHeader />*/}
-            {/*<AppSidebarForm />*/}
-            {/*<AppSidebarNav navConfig={navigation} {...this.props} />*/}
-            {/*<AppSidebarFooter />*/}
-            {/*<AppSidebarMinimizer />*/}
-          {/*</AppSidebar>*/}
+          <AppSidebar fixed display="lg">
+            {/* <AppSidebarHeader /> */}
+            {/* <AppSidebarForm /> */}
+            <AppSidebarNav navConfig={navigation} {...this.props} />
+            <AppSidebarFooter />
+            <AppSidebarMinimizer />
+          </AppSidebar>
           <main className="main">
             {/*<AppBreadcrumb appRoutes={routes}/>*/}
             <Container fluid>
@@ -62,14 +80,15 @@ class Full extends Component {
                       : (null);
                   },
                 )}
-                <Route exact path="/" component={Home}/>
+                <Route exact path="/" render={(props) => <Home {...props} currentUser={this.state.currentUser}/> }/>
                 <Route exact path="/about" component={About}/>
-                <Route exact path="/projects/:id" component={ProjectDetails}/>
+                <Route exact path="/projects/:id" render={(props) => <ProjectDetails {...props} currentUser={this.state.currentUser} />}/>
                 <Route exact path="/project/new" component={NewProject}/>
                 <Route exact path="/:projectId/tasks/new/:parentTaskId" component={NewTask}/>
-                <Route exact path="/users/:id" component={UserProfile}/>
-                <Route exact path="/tasks/:id" component={TaskDetails}/>
-                <Route exact path="/conversation" component={Conversation}/>
+                <Route exact path="/users/:id" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
+                <Route exact path="/settings" render={(props) => <UserProfile {...props} callbackOnCurrentUserChange={this.onCurrentUserChange} currentUser={this.state.currentUser} />}/>
+                <Route exact path="/tasks/:id" render={(props) => <TaskDetails {...props} currentUser={this.state.currentUser} />}/>
+                <Route exact path="/conversation" render={(props) => <Conversation {...props} currentUser={this.state.currentUser}/> }/>
                 {/*<Redirect from="/" to="/dashboard" />*/}
               </Switch>
             </Container>

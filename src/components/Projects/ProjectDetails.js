@@ -4,6 +4,7 @@ import {getProject, addMemberToProject, removeMemberFromProject} from '../../lib
 import { toast } from 'react-toastify';
 import {getAllUsers} from '../../lib/usersServices';
 import TaskList from '../tasks/TaskList';
+import AppLoader from '../shared/AppLoader';
 import {
     NavLink
 } from 'react-router-dom';
@@ -17,8 +18,15 @@ class ProjectDetails extends Component {
         tasks: [],
         showAddMembersForm: false,
         userFetched: false,
-        member_id: ''
+        member_id: '',
+        submittingAssigneeForm: false,
+        fetchingUserForAssign: false,
+        submittingRemoveMemberId: {}
     };
+
+    createMarkup = (text) => {
+      return {__html: text};
+    }
 
     componentDidMount() {
         getProject(this.props.match.params.id).then(
@@ -31,6 +39,7 @@ class ProjectDetails extends Component {
     handleAddMembersForm = () => {
         var tempFlag = this.state.showAddMembersForm;
         if(!this.state.userFetched){
+            this.setState({fetchingUserForAssign: true});
             getAllUsers().then(
                 users => {
                     this.state.members.map((member)=>{
@@ -40,11 +49,12 @@ class ProjectDetails extends Component {
                             users.splice(index, 1);
                         }
                     });
-                    this.setState({availableUsers: users, userFetched: true});
+                    this.setState({availableUsers: users, userFetched: true, showAddMembersForm: !tempFlag, fetchingUserForAssign: false});
                 }
             );
+        }else{
+          this.setState({showAddMembersForm: !tempFlag});
         }
-        this.setState({showAddMembersForm: !tempFlag});
     };
 
     addMemberToThisProject = () => {
@@ -53,6 +63,7 @@ class ProjectDetails extends Component {
             if(obj){
                 console.log('Already added this member.');
             }else {
+                this.setState({submittingAssigneeForm: true});
                 addMemberToProject({project_id: this.state.project._id, member_id: this.state.member_id}).then(
                     user => {
                         var members = this.state.members;
@@ -65,8 +76,8 @@ class ProjectDetails extends Component {
                             this.setState({availableUsers: tempAvailableUser});
                         }
                         var toastMsg = "Added " + user.username + " to this project."
-                        toast.success(toastMsg);
-                        this.setState({members: members, member_id: ''});
+                        toast(toastMsg);
+                        this.setState({members: members, member_id: '', submittingAssigneeForm: false, showAddMembersForm: false});
                     }
                 );
             }
@@ -78,6 +89,9 @@ class ProjectDetails extends Component {
         if(member_id){
             var removedMember = this.state.members.find((obj)=> { return obj._id === member_id });
             if(removedMember){
+                var tempSubmittingRemoveMemberId = this.state.submittingRemoveMemberId;
+                tempSubmittingRemoveMemberId[member_id] = true;
+                this.setState({submittingRemoveMemberId: tempSubmittingRemoveMemberId});
                 removeMemberFromProject({project_id: this.state.project._id, member_id: member_id}).then(
                     user => {
                         var toastMsg = "Removed " + user.username + " from this project."
@@ -90,7 +104,9 @@ class ProjectDetails extends Component {
                         }
                         var tempAvailableUser = this.state.availableUsers;
                         tempAvailableUser.push(removedMember);
-                        this.setState({availableUsers: tempAvailableUser});
+                        var tempSubmittingRemoveMemberId = this.state.submittingRemoveMemberId;
+                        tempSubmittingRemoveMemberId[member_id] = false;
+                        this.setState({availableUsers: tempAvailableUser, submittingRemoveMemberId: tempSubmittingRemoveMemberId});
                     }
                 );
             }else {
@@ -104,11 +120,13 @@ class ProjectDetails extends Component {
     };
 
     render() {
+      if(this.state.project)
         return (
             <div className="ProjectDetails">
                 <h4><strong>Project Name: </strong>{this.state.project.title}</h4>
                 <p><strong>Short Name: {this.state.project.shortName}</strong></p>
-                <p><strong>Description: </strong>{this.state.project.description}</p>
+                <label>Description: </label>
+                <div className="projectDescription" dangerouslySetInnerHTML={this.createMarkup(this.state.project.description)}></div>
                 <div className="row">
                     <div className="col-sm-8 col-md-8 col-lg-8">
                     <div className="m-b-10">
@@ -121,26 +139,33 @@ class ProjectDetails extends Component {
                     <div className="col-sm-4 col-md-4 col-lg-4 border-left-2-grey">
                         <h4>Creator: {this.state.project.creator ? <NavLink to={"/users/" + this.state.project.creator._id}>{this.state.project.creator.username}</NavLink>: ''}</h4><br/>
                         <h4>
-                            <button className="btn btn-default pull-right" onClick={this.handleAddMembersForm}>+ Add Members</button>
+                            <button className={"btn btn-default pull-right " + (this.state.fetchingUserForAssign ? 'disabled' : '')} disabled={this.state.fetchingUserForAssign} onClick={this.handleAddMembersForm}>
+                            + Add Members {this.state.fetchingUserForAssign ? <span><i className="fa fa-spinner fa-pulse fa-fw color-blue"></i></span> : ''}
+                            </button>
                         </h4><br/>
                         {this.state.showAddMembersForm ? <div className="AddMemberFrom">
                             <select className="form-control m-b-10 m-t-10"  onChange={this.handleInputChange} name="member_id" value={this.state.member_id}>
                                 <option key={0} value=''>Please select one user</option>
                                 {this.state.availableUsers.map(user => <option key={user._id} value={user._id} className="form-control">{user.username}</option>)}
                             </select>
-                            <button className="pull-right btn btn-info" onClick={this.addMemberToThisProject}>Add</button><br/><br/>
+                            <button className={"btn btn-info pull-right " + (this.state.submittingAssigneeForm ? 'disabled' : '')} disabled={this.state.submittingAssigneeForm} onClick={this.addMemberToThisProject}>
+                            Add {this.state.submittingAssigneeForm ? <span><i className="fa fa-spinner fa-pulse fa-fw color-white"></i></span> : ''}
+                            </button>
+                            <br/><br/>
                         </div> : ""}
                         <div>
                             <strong>Members: </strong>
                             {this.state.members.map(member => <div key={member._id}>
                                 <NavLink to={"/users/" + member._id}>{member.username}</NavLink>
-                                <span onClick={() => this.removeMemberFromThisProject(member._id)} className="badge badge-danger cursor-pointer remove-icon-project-members">x</span>
+                                { this.state.submittingRemoveMemberId[member._id] ? <span><i className="fa fa-spinner fa-pulse fa-fw color-blue"></i></span> : <span onClick={() => this.removeMemberFromThisProject(member._id)} className="badge badge-danger cursor-pointer remove-icon-project-members">x</span>}
                             </div>)}
                         </div>
                     </div>
                 </div>
             </div>
         );
+      else
+        return <AppLoader currentUser={this.props.currentUser}/>
     }
 }
 

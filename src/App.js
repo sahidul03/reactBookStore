@@ -20,9 +20,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Full } from './containers';
 // Pages
 // import { Login, Page404, Page500, Register } from './views/Pages';
-import { Page404, Page500 } from './views/Pages';
+import { Page500 } from './views/Pages';
 import Login from './components/layouts/Login';
 import SignUp from './components/layouts/Signup';
+import Page404 from './components/layouts/Page404';
 
 import {logout} from './lib/authenticationService';
 import {loggingStatus} from './lib/authenticationService';

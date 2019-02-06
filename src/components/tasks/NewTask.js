@@ -3,9 +3,10 @@ import {createTask, getMinTask} from '../../lib/tasksServices';
 import {getMinProject} from '../../lib/projectsServices';
 import { toast } from 'react-toastify';
 import config from '../../config';
-import {
-    NavLink
-} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import 'jodit';
+import 'jodit/build/jodit.min.css';
+import JoditEditor from "jodit-react";
 
 class NewTask extends Component {
     state = {
@@ -22,6 +23,15 @@ class NewTask extends Component {
         errorMessage: ''
     };
 
+    /**
+     * @property Jodit jodit instance of native Jodit
+     */
+    jodit;
+    setRef = jodit => this.jodit = jodit;
+
+    config = {
+        readonly: false // all options from https://xdsoft.net/jodit/doc/
+    }
     componentDidMount(){
         getMinProject(this.props.match.params.projectId).then(
             project => {
@@ -65,16 +75,20 @@ class NewTask extends Component {
     handleInputChange = (evt) => {
         let formData = this.state.task;
         formData[evt.target.name] = evt.target.value;
-        this.setState({
-            task: formData
-        });
+        this.setState({ task: formData });
     };
+
+    handleDescriptionChange = (value) => {
+      let formData = this.state.task;
+        formData['description'] = value;
+        this.setState({ task: formData });
+    }
 
     render() {
         return (
-            <div className="NewProject">
+            <div className="NewTask">
                 <h4><strong>Create a new task</strong></h4>
-                <div className="row">
+                <div className="row m-b-20">
                     <div className="col-sm-12 col-md-12 col-lg-12">
                         <form onSubmit={this.handleSubmit}>
                             <div className="form-group col-md-12 col-sm-12">
@@ -86,7 +100,7 @@ class NewTask extends Component {
                             </div>
                             {this.state.parentTask ? <div className="form-group col-md-12 col-sm-12">
                                 <label>Parent Task: </label>
-                                <NavLink to={"/tasks/" + this.state.parentTask._id }> { this.state.parentTask.title}</NavLink>
+                                <NavLink to={"/tasks/" + this.state.parentTask._id }> [{this.state.parentTask.taskNumber}] { this.state.parentTask.title}</NavLink>
                             </div> : ''}
 
                             <div className="form-group col-md-12 col-sm-12">
@@ -98,13 +112,16 @@ class NewTask extends Component {
                             </div>
                             <div className="form-group col-md-12 col-sm-12">
                                 <label>Task Description*</label>
-                                <textarea name="description" onChange={this.handleInputChange}
-                                          value={this.state.task.description}
-                                          className="form-control input-sm" id="description"
-                                          placeholder="Description" required></textarea>
+                                <JoditEditor
+                                        editorRef={this.setRef}
+                                        value={this.state.task.description}
+                                        config={this.config}
+                                        onChange={this.handleDescriptionChange}
+                                        placeholder="Write Description here ..." required/>
                             </div>
                             <div className="col-md-12 col-sm-12">
                                 <button type="submit" className={"btn btn-primary pull-right " + (this.state.submitted ? 'disabled' : '')} disabled={this.state.submitted}>Submit {this.state.submitted ? <span><i className="fa fa-spinner fa-pulse fa-fw"></i></span> : ''}</button>
+                                <span className="btn btn-default pull-right color-blue" onClick={()=>this.props.history.goBack()}>Cancel</span>
                             </div>
                         </form>
                     </div>

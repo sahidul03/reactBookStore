@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {getCurrentUser} from '../../lib/usersServices';
-import {
-    NavLink
-} from 'react-router-dom';
+import AppLoader from '../shared/AppLoader';
+import { NavLink } from 'react-router-dom';
 
 class Home extends Component {
     state = {
@@ -45,7 +44,7 @@ class Home extends Component {
             </div>
         );}
         else{
-          return <div className="whole-page-spiner color-blue"><i className="fa fa-spinner fa-pulse fa-fw"></i></div>
+          return <AppLoader currentUser={this.props.currentUser}/>;
         }
     }
 }

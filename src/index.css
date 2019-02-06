@@ -6,7 +6,7 @@ main.main{
   background-color: white;
 }
 .main .container-fluid {
-  padding: 15px 30px !important;
+  padding: 15px 30px 0px 30px !important;
 }
 .form-signin {
   max-width: 330px;
@@ -19,6 +19,19 @@ main.main{
   text-align: center;
   font-size: 100px;
   padding-top: 150px;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.container-block-spiner {
+  z-index: 1;
+  background-color: white;
+  text-align: center;
+  font-size: 100px;
+  padding-top: 210px;
   position: fixed;
   height: 100%;
   width: 100%;
@@ -70,12 +83,24 @@ main.main{
 .color-blue {
   color: 	#20a8d8;
 }
+
+.color-white {
+  color: 	#ffffff;
+}
 .cursor-pointer {
   cursor: pointer;
 }
 
+.min-width-120{
+  min-width: 120px;
+}
+
 .m-b-10 {
   margin-bottom: 10px;
+}
+
+.m-b-20 {
+  margin-bottom: 20px;
 }
 
 .m-r-10 {
@@ -88,6 +113,9 @@ main.main{
 
 .m-l-10 {
   margin-left: 10px;
+}
+.m-l-20 {
+  margin-left: 20px;
 }
 
 .p-l-10 {
@@ -147,6 +175,22 @@ main.main{
   border: 1px solid lightgray;
 }
 
+.taskDescription{
+  border: 1px solid #dadada;
+  padding: 10px;
+}
+.taskDescription table td, th {
+  border: 1px solid lightgray;
+}
+
+.projectDescription{
+  border: 1px solid #dadada;
+  padding: 10px;
+}
+.projectDescription table td, th {
+  border: 1px solid lightgray;
+}
+
 .comments-container .comment {
   border-bottom: 1px solid #dadada;
   margin-bottom: 12px;
@@ -168,7 +212,8 @@ main.main{
 }
 .Conversation .channels-contacts {
   /*border-right: 1px solid #dadada;*/
-  min-height: 400px;
+  /* min-height: 400px; */
+  margin-bottom: 15px;
 }
 
 .Conversation .channels-contacts .new-message-icon {
@@ -183,6 +228,7 @@ main.main{
 
 .Conversation .conversation-rendering {
   border-left: 2px solid #dadada;
+  padding-bottom: 10px;
 }
 
 .Conversation .chat-text-box {
@@ -190,7 +236,7 @@ main.main{
 }
 
 .Conversation .messages-container {
-  height: 400px;
+  height: 395px;
   overflow-y: scroll;
   margin-left: -30px;
 }

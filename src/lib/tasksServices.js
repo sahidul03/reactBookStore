@@ -15,3 +15,7 @@ export  const createTask = (task) => {
 export  const addAssigneeToTask = (data) => {
     return postRequest('/add-assignee', data);
 };
+
+export  const changeTaskStatus = (data) => {
+    return postRequest('/tasks/change-status', data);
+};
